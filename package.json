@@ -1,0 +1,29 @@
+{
+  "name": "fts_backend",
+  "version": "1.0.0",
+  "description": "FTS BackEnd",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ssrc/server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oipul-class/FTS_backend.git"
+  },
+  "author": "João Lucas e Pedro Henrique",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oipul-class/FTS_backend/issues"
+  },
+  "homepage": "https://github.com/oipul-class/FTS_backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
