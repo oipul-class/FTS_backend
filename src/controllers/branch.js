@@ -3,15 +3,27 @@ const Company = require("../models/Company");
 
 module.exports = {
   async index(req, res) {
-    const branches = await Company.findAll({
-      attributes: ["branch_name", "cep", "place_number", "company_id"],
+    const branches = await Branch.findAll({
+      attributes: [
+        "branch_name",
+        "cep",
+        "branch_email",
+        "place_number",
+        "company_id",
+      ],
     });
 
     res.send(branches);
   },
 
   async store(req, res) {
-    const { branch_name, cep, place_number, company_id } = req.body;
+    const {
+      branch_name,
+      cep,
+      branch_email,
+      place_number,
+      company_id,
+    } = req.body;
 
     const company = await Company.findByPk(company_id);
 
@@ -20,6 +32,7 @@ module.exports = {
     const branch = await Branch.create({
       branch_name,
       cep,
+      branch_email,
       place_number,
       company_id,
     });
@@ -33,66 +46,56 @@ module.exports = {
     const { id } = req.params;
 
     const {
-      cnpj,
-      fantasy_name,
-      social_reason,
-      place_number,
+      branch_name,
       cep,
-      state,
-      nature_of_the_business,
-      commercial_email,
+      branch_email,
+      place_number,
+      company_id,
     } = req.body;
 
-    const company = await Company.findByPk(id);
+    const branch = await Branch.findByPk(id, {
+      attributes: [
+        "branch_name",
+        "cep",
+        "branch_email",
+        "place_number",
+        "company_id",
+      ],
+    });
 
-    if (!company) return res.status(404).send({ erro: "compania não existe" });
+    if (!branch) return res.status(404).send({ erro: "afilial não existe" });
 
-    if (cnpj) company.cnpj = cnpj;
-    if (fantasy_name) company.fantasy_name = fantasy_name;
-    if (social_reason) company.social_reason = social_reason;
-    if (place_number) company.place_number = place_number;
-    if (cep) company.cep = cep;
-    if (state) company.state = state;
-    if (nature_of_the_business)
-      company.nature_of_the_business = nature_of_the_business;
-    if (commercial_email) company.commercial_email = commercial_email;
+    if (branch_name) branch.branch_name = branch_name;
+    if (place_number) branch.place_number = place_number;
+    if (branch_email) branch.branch_email = branch_email;
+    if (cep) branch.cep = cep;
+    if (company_id) branch.company_id = company_id;
 
-    await company.save();
+    await branch.save();
 
-    res.send(company);
+    res.send(branch);
   },
 
   async delete(req, res) {
     const { id } = req.params;
 
-    const company = await Company.findByPk(id);
+    const branch = await Branch.findByPk(id, {
+      attributes: [
+        "branch_name",
+        "cep",
+        "branch_email",
+        "place_number",
+        "company_id",
+      ],
+    });
 
-    if (!company) return res.status(404).send({ erro: "compania não existe" });
+    if (!branch) return res.status(404).send({ erro: "afilial não existe" });
 
-    await company.destroy();
+    await branch.destroy();
 
     res.send({
       status: "deletado",
-      compania: company,
-    });
-  },
-
-  async setPlan(req, res) {
-    const { company_id, plan_id } = req.body;
-
-    const company = await Company.findByPk(company_id);
-
-    if (!company) return res.status(404).send({ erro: "compania não existe" });
-
-    const plan = await Plan.findByPk(plan_id);
-
-    if (!plan) return res.status(404).send({ erro: "plano não existe" });
-
-    company.plan_id = plan_id;
-
-    res.send({
-      compania: company,
-      plano: plan,
+      afilial: branch,
     });
   },
 };

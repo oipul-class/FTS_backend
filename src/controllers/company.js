@@ -60,7 +60,19 @@ module.exports = {
       commercial_email,
     } = req.body;
 
-    const company = await Company.findByPk(id);
+    const company = await Company.findByPk(id, {
+      attributes: [
+        "cnpj",
+        "fantasy_name",
+        "social_reason",
+        "place_number",
+        "cep",
+        "state",
+        "nature_of_the_business",
+        "commercial_email",
+        "plan_id",
+      ],
+    });
 
     if (!company) return res.status(404).send({ erro: "compania não existe" });
 
@@ -82,7 +94,19 @@ module.exports = {
   async delete(req, res) {
     const { id } = req.params;
 
-    const company = await Company.findByPk(id);
+    const company = await Company.findByPk(id, {
+      attributes: [
+        "cnpj",
+        "fantasy_name",
+        "social_reason",
+        "place_number",
+        "cep",
+        "state",
+        "nature_of_the_business",
+        "commercial_email",
+        "plan_id",
+      ],
+    });
 
     if (!company) return res.status(404).send({ erro: "compania não existe" });
 

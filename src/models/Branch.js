@@ -6,6 +6,7 @@ class Branch extends Model {
       {
         branch_name: DataTypes.STRING,
         cep: DataTypes.INTEGER,
+        branch_email: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
       },
