@@ -2,38 +2,39 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable("branches", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
 
-      user_name: {
+      branch_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      rg: {
+      cep: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        unique: true,
       },
 
-      cpf: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-      },
-
-      user_password: {
+      branch_email: {
         type: Sequelize.STRING,
+      },
+
+      place_number: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
 
-      manager_id: {
+      company_id: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: "companies",
+          key: "id",
+        },
       },
 
       created_at: {
@@ -49,6 +50,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("users");
+    await queryInterface.dropTable("branches");
   },
 };

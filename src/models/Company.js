@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize/types");
+const { Model, DataTypes } = require("sequelize");
 
 class Company extends Model {
   static init(sequelize) {
@@ -7,7 +7,7 @@ class Company extends Model {
         cnpj: DataTypes.INTEGER,
         fantasy_name: DataTypes.STRING,
         social_reason: DataTypes.STRING,
-        place_numbe: DataTypes.INTEGER,
+        place_number: DataTypes.INTEGER,
         cep: DataTypes.INTEGER,
         state: DataTypes.STRING,
         nature_of_the_business: DataTypes.STRING,
@@ -22,7 +22,7 @@ class Company extends Model {
 
   static associate(models) {
     this.hasMany(models.Branch);
-    this.hasOne(models.Plan)
+    //this.hasOne(models.Plan)
   }
 }
 module.exports = Company;

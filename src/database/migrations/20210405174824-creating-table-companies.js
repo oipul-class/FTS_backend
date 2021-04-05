@@ -10,7 +10,7 @@ module.exports = {
       },
 
       cnpj: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         unique: true,
         allowNull: false,
       },
@@ -31,7 +31,7 @@ module.exports = {
       },
 
       cep: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
@@ -50,6 +50,10 @@ module.exports = {
 
       plan_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "plans",
+          key: "id",
+        },
       },
 
       created_at: {

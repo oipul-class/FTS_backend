@@ -4,7 +4,8 @@
   "description": "FTS BackEnd",
   "main": "index.js",
   "scripts": {
-    "start": "node ssrc/server",
+    "start-dv": "nodemon src/server",
+    "start": "node src/server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
