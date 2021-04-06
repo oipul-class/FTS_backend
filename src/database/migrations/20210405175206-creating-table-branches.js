@@ -15,7 +15,7 @@ module.exports = {
       },
 
       cep: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(10),
         allowNull: false,
       },
 

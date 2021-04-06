@@ -13,9 +13,7 @@ class Role extends Model {
   }
 
   static associate(models) {
-    this.belongsToMany(models.Manager, {
-      through: "Manangers"
-    });
+    this.hasMany(models.Manager)
   }
 }
 

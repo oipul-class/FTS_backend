@@ -10,7 +10,7 @@ module.exports = {
       },
 
       cnpj: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(18),
         unique: true,
         allowNull: false,
       },
@@ -31,7 +31,7 @@ module.exports = {
       },
 
       cep: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(10),
         allowNull: false,
       },
 

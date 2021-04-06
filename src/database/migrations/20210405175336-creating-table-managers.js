@@ -15,13 +15,13 @@ module.exports = {
       },
 
       rg: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(12),
         allowNull: false,
         unique: true,
       },
 
       cpf: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(14),
         allowNull: false,
         unique: true,
       },

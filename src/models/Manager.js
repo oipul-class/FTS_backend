@@ -9,6 +9,7 @@ class Manager extends Model {
         cpf: DataTypes.STRING,
         manager_password: DataTypes.STRING,
         branch_id: DataTypes.INTEGER,
+        role_id: DataTypes.INTEGER,
       },
       {
         sequelize,
@@ -19,7 +20,7 @@ class Manager extends Model {
   static associate(models) {
     this.belongsTo(models.Branch);
     this.hasMany(models.User);
-    this.hasOne(models.Role);
+    this.belongsTo(models.Role);
   }
 }
 
