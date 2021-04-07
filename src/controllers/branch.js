@@ -3,17 +3,22 @@ const Company = require("../models/Company");
 
 module.exports = {
   async index(req, res) {
-    const branches = await Branch.findAll({
-      attributes: [
-        "branch_name",
-        "cep",
-        "branch_email",
-        "place_number",
-        "company_id",
-      ],
-    });
+    try {
+      const branches = await Branch.findAll({
+        attributes: [
+          "branch_name",
+          "cep",
+          "branch_email",
+          "place_number",
+          "company_id",
+        ],
+      });
 
-    res.send(branches);
+      res.send(branches);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
   },
 
   async store(req, res) {
@@ -25,21 +30,27 @@ module.exports = {
       company_id,
     } = req.body;
 
-    const company = await Company.findByPk(company_id);
+    try {
+      const company = await Company.findByPk(company_id);
 
-    if (!company) return res.status(404).send({ erro: "compania não existe" });
+      if (!company)
+        return res.status(404).send({ erro: "compania não existe" });
 
-    const branch = await Branch.create({
-      branch_name,
-      cep,
-      branch_email,
-      place_number,
-      company_id,
-    });
+      const branch = await Branch.create({
+        branch_name,
+        cep,
+        branch_email,
+        place_number,
+        company_id,
+      });
 
-    res
-      .status(201)
-      .send({ branch_name, cep, place_number, companhia: company });
+      res
+        .status(201)
+        .send({ branch_name, cep, place_number, companhia: company });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
   },
 
   async update(req, res) {
@@ -52,50 +63,59 @@ module.exports = {
       place_number,
       company_id,
     } = req.body;
+    try {
+      const branch = await Branch.findByPk(id, {
+        attributes: [
+          "branch_name",
+          "cep",
+          "branch_email",
+          "place_number",
+          "company_id",
+        ],
+      });
 
-    const branch = await Branch.findByPk(id, {
-      attributes: [
-        "branch_name",
-        "cep",
-        "branch_email",
-        "place_number",
-        "company_id",
-      ],
-    });
+      if (!branch) return res.status(404).send({ erro: "afilial não existe" });
 
-    if (!branch) return res.status(404).send({ erro: "afilial não existe" });
+      if (branch_name) branch.branch_name = branch_name;
+      if (place_number) branch.place_number = place_number;
+      if (branch_email) branch.branch_email = branch_email;
+      if (cep) branch.cep = cep;
+      if (company_id) branch.company_id = company_id;
 
-    if (branch_name) branch.branch_name = branch_name;
-    if (place_number) branch.place_number = place_number;
-    if (branch_email) branch.branch_email = branch_email;
-    if (cep) branch.cep = cep;
-    if (company_id) branch.company_id = company_id;
+      await branch.save();
 
-    await branch.save();
-
-    res.send(branch);
+      res.send(branch);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
   },
 
   async delete(req, res) {
     const { id } = req.params;
 
-    const branch = await Branch.findByPk(id, {
-      attributes: [
-        "branch_name",
-        "cep",
-        "branch_email",
-        "place_number",
-        "company_id",
-      ],
-    });
-
-    if (!branch) return res.status(404).send({ erro: "afilial não existe" });
-
-    await branch.destroy();
-
-    res.send({
-      status: "deletado",
-      afilial: branch,
-    });
+    try {
+      const branch = await Branch.findByPk(id, {
+        attributes: [
+          "branch_name",
+          "cep",
+          "branch_email",
+          "place_number",
+          "company_id",
+        ],
+      });
+  
+      if (!branch) return res.status(404).send({ erro: "afilial não existe" });
+  
+      await branch.destroy();
+  
+      res.send({
+        status: "deletado",
+        afilial: branch,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
   },
 };
