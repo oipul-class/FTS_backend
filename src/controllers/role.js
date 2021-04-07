@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Role = require("../models/Role");
 
 module.exports = {
@@ -5,6 +6,24 @@ module.exports = {
     try {
       const roles = await Role.findAll({
         attributes: ["role_name"],
+      });
+
+      res.send(roles);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async find(req, res) {
+    const { role_name } = req.body;
+    console.log(role_name);
+    try {
+      const roles = await Role.findAll({
+        attributes: ["role_name"],
+        where: {
+          role_name: { [Op.substring]: role_name },
+        },
       });
 
       res.send(roles);
@@ -37,13 +56,15 @@ module.exports = {
 
       if (!role) return res.status(404).send({ erro: "cargo não encontrado" });
 
-      const velho_nome_do_cargo = role.role_name
+      const velho_nome_do_cargo = role.role_name;
 
       role.role_name = role_name;
 
       await role.save();
 
-      res.send({ mensagem: `agora ${velho_nome_do_cargo} é ${role.role_name}`});
+      res.send({
+        mensagem: `agora ${velho_nome_do_cargo} é ${role.role_name}`,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
