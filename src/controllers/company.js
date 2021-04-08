@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Company = require("../models/Company");
 const Plan = require("../models/Plan");
 
@@ -19,6 +20,50 @@ module.exports = {
       });
 
       res.send(companys);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async find(req, res) {
+    const { fantasy_name, cnpj, cep } = req.body;
+
+    try {
+      const companies = await Company.findAll({
+        attributes: [
+          "cnpj",
+          "fantasy_name",
+          "social_reason",
+          "place_number",
+          "cep",
+          "state",
+          "nature_of_the_business",
+          "commercial_email",
+          "plan_id",
+        ],
+        where: {
+          [Op.and]: [
+            {
+              fantasy_name: {
+                [Op.substring]: fantasy_name ? fantasy_name : "",
+              },
+            },
+            {
+              cnpj: {
+                [Op.substring]: cnpj ? cnpj : "",
+              },
+            },
+            {
+              cep: {
+                [Op.substring]: cep ? cep : "",
+              },
+            },
+          ],
+        },
+      });
+
+      res.send(companies);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

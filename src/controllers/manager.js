@@ -1,12 +1,56 @@
 const Manager = require("../models/Manager");
 const Branch = require("../models/Branch");
 const Role = require("../models/Role");
+const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
     try {
       const managers = await Manager.findAll({
         attributes: ["manager_name", "rg", "cpf"],
+        include: [
+          {
+            association: "Branch",
+            attributes: ["branch_name", "cep", "branch_email", "place_number"],
+          },
+          {
+            association: "Role",
+            attributes: ["role_name"],
+          },
+        ],
+      });
+
+      res.send(managers);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async find(req, res) {
+    const { manager_name, rg, cpf } = req.body;
+
+    try {
+      const managers = await Manager.findAll({
+        where: {
+          [Op.and]: [
+            {
+              manager_name: {
+                [Op.substring]: manager_name ? manager_name : "",
+              },
+            },
+            {
+              rg: {
+                [Op.substring]: rg ? rg : "",
+              },
+            },
+            {
+              cpf: {
+                [Op.substring]: cpf ? cpf : "",
+              },
+            },
+          ],
+        },
         include: [
           {
             association: "Branch",
@@ -120,11 +164,9 @@ module.exports = {
 
     await manager.destroy();
 
-    res.send(
-      {
-        status: "deletado",
-        gerente: manager
-      }
-    )
+    res.send({
+      status: "deletado",
+      gerente: manager,
+    });
   },
 };

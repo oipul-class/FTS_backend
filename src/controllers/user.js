@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Manager = require("../models/Manager");
+const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
@@ -28,6 +29,53 @@ module.exports = {
       });
 
       res.send(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async find(req, res) {
+    const { user_name, rg, cpf } = req.body;
+
+    try {
+      const users = await User.findAll({
+        attributes: ["user_name", "rg", "cpf"],
+        where: {
+          [Op.and]: [
+            {
+              user_name: { [Op.substring]: user_name ? user_name : "" },
+            },
+            {
+              rg: { [Op.substring]: rg ? rg : "" },
+            },
+            {
+              cpf: { [Op.substring]: cpf ? cpf : "" },
+            },
+          ],
+        },
+        include: {
+          association: "Manager",
+          attributes: ["manager_name", "rg", "cpf"],
+          include: [
+            {
+              association: "Branch",
+              attributes: [
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+              ],
+            },
+            {
+              association: "Role",
+              attributes: ["role_name"],
+            },
+          ],
+        },
+      });
+
+      res.sand(users);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

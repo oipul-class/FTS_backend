@@ -17,12 +17,11 @@ module.exports = {
 
   async find(req, res) {
     const { role_name } = req.body;
-    console.log(role_name);
     try {
       const roles = await Role.findAll({
         attributes: ["role_name"],
         where: {
-          role_name: { [Op.substring]: role_name },
+          role_name: { [Op.substring]: role_name ? role_name : ""},
         },
       });
 

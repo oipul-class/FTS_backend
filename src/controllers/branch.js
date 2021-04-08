@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Branch = require("../models/Branch");
 const Company = require("../models/Company");
 
@@ -12,6 +13,63 @@ module.exports = {
           "place_number",
           "company_id",
         ],
+        include: {
+          association: "Company",
+          attributes: [
+            "cnpj",
+            "fantasy_name",
+            "social_reason",
+            "place_number",
+            "cep",
+            "state",
+            "nature_of_the_business",
+            "commercial_email",
+          ],
+        },
+      });
+
+      res.send(branches);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async find(req, res) {
+    const { branch_name, cep } = req.body;
+
+    try {
+      const branches = await Branch.findAll({
+        attributes: [
+          "branch_name",
+          "cep",
+          "branch_email",
+          "place_number",
+          "company_id",
+        ],
+        where: {
+          [Op.and]: [
+            {
+              branch_name: { [Op.substring]: branch_name ? branch_name : "" },
+            },
+            {
+              cep: { [Op.substring]: cep ? cep : "" },
+            },
+          ],
+        },
+        include: {
+          association: "Company",
+          attributes: [
+            "cnpj",
+            "fantasy_name",
+            "social_reason",
+            "place_number",
+            "cep",
+            "state",
+            "nature_of_the_business",
+            "commercial_email",
+          ],
+        },
       });
 
       res.send(branches);
@@ -104,11 +162,11 @@ module.exports = {
           "company_id",
         ],
       });
-  
+
       if (!branch) return res.status(404).send({ erro: "afilial não existe" });
-  
+
       await branch.destroy();
-  
+
       res.send({
         status: "deletado",
         afilial: branch,
