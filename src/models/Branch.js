@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize/types");
+const { Model, DataTypes } = require("sequelize");
 
 class Branch extends Model {
   static init(sequelize) {
@@ -6,6 +6,7 @@ class Branch extends Model {
       {
         branch_name: DataTypes.STRING,
         cep: DataTypes.INTEGER,
+        branch_email: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
       },
@@ -17,7 +18,7 @@ class Branch extends Model {
 
   static associate(models) {
     this.belongsTo(models.Company);
-    this.hasOne(models.Managers);
+    this.hasOne(models.Manager);
   }
 }
 

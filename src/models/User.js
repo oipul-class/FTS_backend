@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize/types");
+const { Model, DataTypes } = require("sequelize");
 
 class User extends Model {
   static init(sequelize) {
@@ -8,8 +8,7 @@ class User extends Model {
         rg: DataTypes.STRING,
         cpf: DataTypes.STRING,
         user_password: DataTypes.STRING,
-        branch_id: DataTypes.INTEGER,
-        role_id: DataTypes.INTEGER
+        manager_id: DataTypes.INTEGER,
       },
       {
         sequelize,
@@ -21,3 +20,5 @@ class User extends Model {
     this.belongsTo(models.Manager);
   }
 }
+
+module.exports = User;

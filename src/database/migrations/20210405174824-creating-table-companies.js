@@ -2,43 +2,58 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("managers", {
+    await queryInterface.createTable("companies", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
 
-      manager_name: {
+      cnpj: {
+        type: Sequelize.STRING(18),
+        unique: true,
+        allowNull: false,
+      },
+
+      fantasy_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      rg: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-      },
-
-      cpf: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        unique: true,
-      },
-
-      manager_password: {
+      social_reason: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      branch_id: {
+      place_number: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
 
-      role_id: {
-        type: Sequelize.INTEGER,
+      cep: {
+        type: Sequelize.STRING(10),
         allowNull: false,
+      },
+
+      state: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+
+      nature_of_the_business: {
+        type: Sequelize.STRING,
+      },
+
+      commercial_email: {
+        type: Sequelize.STRING,
+      },
+
+      plan_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "plans",
+          key: "id",
+        },
       },
 
       created_at: {
@@ -54,6 +69,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("managers");
+    await queryInterface.dropTable("companies");
   },
 };

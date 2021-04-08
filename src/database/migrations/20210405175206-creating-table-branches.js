@@ -2,27 +2,25 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("companies", {
+    await queryInterface.createTable("branches", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
 
-      cnpj: {
-        type: Sequelize.INTEGER,
-        unique: true,
-        allowNull: false,
-      },
-
-      fantasy_name: {
+      branch_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      social_reason: {
-        type: Sequelize.STRING,
+      cep: {
+        type: Sequelize.STRING(10),
         allowNull: false,
+      },
+
+      branch_email: {
+        type: Sequelize.STRING,
       },
 
       place_number: {
@@ -30,26 +28,13 @@ module.exports = {
         allowNull: false,
       },
 
-      cep: {
+      company_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-      },
-
-      state: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-
-      nature_of_the_business: {
-        type: Sequelize.STRING,
-      },
-
-      commercial_email: {
-        type: Sequelize.STRING,
-      },
-
-      plan_id: {
-        type: Sequelize.INTEGER,
+        references: {
+          model: "companies",
+          key: "id",
+        },
       },
 
       created_at: {
@@ -65,6 +50,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("companies");
+    await queryInterface.dropTable("branches");
   },
 };
