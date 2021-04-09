@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const Company = require("../models/Company");
 const Plan = require("../models/Plan");
+const bcryptjs = require("bcryptjs");
 
 module.exports = {
   async index(req, res) {
@@ -73,6 +74,7 @@ module.exports = {
   async store(req, res) {
     const {
       cnpj,
+      adm_password,
       fantasy_name,
       social_reason,
       place_number,
@@ -82,9 +84,12 @@ module.exports = {
       commercial_email,
     } = req.body;
 
+    const cryptPassword = bcryptjs.hashSync(adm_password);
+
     try {
       const company = await Company.create({
         cnpj,
+        adm_password: cryptPassword,
         fantasy_name,
         social_reason,
         place_number,
@@ -94,7 +99,16 @@ module.exports = {
         commercial_email,
       });
 
-      res.status(201).send(company);
+      res.status(201).send({
+        cnpj,
+        fantasy_name,
+        social_reason,
+        place_number,
+        cep,
+        state,
+        nature_of_the_business,
+        commercial_email,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
