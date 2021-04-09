@@ -15,6 +15,11 @@ module.exports = {
         allowNull: false,
       },
 
+      adm_password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+
       fantasy_name: {
         type: Sequelize.STRING,
         allowNull: false,

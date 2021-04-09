@@ -4,11 +4,12 @@ class Company extends Model {
   static init(sequelize) {
     super.init(
       {
-        cnpj: DataTypes.INTEGER,
+        cnpj: DataTypes.STRING,
+        adm_password: DataTypes.STRING,
         fantasy_name: DataTypes.STRING,
         social_reason: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
-        cep: DataTypes.INTEGER,
+        cep: DataTypes.STRING,
         state: DataTypes.STRING,
         nature_of_the_business: DataTypes.STRING,
         commercial_email: DataTypes.STRING,

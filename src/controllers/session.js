@@ -1,52 +1,64 @@
 const bcryptjs = require("bcryptjs");
-const User = require("../models/User");
+const Company = require("../models/Company");
+const Branch = require("../models/Branch");
+const Role = require("../models/Role")
 const Manager = require("../models/Manager");
 const { generateToken } = require("../utils");
 
 module.exports = {
   async store(req, res) {
-    const { cpf, password } = req.body;
+    const { cnpj_ou_cpf, password } = req.body;
 
     try {
-      const manager = await Manager.findOne({
+      const company = await Company.findOne({
         where: {
-          cpf,
+          cnpj: cnpj_ou_cpf,
+        },
+        include: {
+          model: Branch,
         },
       });
-      
-      if (!manager || !bcryptjs.compareSync(password, manager.manager_password)) {
-        const user = await User.findOne({
+
+      if (!company || !bcryptjs.compareSync(password, company.adm_password)) {
+        const manager = await Manager.findOne({
           where: {
-            cpf,
+            cpf: cnpj_ou_cpf,
           },
+          include: {
+            model: Role,
+          }
         });
 
-        if (!user || !bcryptjs.compareSync(password, user.user_password))
-          return res
-            .status(404)
-            .send({ erro: "usuario ou gerente não existe" });
+        if (
+          !manager ||
+          !bcryptjs.compareSync(password, manager.manager_password)
+        )
+          return res.status(404).send({ erro: "admin ou gerente não existe" });
         else {
           const token = generateToken({
-            id: user.id,
-            user_name: user.user_name,
+            id: manager.id,
+            manager_name: manager.manager_name,
           });
 
           return res.status(201).send({
             user: {
-              user_name: user.user_name,
+              manager_name: manager.manager_name,
+              manager_role: manager.Role.role_name,
+
             },
             token: token,
           });
         }
       } else {
         const token = generateToken({
-          id: manager.id,
-          manager_name: manager.manager_name,
+          id: company.id,
+          fantasy_name: company.fantasy_name,
         });
 
         return res.status(201).send({
           user: {
-            manager_name: manager.manager_name,
+            fantasy_name: company.fantasy_name,
+            branches: company.Branches
           },
           token: token,
         });
