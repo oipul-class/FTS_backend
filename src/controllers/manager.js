@@ -2,6 +2,7 @@ const Manager = require("../models/Manager");
 const Branch = require("../models/Branch");
 const Role = require("../models/Role");
 const { Op } = require("sequelize");
+const bcryptjs = require("bcryptjs");
 
 module.exports = {
   async index(req, res) {
@@ -87,11 +88,13 @@ module.exports = {
       if (!branch || !role)
         return res.status(404).send({ erro: "afilial ou cargo não existe" });
 
+      const cryptPassword = bcryptjs.hashSync(manager_password);
+
       const manager = await Manager.create({
         manager_name,
         rg,
         cpf,
-        manager_password,
+        manager_password: cryptPassword,
         branch_id,
         role_id,
       });
