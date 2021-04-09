@@ -15,14 +15,20 @@ const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 
 routes.post("/session", sessionController.store);
 
-routes.use(tokenAuthMiddleware);
-
 routes.get("/company", companyController.index);
 routes.get("/company/search", companyController.find);
 routes.post("/company", companyController.store);
 routes.put("/company/:id", companyController.update);
 routes.put("/company/plan", companyController.setPlan);
 routes.delete("/company/:id", companyController.delete);
+
+routes.use(tokenAuthMiddleware);
+
+routes.get("/manager", managerController.index);
+routes.get("/manager/search", managerController.find);
+routes.post("/manager", managerController.store);
+routes.put("/manager/:id", managerController.update);
+routes.delete("/manager/:id", managerController.delete);
 
 routes.get("/branch", branchController.index);
 routes.get("/branch/search", branchController.find);
@@ -35,12 +41,6 @@ routes.get("/role/search", roleController.find);
 routes.post("/role", roleController.store);
 routes.put("/role/:id", roleController.update);
 routes.delete("/role/:id", roleController.delete);
-
-routes.get("/manager", managerController.index);
-routes.get("/manager/search", managerController.find);
-routes.post("/manager", managerController.store);
-routes.put("/manager/:id", managerController.update);
-routes.delete("/manager/:id", managerController.delete);
 
 routes.get("/user", userController.index);
 routes.get("/user/search", userController.find);
