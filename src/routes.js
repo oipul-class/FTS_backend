@@ -9,6 +9,13 @@ const branchController = require("./controllers/branch");
 const managerController = require("./controllers/manager");
 const roleController = require("./controllers/role");
 const userController = require("./controllers/user");
+const sessionController = require("./controllers/session");
+
+const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
+
+routes.post("/session", sessionController.store);
+
+routes.use(tokenAuthMiddleware);
 
 routes.get("/company", companyController.index);
 routes.get("/company/search", companyController.find);
