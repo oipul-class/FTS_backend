@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Manager = require("../models/Manager");
 const { Op } = require("sequelize");
+const bcryptjs = require("bcryptjs");
 
 module.exports = {
   async index(req, res) {
@@ -89,12 +90,14 @@ module.exports = {
       const manager = await Manager.findByPk(manager_id);
 
       if (!manager) return res.status(404).send({ erro: "gerente não existe" });
+      
+      const cryptPassword = bcryptjs.hashSync(user_password);
 
       const user = await User.create({
         user_name,
         rg,
         cpf,
-        user_password,
+        user_password: cryptPassword,
         manager_id,
       });
 
