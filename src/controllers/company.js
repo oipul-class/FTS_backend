@@ -8,6 +8,7 @@ module.exports = {
     try {
       const companys = await Company.findAll({
         attributes: [
+          "id",
           "cnpj",
           "fantasy_name",
           "social_reason",

@@ -8,15 +8,21 @@ module.exports = {
   async index(req, res) {
     try {
       const managers = await Manager.findAll({
-        attributes: ["manager_name", "rg", "cpf"],
+        attributes: ["id", "manager_name", "rg", "cpf"],
         include: [
           {
             association: "Branch",
-            attributes: ["branch_name", "cep", "branch_email", "place_number"],
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+            ],
           },
           {
             association: "Role",
-            attributes: ["role_name"],
+            attributes: ["id", "role_name"],
           },
         ],
       });

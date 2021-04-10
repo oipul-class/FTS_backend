@@ -7,10 +7,10 @@ module.exports = {
   async index(req, res) {
     try {
       const users = await User.findAll({
-        attributes: ["user_name", "rg", "cpf"],
+        attributes: ["id", "user_name", "rg", "cpf"],
         include: {
           association: "Manager",
-          attributes: ["manager_name", "rg", "cpf"],
+          attributes: ["id", "manager_name", "rg", "cpf"],
           include: [
             {
               association: "Branch",
@@ -90,7 +90,7 @@ module.exports = {
       const manager = await Manager.findByPk(manager_id);
 
       if (!manager) return res.status(404).send({ erro: "gerente não existe" });
-      
+
       const cryptPassword = bcryptjs.hashSync(user_password);
 
       const user = await User.create({

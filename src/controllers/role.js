@@ -5,7 +5,7 @@ module.exports = {
   async index(req, res) {
     try {
       const roles = await Role.findAll({
-        attributes: ["role_name"],
+        attributes: ["id", "role_name"],
       });
 
       res.send(roles);
@@ -21,7 +21,7 @@ module.exports = {
       const roles = await Role.findAll({
         attributes: ["role_name"],
         where: {
-          role_name: { [Op.substring]: role_name ? role_name : ""},
+          role_name: { [Op.substring]: role_name ? role_name : "" },
         },
       });
 

@@ -7,6 +7,7 @@ module.exports = {
     try {
       const branches = await Branch.findAll({
         attributes: [
+          "id",
           "branch_name",
           "cep",
           "branch_email",
@@ -16,6 +17,7 @@ module.exports = {
         include: {
           association: "Company",
           attributes: [
+            "id",
             "cnpj",
             "fantasy_name",
             "social_reason",
