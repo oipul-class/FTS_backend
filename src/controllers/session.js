@@ -1,7 +1,7 @@
 const bcryptjs = require("bcryptjs");
 const Company = require("../models/Company");
 const Branch = require("../models/Branch");
-const Role = require("../models/Role")
+const Role = require("../models/Role");
 const Manager = require("../models/Manager");
 const { generateToken } = require("../utils");
 
@@ -26,7 +26,7 @@ module.exports = {
           },
           include: {
             model: Role,
-          }
+          },
         });
 
         if (
@@ -42,9 +42,9 @@ module.exports = {
 
           return res.status(201).send({
             user: {
+              id: manager.id,
               manager_name: manager.manager_name,
               manager_role: manager.Role.role_name,
-
             },
             token: token,
           });
@@ -57,8 +57,9 @@ module.exports = {
 
         return res.status(201).send({
           user: {
+            id: company.id,
             fantasy_name: company.fantasy_name,
-            branches: company.Branches
+            branches: company.Branches,
           },
           token: token,
         });
