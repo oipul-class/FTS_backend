@@ -11,14 +11,20 @@ const roleController = require("./controllers/role");
 const userController = require("./controllers/user");
 const sessionController = require("./controllers/session");
 
+const companyMiddleware = require("./validators/company");
+const branchMiddleware = require("./validators/branch");
+const ManagerMiddleware = require("./validators/manager");
+const userMiddleware = require("./validators/user");
+const roleMiddleware = require("./validators/role");
+
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 
 routes.post("/session", sessionController.store);
 
 routes.get("/company", companyController.index);
 routes.get("/company/search", companyController.find);
-routes.post("/company", companyController.store);
-routes.put("/company/:id", companyController.update);
+routes.post("/company", companyMiddleware.create, companyController.store);
+routes.put("/company/:id", companyMiddleware.update, companyController.update);
 routes.put("/company/plan", companyController.setPlan);
 routes.delete("/company/:id", companyController.delete);
 
@@ -26,24 +32,24 @@ routes.use(tokenAuthMiddleware);
 
 routes.get("/manager", managerController.index);
 routes.get("/manager/search", managerController.find);
-routes.post("/manager", managerController.store);
+routes.post("/manager", ManagerMiddleware.create, managerController.store);
 routes.put("/manager/:id", managerController.update);
 routes.delete("/manager/:id", managerController.delete);
 
 routes.get("/branch", branchController.index);
 routes.get("/branch/search", branchController.find);
-routes.post("/branch", branchController.store);
-routes.put("/branch/:id", branchController.update);
+routes.post("/branch", branchMiddleware.create, branchController.store);
+routes.put("/branch/:id", branchMiddleware.update, branchController.update);
 routes.delete("/branch/:id", branchController.delete);
 
 routes.get("/role", roleController.index);
 routes.get("/role/search", roleController.find);
-routes.post("/role", roleController.store);
-routes.put("/role/:id", roleController.update);
+routes.post("/role", roleMiddleware.create, roleController.store);
+routes.put("/role/:id", roleMiddleware.create, roleController.update);
 routes.delete("/role/:id", roleController.delete);
 
 routes.get("/user", userController.index);
 routes.get("/user/search", userController.find);
-routes.post("/user", userController.store);
-routes.put("/user/:id", userController.update);
+routes.post("/user", userMiddleware.create, userController.store);
+routes.put("/user/:id", userMiddleware.update, userController.update);
 routes.delete("/user/:id", userController.delete);
