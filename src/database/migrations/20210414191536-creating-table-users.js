@@ -25,7 +25,7 @@ module.exports = {
       },
 
       user_access: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
 
