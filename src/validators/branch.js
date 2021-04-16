@@ -7,7 +7,7 @@ module.exports = {
       cep: Joi.string().length(10).required(),
       branch_email: Joi.string().email().min(5).max(255),
       place_number: Joi.number().integer().length(3).required(),
-      company_id: Joi.number().integer().required()
+      company_id: Joi.number().integer().required(),
     }),
   }),
 
@@ -17,7 +17,7 @@ module.exports = {
       cep: Joi.string().length(10),
       branch_email: Joi.string().email().min(5).max(255),
       place_number: Joi.number().integer().length(3),
-      company_id: Joi.number().integer().required()
+      company_id: Joi.number().integer().required(),
     }),
   }),
 };
