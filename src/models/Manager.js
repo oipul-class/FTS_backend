@@ -4,7 +4,6 @@ class Manager extends Model {
   static init(sequelize) {
     super.init(
       {
-        id: DataTypes.INTEGER,
         rg: DataTypes.STRING,
       },
       {

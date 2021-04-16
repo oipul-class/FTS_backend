@@ -14,7 +14,7 @@ class Screen extends Model {
   }
 
   static associate(models) {
-    this.belongsToMany(models.Permisson, { through: "screens_permissions" })
+    this.belongsToMany(models.Permission, { through: "screens_permissions" });
   }
 }
 module.exports = Screen;

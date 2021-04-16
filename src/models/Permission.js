@@ -13,9 +13,9 @@ class Permission extends Model {
   }
 
   static associate(models) {
-    this.belongsToMany(models.Users, { through: "users_permissions" });
+    this.belongsToMany(models.User, { through: "users_permissions" });
     this.belongsToMany(models.Company, { through: "companies_permissions" });
-    this.belongsToMany(models.Company, { through: "screens_permissions" });
+    this.belongsToMany(models.Screen, { through: "screens_permissions" });
   }
 }
 
