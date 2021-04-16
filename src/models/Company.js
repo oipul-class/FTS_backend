@@ -5,10 +5,10 @@ class Company extends Model {
     super.init(
       {
         cnpj: DataTypes.STRING,
-        adm_password: DataTypes.STRING,
         fantasy_name: DataTypes.STRING,
         social_reason: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
+        companie_password: DataTypes.STRING,
         cep: DataTypes.STRING,
         state: DataTypes.STRING,
         nature_of_the_business: DataTypes.STRING,
@@ -23,7 +23,7 @@ class Company extends Model {
 
   static associate(models) {
     this.hasMany(models.Branch);
-    //this.hasOne(models.Plan)
+    this.belongsToMany(models.Permission, { through: "companies_permissons" });
   }
 }
 module.exports = Company;

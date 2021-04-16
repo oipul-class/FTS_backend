@@ -15,11 +15,6 @@ module.exports = {
         allowNull: false,
       },
 
-      adm_password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-
       fantasy_name: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -32,6 +27,11 @@ module.exports = {
 
       place_number: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+
+      companie_password: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
