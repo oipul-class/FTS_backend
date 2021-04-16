@@ -4,11 +4,12 @@ class User extends Model {
   static init(sequelize) {
     super.init(
       {
-        user_name: DataTypes.STRING,
-        rg: DataTypes.STRING,
         cpf: DataTypes.STRING,
         user_password: DataTypes.STRING,
-        manager_id: DataTypes.INTEGER,
+        user_name: DataTypes.STRING,
+        user_access: DataTypes.INTEGER,
+        branch_id: DataTypes.INTEGER,
+
       },
       {
         sequelize,
@@ -17,7 +18,9 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Manager);
+    this.hasMany(models.Manager);
+    this.hasMany(models.Employer);
+    this.belongsToMany(models.Permission, { through: "users_permissions" })
   }
 }
 
