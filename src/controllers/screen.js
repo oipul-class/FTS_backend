@@ -5,13 +5,6 @@ module.exports = {
     try {
       const screens = await Screen.findAll({
         attributes: ["id", "screen_name", "route"],
-        include: [
-          {
-            association: "Permission",
-            attributes: ["id", "permission_name"],
-            through: { attributes: [] },
-          },
-        ],
       });
 
       res.send(screens);
@@ -20,16 +13,17 @@ module.exports = {
     }
   },
 
-  async find(req, res) {},
-
-  async store(req, res) {
-    const { screen_name, route } = req.body;
+  async find(req, res) {
+    const sreenId = req.params.id;
 
     try {
-    } catch (error) {}
+      const screen = await Screen.findByPk(sreenId, {
+        attributes: ["id", "screen_name", "route"],
+      });
+
+      res.send(screen);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   },
-
-  async update(req, res) {},
-
-  async delete(req, res) {},
 };

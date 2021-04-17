@@ -4,6 +4,7 @@ const routes = express.Router();
 
 module.exports = routes;
 
+const screenController = require("./controllers/screen");
 const companyController = require("./controllers/company");
 const branchController = require("./controllers/branch");
 const managerController = require("./controllers/manager");
@@ -16,6 +17,9 @@ const branchMiddleware = require("./validators/branch");
 const ManagerMiddleware = require("./validators/manager");
 const userMiddleware = require("./validators/user");
 const roleMiddleware = require("./validators/role");
+
+routes.get("/screen", screenController.index);
+routes.get("/screen/:id", screenController.find);
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 
