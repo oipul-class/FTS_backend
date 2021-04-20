@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const Manager = require("../models/Manager");
+const Employer = require("../models/Employer");
+const Branch = require("../models/Branch");
 const { Op } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 
@@ -7,26 +9,28 @@ module.exports = {
   async index(req, res) {
     try {
       const users = await User.findAll({
-        attributes: ["id", "user_name", "rg", "cpf"],
-        include: {
-          association: "Manager",
-          attributes: ["id", "manager_name", "rg", "cpf"],
-          include: [
-            {
-              association: "Branch",
-              attributes: [
-                "branch_name",
-                "cep",
-                "branch_email",
-                "place_number",
-              ],
-            },
-            {
-              association: "Role",
-              attributes: ["role_name"],
-            },
-          ],
-        },
+        attributes: [
+          "cpf",
+          "user_password",
+          "user_name",
+          "user_access",
+          "branch_id",
+        ],
+        include: [
+          { model: Manager, attributes: ["rg"] },
+          { model: Employer, attributes: ["rg"] },
+          {
+            association: "Branch",
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+              "company_id",
+            ],
+          },
+        ],
       });
 
       res.send(users);
@@ -37,46 +41,35 @@ module.exports = {
   },
 
   async find(req, res) {
-    const { user_name, rg, cpf } = req.body;
+    const { user_name, cpf, user_access } = req.body;
 
     try {
       const users = await User.findAll({
-        attributes: ["user_name", "rg", "cpf"],
+        attributes: ["user_name", "cpf", "user_access"],
         where: {
-          [Op.and]: [
-            {
-              user_name: { [Op.substring]: user_name ? user_name : "" },
-            },
-            {
-              rg: { [Op.substring]: rg ? rg : "" },
-            },
-            {
-              cpf: { [Op.substring]: cpf ? cpf : "" },
-            },
-          ],
+          [Op.and]: {
+            user_name: { [Op.substring]: user_name ? user_name : "" },
+            cpf: { [Op.substring]: cpf ? cpf : "" },
+          },
         },
-        include: {
-          association: "Manager",
-          attributes: ["manager_name", "rg", "cpf"],
-          include: [
-            {
-              association: "Branch",
-              attributes: [
-                "branch_name",
-                "cep",
-                "branch_email",
-                "place_number",
-              ],
-            },
-            {
-              association: "Role",
-              attributes: ["role_name"],
-            },
-          ],
-        },
+        include: [
+          { model: Manager, attributes: ["rg"] },
+          { model: Employer, attributes: ["rg"] },
+          {
+            association: "Branch",
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+              "company_id",
+            ],
+          },
+        ],
       });
 
-      res.sand(users);
+      res.send(users);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -84,24 +77,56 @@ module.exports = {
   },
 
   async store(req, res) {
-    const { user_name, rg, cpf, user_password, manager_id } = req.body;
+    const {
+      cpf,
+      rg,
+      user_password,
+      user_name,
+      user_access,
+      branch_id,
+    } = req.body;
 
     try {
-      const manager = await Manager.findByPk(manager_id);
+      const branch = await Branch.findByPk(branch_id);
 
-      if (!manager) return res.status(404).send({ erro: "gerente não existe" });
+      if (!branch) return res.status(404).send({ erro: "afilial não existe" });
 
       const cryptPassword = bcryptjs.hashSync(user_password);
 
       const user = await User.create({
-        user_name,
-        rg,
         cpf,
         user_password: cryptPassword,
-        manager_id,
+        user_name,
+        user_access,
+        branch_id,
       });
 
-      res.status(201).send({ user_name, rg, cpf, user_password, manager_id });
+      let role;
+
+      if (user_access == 2 || user_access == 3 || user_access == 4) {
+        const manager = await user.createManager({
+          rg,
+        });
+
+        role = manager;
+      } else if (user_access == 5 || user_access == 6 || user_access == 7) {
+        const employer = await user.createEmployer({
+          rg,
+        });
+
+        role = employer;
+      }
+
+      const response = {
+        cpf,
+        user_password,
+        user_name,
+        user_access,
+        branch: branch,
+        role,
+      };
+
+      res.status(201).send(response);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -111,7 +136,7 @@ module.exports = {
   async update(req, res) {
     const { id } = req.params;
 
-    const { user_name, rg, cpf, user_password, manager_id } = req.body;
+    const { user_name, cpf, user_password, user_access, branch_id } = req.body;
 
     try {
       const user = await User.findByPk(id);
@@ -119,21 +144,77 @@ module.exports = {
       if (!user) return res.status(404).send({ erro: "usuário não existe" });
 
       if (user_name) user.user_name = user_name;
-      if (rg) user.rg = rg;
       if (cpf) user.cpf = cpf;
-      if (user_password) user.user_password = user_password;
-      if (manager_id) {
-        const manager = await Manager.findByPk(manager_id);
+      if (user_password) {
+        const cryptPassword = bcryptjs.hashSync(user_password);
 
-        if (!manager)
-          return res.status(404).send({ erro: "gerente não existe" });
+        user.user_password = cryptPassword;
+      }
+      if (branch_id) {
+        const branch = await Branch.findByPk(branch_id);
 
-        user.manager_id = manager_id;
+        if (!branch)
+          return res.status(404).send({ erro: "afilial não existe" });
+
+        user.branch_id = branch_id;
+      }
+      if (user_access) {
+        if (user_access == 2 || user_access == 3 || user_access == 4) {
+          const employer = await Employer.findByPk(id, {attributes: ["rg"]});
+          if (employer) {
+
+            const manager = await user.createManager({
+              rg: employer.rg,
+            });
+
+            await employer.destroy();
+
+          } else {
+            user.user_access = user_access;
+          }
+        } else if (user_access == 5 || user_access == 6 || user_access == 7) {
+          const manager = await Manager.findByPk(id, {attributes: ["rg"]});
+
+          if (manager) {
+            manager.destroy();
+
+            const employer = await user.createEmployer({
+              rg: manager.rg,
+            });
+          } else {
+            user.user_access = user_access;
+          }
+        }
       }
 
       await user.save();
 
-      res.send(user);
+      const updatedUser = await User.findByPk(user.id, {
+        attributes: [
+          "cpf",
+          "user_password",
+          "user_name",
+          "user_access",
+          "branch_id",
+        ],
+        include: [
+          { model: Manager, attributes: ["rg"] },
+          { model: Employer, attributes: ["rg"] },
+          {
+            association: "Branch",
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+              "company_id",
+            ],
+          },
+        ],
+      });
+
+      res.send(updatedUser);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
