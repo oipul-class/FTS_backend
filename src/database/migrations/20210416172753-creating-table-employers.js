@@ -11,6 +11,8 @@ module.exports = {
           model: "users",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
 
       rg: {
@@ -24,7 +26,17 @@ module.exports = {
           model: "managers",
           key: "id",
         },
-      }
+      },
+
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
 
     });
 
