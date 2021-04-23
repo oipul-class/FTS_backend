@@ -1,9 +1,9 @@
 const bcryptjs = require("bcryptjs");
-const Company = require("../models/Company");
+const Company = require("../models/Company")
+const User = require("../models/User");
 const Branch = require("../models/Branch");
-const Role = require("../models/Role");
-const Manager = require("../models/Manager");
 const { generateToken } = require("../utils");
+
 
 module.exports = {
   async store(req, res) {
@@ -16,35 +16,31 @@ module.exports = {
         },
         include: {
           model: Branch,
-        },
+        }
       });
 
-      if (!company || !bcryptjs.compareSync(password, company.adm_password)) {
-        const manager = await Manager.findOne({
+      if (!company || !bcryptjs.compareSync(password, company.companie_password)) {
+        const user = await User.findOne({
           where: {
             cpf: cnpj_ou_cpf,
-          },
-          include: {
-            model: Role,
           },
         });
 
         if (
-          !manager ||
-          !bcryptjs.compareSync(password, manager.manager_password)
+          !user ||
+          !bcryptjs.compareSync(password, user.user_password)
         )
-          return res.status(404).send({ erro: "admin ou gerente não existe" });
+          return res.status(404).send({ erro: "usuario não existe" });
         else {
           const token = generateToken({
-            id: manager.id,
-            manager_name: manager.manager_name,
+            id: user.id,
+            user_name: user.user_name,
           });
 
           return res.status(201).send({
             user: {
-              id: manager.id,
-              manager_name: manager.manager_name,
-              manager_role: manager.Role.role_name,
+              id: user.id,
+              user_name: user.user_name,
             },
             token: token,
           });

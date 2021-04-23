@@ -1,3 +1,4 @@
+
 const { Op } = require("sequelize");
 const Company = require("../models/Company");
 const Plan = require("../models/Plan");
@@ -75,25 +76,25 @@ module.exports = {
   async store(req, res) {
     const {
       cnpj,
-      adm_password,
       fantasy_name,
       social_reason,
       place_number,
+      companie_password,
       cep,
       state,
       nature_of_the_business,
       commercial_email,
     } = req.body;
 
-    const cryptPassword = bcryptjs.hashSync(adm_password);
+    const cryptPassword = bcryptjs.hashSync(companie_password);
 
     try {
       const company = await Company.create({
         cnpj,
-        adm_password: cryptPassword,
         fantasy_name,
         social_reason,
         place_number,
+        companie_password: cryptPassword,
         cep,
         state,
         nature_of_the_business,
@@ -124,6 +125,7 @@ module.exports = {
       fantasy_name,
       social_reason,
       place_number,
+      companie_password,
       cep,
       state,
       nature_of_the_business,
@@ -152,6 +154,13 @@ module.exports = {
       if (fantasy_name) company.fantasy_name = fantasy_name;
       if (social_reason) company.social_reason = social_reason;
       if (place_number) company.place_number = place_number;
+
+      if (companie_password) {
+        const cryptPassword = bcryptjs.hashSync(companie_password);
+
+        company.companie_password = companie_password;
+      }
+
       if (cep) company.cep = cep;
       if (state) company.state = state;
       if (nature_of_the_business)
@@ -220,3 +229,4 @@ module.exports = {
     });
   },
 };
+

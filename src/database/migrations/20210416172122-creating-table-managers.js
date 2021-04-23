@@ -10,10 +10,22 @@ module.exports = {
           model: "users",
           key: "id",
         },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
 
       rg: {
         type: Sequelize.STRING(20),
+        allowNull: false,
+      },
+
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+
+      updated_at: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
     });
