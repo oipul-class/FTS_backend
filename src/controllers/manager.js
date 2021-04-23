@@ -1,30 +1,21 @@
 const Manager = require("../models/Manager");
-const Branch = require("../models/Branch");
-const Role = require("../models/Role");
 const { Op } = require("sequelize");
-const bcryptjs = require("bcryptjs");
 
 module.exports = {
   async index(req, res) {
     try {
       const managers = await Manager.findAll({
-        attributes: ["id", "manager_name", "rg", "cpf"],
-        include: [
-          {
-            association: "Branch",
-            attributes: [
-              "id",
-              "branch_name",
-              "cep",
-              "branch_email",
-              "place_number",
-            ],
-          },
-          {
-            association: "Role",
-            attributes: ["id", "role_name"],
-          },
-        ],
+        attributes: ["id", "rg"],
+        include: {
+          association: "User",
+          attributes: [
+            "cpf",
+            "user_password",
+            "user_name",
+            "user_access",
+            "branch_id",
+          ],
+        },
       });
 
       res.send(managers);
@@ -77,47 +68,6 @@ module.exports = {
     }
   },
 
-  async store(req, res) {
-    const {
-      manager_name,
-      rg,
-      cpf,
-      manager_password,
-      branch_id,
-      role_id,
-    } = req.body;
-
-    try {
-      const branch = await Branch.findByPk(branch_id);
-      const role = await Role.findByPk(role_id);
-
-      if (!branch || !role)
-        return res.status(404).send({ erro: "afilial ou cargo não existe" });
-
-      const cryptPassword = bcryptjs.hashSync(manager_password);
-
-      const manager = await Manager.create({
-        manager_name,
-        rg,
-        cpf,
-        manager_password: cryptPassword,
-        branch_id,
-        role_id,
-      });
-
-      res.status(201).send({
-        manager_name,
-        rg,
-        cpf,
-        branch: branch.branch_name,
-        role: role.role_name,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
-  },
-
   async update(req, res) {
     const { id } = req.params;
 
@@ -162,20 +112,5 @@ module.exports = {
       console.error(error);
       res.status(500).send(error);
     }
-  },
-
-  async delete(req, res) {
-    const { id } = req.params;
-
-    const manager = await Manager.findByPk(id);
-
-    if (!manager) return res.status(404).send({ erro: "gerente não existe" });
-
-    await manager.destroy();
-
-    res.send({
-      status: "deletado",
-      gerente: manager,
-    });
   },
 };
