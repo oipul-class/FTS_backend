@@ -8,6 +8,10 @@ module.exports = {
     try {
       const managers = await Manager.findAll({
         attributes: ["id", "rg"],
+        include: {
+          model: User,
+          attributes: ["cpf", "user_name"],
+        },
       });
 
       res.send(managers);
@@ -18,12 +22,12 @@ module.exports = {
   },
 
   async find(req, res) {
-    const {rg,} = req.body;
+    const { rg } = req.body;
 
     try {
       const managers = await Manager.findAll({
         where: {
-          rg: { [Op.substring]: rg ? rg : "",}
+          rg: { [Op.substring]: rg ? rg : "" },
         },
       });
 
@@ -37,9 +41,7 @@ module.exports = {
   async update(req, res) {
     const { id } = req.params;
 
-    const {
-      rg,
-    } = req.body;
+    const { rg } = req.body;
 
     try {
       const manager = await Manager.findByPk(id);

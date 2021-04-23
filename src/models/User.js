@@ -9,7 +9,6 @@ class User extends Model {
         user_name: DataTypes.STRING,
         user_access: DataTypes.INTEGER,
         branch_id: DataTypes.INTEGER,
-
       },
       {
         sequelize,
@@ -19,9 +18,9 @@ class User extends Model {
 
   static associate(models) {
     this.belongsTo(models.Branch);
-    this.hasMany(models.Manager, { foreignKey: "id" });
+    this.hasMany(models.Manager);
     this.hasMany(models.Employer, { foreignKey: "id" });
-    this.belongsToMany(models.Permission, { through: "users_permissions" })
+    this.belongsToMany(models.Permission, { through: "users_permissions" });
   }
 }
 
