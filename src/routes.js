@@ -40,7 +40,7 @@ routes.put("/company/:id", companyMiddleware.update, companyController.update);
 routes.put("/company/plan", companyController.setPlan);
 routes.delete("/company/:id", companyController.delete);
 
-//routes.use(tokenAuthMiddleware);
+routes.use(tokenAuthMiddleware);
 
 routes.get("/manager", managerController.index);
 routes.get("/manager/search", managerController.find);

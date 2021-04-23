@@ -18,8 +18,8 @@ class User extends Model {
 
   static associate(models) {
     this.belongsTo(models.Branch);
-    this.hasMany(models.Manager);
-    this.hasMany(models.Employer, { foreignKey: "id" });
+    this.hasOne(models.Manager);
+    this.hasOne(models.Employer);
     this.belongsToMany(models.Permission, { through: "users_permissions" });
   }
 }
