@@ -1,4 +1,6 @@
 const Manager = require("../models/Manager");
+const User = require("../models/User");
+
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -6,16 +8,6 @@ module.exports = {
     try {
       const managers = await Manager.findAll({
         attributes: ["id", "rg"],
-        include: {
-          association: "User",
-          attributes: [
-            "cpf",
-            "user_password",
-            "user_name",
-            "user_access",
-            "branch_id",
-          ],
-        },
       });
 
       res.send(managers);
@@ -26,39 +18,13 @@ module.exports = {
   },
 
   async find(req, res) {
-    const { manager_name, rg, cpf } = req.body;
+    const {rg,} = req.body;
 
     try {
       const managers = await Manager.findAll({
         where: {
-          [Op.and]: [
-            {
-              manager_name: {
-                [Op.substring]: manager_name ? manager_name : "",
-              },
-            },
-            {
-              rg: {
-                [Op.substring]: rg ? rg : "",
-              },
-            },
-            {
-              cpf: {
-                [Op.substring]: cpf ? cpf : "",
-              },
-            },
-          ],
+          rg: { [Op.substring]: rg ? rg : "",}
         },
-        include: [
-          {
-            association: "Branch",
-            attributes: ["branch_name", "cep", "branch_email", "place_number"],
-          },
-          {
-            association: "Role",
-            attributes: ["role_name"],
-          },
-        ],
       });
 
       res.send(managers);
@@ -72,12 +38,7 @@ module.exports = {
     const { id } = req.params;
 
     const {
-      manager_name,
       rg,
-      cpf,
-      manager_password,
-      branch_id,
-      role_id,
     } = req.body;
 
     try {
@@ -87,23 +48,6 @@ module.exports = {
 
       if (manager_name) manager.manager_name = manager_name;
       if (rg) manager.rg = rg;
-      if (cpf) manager.cpf = cpf;
-      if (manager_password) manager.manager_password = manager_password;
-      if (branch_id) {
-        const branch = await Branch.findByPk(branch_id);
-
-        if (!branch)
-          return res.status(404).send({ erro: "afilial não existe" });
-
-        manager.branch_id = branch_id;
-      }
-      if (role_id) {
-        const role = await Branch.findByPk(role_id);
-
-        if (!role) return res.status(404).send({ erro: "cargo não existe" });
-
-        manager.role_id = role_id;
-      }
 
       await manager.save();
 
