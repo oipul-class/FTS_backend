@@ -4,8 +4,13 @@ const Company = require("../models/Company");
 
 module.exports = {
   async index(req, res) {
+    const { company_id } = req.query;
+
     try {
       const branches = await Branch.findAll({
+        where: {
+          company_id: company_id,
+        },
         attributes: [
           "id",
           "branch_name",
