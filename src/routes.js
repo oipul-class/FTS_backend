@@ -6,17 +6,14 @@ module.exports = routes;
 
 const screenController = require("./controllers/screen");
 const permissionController = require("./controllers/permission");
-const employerController = require("./controllers/employer");
 const companyController = require("./controllers/company");
 const branchController = require("./controllers/branch");
-const managerController = require("./controllers/manager");
 const roleController = require("./controllers/role");
 const userController = require("./controllers/user");
 const sessionController = require("./controllers/session");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
-const ManagerMiddleware = require("./validators/manager");
 const userMiddleware = require("./validators/user");
 const roleMiddleware = require("./validators/role");
 
@@ -25,9 +22,6 @@ routes.get("/screen/:id", screenController.find);
 
 routes.get("/permission", permissionController.index);
 routes.get("/permission/:id", permissionController.find);
-
-routes.get("/employer", employerController.index);
-routes.get("/employer/:id", employerController.find);
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 
@@ -41,10 +35,6 @@ routes.put("/company/plan", companyController.setPlan);
 routes.delete("/company/:id", companyController.delete);
 
 // routes.use(tokenAuthMiddleware);
-
-routes.get("/manager", managerController.index);
-routes.get("/manager/search", managerController.find);
-routes.put("/manager/:id", managerController.update);
 
 routes.get("/branch", branchController.index);
 routes.get("/branch/search", branchController.find);

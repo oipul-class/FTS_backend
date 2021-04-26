@@ -5,10 +5,11 @@ class User extends Model {
     super.init(
       {
         cpf: DataTypes.STRING,
+        rg: DataTypes.STRING,
         user_password: DataTypes.STRING,
         user_name: DataTypes.STRING,
-        user_access: DataTypes.INTEGER,
         branch_id: DataTypes.INTEGER,
+        role_id: DataTypes.INTEGER,
       },
       {
         sequelize,
@@ -18,8 +19,7 @@ class User extends Model {
 
   static associate(models) {
     this.belongsTo(models.Branch);
-    this.hasOne(models.Manager);
-    this.hasOne(models.Employer);
+    this.belongsTo(models.Role);
     this.belongsToMany(models.Permission, { through: "users_permissions" });
   }
 }

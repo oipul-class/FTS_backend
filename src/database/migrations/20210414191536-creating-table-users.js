@@ -14,6 +14,10 @@ module.exports = {
         allowNull: false,
       },
 
+      rg: {
+        type: Sequelize.STRING(20),
+      },
+
       user_password: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -24,15 +28,20 @@ module.exports = {
         allowNull: false,
       },
 
-      user_access: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-
       branch_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "branches",
+          key: "id",
+        },
+      },
+
+      role_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "roles",
           key: "id",
         },
       },

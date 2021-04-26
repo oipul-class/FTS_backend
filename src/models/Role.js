@@ -13,7 +13,7 @@ class Role extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Manager)
+    this.hasMany(models.User);
   }
 }
 
