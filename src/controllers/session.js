@@ -33,7 +33,7 @@ module.exports = {
               model: Role,
             },
             {
-              association: "user_permission"
+              association: "Permissions"
             }
           ]
         });
