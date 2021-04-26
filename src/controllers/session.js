@@ -3,6 +3,7 @@ const Company = require("../models/Company")
 const User = require("../models/User");
 const Branch = require("../models/Branch");
 const { generateToken } = require("../utils");
+const Role = require("../models/Role");
 
 
 module.exports = {
@@ -24,6 +25,17 @@ module.exports = {
           where: {
             cpf: cnpj_ou_cpf,
           },
+          include: [
+            {
+              model: Branch,
+            },
+            {
+              model: Role,
+            },
+            {
+              association: "user_permission"
+            }
+          ]
         });
 
         if (
@@ -35,12 +47,22 @@ module.exports = {
           const token = generateToken({
             id: user.id,
             user_name: user.user_name,
+            user_cpf: user.cpf,
+            user_rg: user.rg,
+            user_branch_id: user.branch_id,
+            user_role_id: user.user_role_id
           });
 
           return res.status(201).send({
             user: {
               id: user.id,
               user_name: user.user_name,
+              user_cpf: user.cpf,
+              user_rg: user.rg,
+              user_branch_id: user.branch_id,
+              user_role_id: user.user_role_id,
+              branch: user.branch,
+              role: user.role
             },
             token: token,
           });
