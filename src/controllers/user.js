@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const Branch = require("../models/Branch");
-const Role = require("../models/Role")
+const Role = require("../models/Role");
 const { Op } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 
@@ -26,8 +26,9 @@ module.exports = {
             attributes: ["id", "role_name"],
           },
           {
-            association: "Permissions"
-          }
+            association: "Permissions",
+            attributes: ["id", "permission_name"],
+          },
         ],
       });
 
@@ -68,8 +69,9 @@ module.exports = {
             attributes: ["id", "role_name"],
           },
           {
-            association: "Permissions"
-          }
+            association: "Permissions",
+            attributes: ["id", "permission_name"],
+          },
         ],
       });
 
@@ -81,7 +83,15 @@ module.exports = {
   },
 
   async store(req, res) {
-    const { cpf, rg, user_password, user_name, branch_id, role_id, permissions } = req.body;
+    const {
+      cpf,
+      rg,
+      user_password,
+      user_name,
+      branch_id,
+      role_id,
+      permissions,
+    } = req.body;
 
     try {
       const branch = await Branch.findByPk(branch_id);
@@ -103,9 +113,9 @@ module.exports = {
         role_id,
       });
 
-      const permissionsArray = permissions.split(",")
+      const permissionsArray = permissions.split(",");
 
-      await user.addPermissions(permissionsArray)
+      await user.addPermissions(permissionsArray);
 
       res.status(201).send(user);
     } catch (error) {
@@ -146,8 +156,7 @@ module.exports = {
 
         if (!role) return res.status(404).send({ erro: "cargo não existe" });
 
-        user.role_id = role_id
-        
+        user.role_id = role_id;
       }
 
       await user.save();
