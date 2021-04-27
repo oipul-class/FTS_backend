@@ -5,6 +5,10 @@ module.exports = {
     try {
       const response = await Permission.findAll({
         attributes: ["id", "permission_name"],
+        include: {
+          association: "Screens",
+          attributes: ["id", "screen_name"],
+        },
       });
 
       res.send(response);

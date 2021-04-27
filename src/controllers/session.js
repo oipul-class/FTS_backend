@@ -1,10 +1,9 @@
 const bcryptjs = require("bcryptjs");
-const Company = require("../models/Company")
+const Company = require("../models/Company");
 const User = require("../models/User");
 const Branch = require("../models/Branch");
 const { generateToken } = require("../utils");
 const Role = require("../models/Role");
-
 
 module.exports = {
   async store(req, res) {
@@ -17,10 +16,13 @@ module.exports = {
         },
         include: {
           model: Branch,
-        }
+        },
       });
 
-      if (!company || !bcryptjs.compareSync(password, company.companie_password)) {
+      if (
+        !company ||
+        !bcryptjs.compareSync(password, company.companie_password)
+      ) {
         const user = await User.findOne({
           where: {
             cpf: cnpj_ou_cpf,
@@ -33,16 +35,18 @@ module.exports = {
               model: Role,
             },
             {
-              association: "Permissions"
-            }
-          ]
+              association: "Permissions",
+              attributes: ["id", "permission_name"],
+              include: {
+                association: "Screens",
+                attributes: ["id", "screen_name"],
+              },
+            },
+          ],
         });
 
-        if (
-          !user ||
-          !bcryptjs.compareSync(password, user.user_password)
-        )
-          return res.status(404).send({ erro: "usuario não existe" });
+        if (!user || !bcryptjs.compareSync(password, user.user_password))
+          return res.status(404).send({ erro: "Usuário/senha incorretos" });
         else {
           const token = generateToken({
             id: user.id,
@@ -50,7 +54,7 @@ module.exports = {
             user_cpf: user.cpf,
             user_rg: user.rg,
             user_branch_id: user.branch_id,
-            user_role_id: user.user_role_id
+            user_role_id: user.user_role_id,
           });
 
           return res.status(201).send({
@@ -62,7 +66,8 @@ module.exports = {
               user_branch_id: user.branch_id,
               user_role_id: user.user_role_id,
               branch: user.branch,
-              role: user.role
+              role: user.role,
+              permissions: user.Permissions,
             },
             token: token,
           });
