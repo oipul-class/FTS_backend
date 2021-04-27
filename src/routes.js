@@ -49,7 +49,7 @@ routes.put("/role/:id", roleMiddleware.create, roleController.update);
 routes.delete("/role/:id", roleController.delete);
 
 routes.get("/user", userController.index);
-routes.get("/user/search", userController.find);
+routes.get("/user/:id", userController.find);
 routes.post("/user", userMiddleware.create, userController.store);
 routes.put("/user/:id", userMiddleware.update, userController.update);
 routes.delete("/user/:id", userController.delete);

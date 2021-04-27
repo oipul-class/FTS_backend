@@ -40,18 +40,12 @@ module.exports = {
   },
 
   async find(req, res) {
-    const { user_name, cpf, rg } = req.body;
+    const { id } = req.params;
 
     try {
-      const users = await User.findAll({
+      const users = await User.findByPk(id, {
         attributes: ["user_name", "cpf", "rg"],
-        where: {
-          [Op.and]: {
-            user_name: { [Op.substring]: user_name ? user_name : "" },
-            cpf: { [Op.substring]: cpf ? cpf : "" },
-            rg: { [Op.substring]: rg ? rg : "" },
-          },
-        },
+
         include: [
           {
             association: "Branch",
@@ -64,13 +58,14 @@ module.exports = {
               "company_id",
             ],
           },
-          {
-            association: "Roles",
-            attributes: ["id", "role_name"],
-          },
+
           {
             association: "Permissions",
             attributes: ["id", "permission_name"],
+            include: {
+              association: "Screens",
+              attributes: ["id", "screen_name"],
+            },
           },
         ],
       });
