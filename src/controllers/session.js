@@ -37,9 +37,10 @@ module.exports = {
             {
               association: "Permissions",
               attributes: ["id", "permission_name"],
+              through: { attributes: [] },
               include: {
                 association: "Screens",
-                attributes: ["id", "screen_name"],
+                attributes: ["id", "screen_name", "route"],
               },
             },
           ],
