@@ -4,20 +4,8 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert("screens", [
       {
-        screen_name: "Cadastro de gerente geral",
-        route: "generalManagerRegister",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_name: "Cadastro de gerentes",
-        route: "managersRegister",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_name: "Cadastro de funcionários",
-        route: "employeesRegister",
+        screen_name: "Cadastro de usuários",
+        route: "usersRegister",
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -35,6 +23,12 @@ module.exports = {
       },
       {
         screen_name: "Relatórios de compras",
+        route: "purchasesReports",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        screen_name: "Relatório de movimento",
         route: "purchasesReports",
         created_at: new Date(),
         updated_at: new Date(),
