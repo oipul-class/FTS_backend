@@ -1,4 +1,3 @@
-
 const { Op } = require("sequelize");
 const Company = require("../models/Company");
 const Plan = require("../models/Plan");
@@ -79,6 +78,7 @@ module.exports = {
       fantasy_name,
       social_reason,
       place_number,
+      permissions,
       companie_password,
       cep,
       state,
@@ -101,11 +101,16 @@ module.exports = {
         commercial_email,
       });
 
+      const permissionsArray = permissions.split(",");
+
+      await company.addPermissions(permissionsArray);
+
       res.status(201).send({
         cnpj,
         fantasy_name,
         social_reason,
         place_number,
+        permissions,
         cep,
         state,
         nature_of_the_business,
@@ -229,4 +234,3 @@ module.exports = {
     });
   },
 };
-

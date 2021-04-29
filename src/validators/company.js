@@ -7,6 +7,7 @@ module.exports = {
       fantasy_name: Joi.string().min(2).max(255).required(),
       social_reason: Joi.string().min(5).max(255).required(),
       place_number: Joi.number().integer().required(),
+      permissions: Joi.string().required(),
       companie_password: Joi.string().min(8).max(255).required(),
       cep: Joi.string().length(9).required(),
       state: Joi.string().length(2).required(),

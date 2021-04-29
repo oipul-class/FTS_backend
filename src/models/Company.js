@@ -23,7 +23,7 @@ class Company extends Model {
 
   static associate(models) {
     this.hasMany(models.Branch);
-    this.belongsToMany(models.Permission, { through: "companies_permissons" });
+    this.belongsToMany(models.Permission, { through: "companies_permissions" });
   }
 }
 module.exports = Company;

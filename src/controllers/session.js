@@ -14,9 +14,20 @@ module.exports = {
         where: {
           cnpj: cnpj_ou_cpf,
         },
-        include: {
-          model: Branch,
-        },
+        include: [
+          {
+            model: Branch,
+          },
+          {
+            association: "Permissions",
+            attributes: ["id", "permission_name"],
+            through: { attributes: [] },
+            include: {
+              association: "Screens",
+              attributes: ["id", "screen_name", "route"],
+            },
+          },
+        ],
       });
 
       if (
@@ -84,6 +95,7 @@ module.exports = {
             id: company.id,
             fantasy_name: company.fantasy_name,
             branches: company.Branches,
+            permissions: company.Permissions,
           },
           token: token,
         });
