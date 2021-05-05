@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 
-class LogbookInvetories extends Model {
+class LogBookInvetory extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -28,4 +28,4 @@ class LogbookInvetories extends Model {
   }
 }
 
-module.exports = LogbookInvetories;
+module.exports = LogBookInvetory;
