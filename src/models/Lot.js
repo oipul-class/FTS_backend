@@ -12,7 +12,11 @@ class Lot extends Model {
         sequelize,
       }
     );
-
+      
+  }
+  
+  static associate(models) {
+    this.hasMany(models.LogBookInventory);
   }
 }
 

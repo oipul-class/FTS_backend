@@ -15,6 +15,12 @@ class Sale extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.belongsTo(models.PaymentMethod);
+    this.belongsTo(models.LogBookInvetory);
+    this.belongsTo(models.Costumer);
+  }
 }
 
 module.exports = Sale;

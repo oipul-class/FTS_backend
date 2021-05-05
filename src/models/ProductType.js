@@ -12,6 +12,10 @@ class ProductType extends Model {
     );
 
   }
+
+  static associate(models) {
+    this.hasMany(models.Product);
+  }
 }
 
 module.exports = ProductType;

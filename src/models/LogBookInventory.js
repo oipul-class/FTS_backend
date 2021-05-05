@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
 
-class LogBookInvetory extends Model {
+class LogBookInventory extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -24,8 +24,11 @@ class LogBookInvetory extends Model {
   static associate(models) {
     this.belongsTo(models.Branch);
     this.belongsTo(models.Lot);
-    this.belongsTo(models.Costomer);
+    this.belongsTo(models.Costumer);
+    this.belongsTo(models.Product);
+    this.hasOne(models.Sale);
+    this.hasOne(mdoels.Purchase);
   }
 }
 
-module.exports = LogBookInvetory;
+module.exports = LogBookInventory;

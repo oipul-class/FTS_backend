@@ -14,6 +14,12 @@ class Purchase extends Model {
 
     return this;
   }
+  
+  static associate(models) {
+    this.belongsTo(models.PaymentMethod);
+    this.belongsTo(models.LogBookInvetory)
+    this.hasMany(models.ItemPurchase);
+  }
 }
 
 module.exports = Purchase;

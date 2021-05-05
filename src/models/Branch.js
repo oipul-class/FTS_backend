@@ -19,6 +19,7 @@ class Branch extends Model {
   static associate(models) {
     this.belongsTo(models.Company);
     this.hasMany(models.User);
+    this.hasMany(models.LogBookInventory);
   }
 }
 

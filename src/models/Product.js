@@ -13,8 +13,16 @@ class Product extends Model {
       {
         sequelize,
       }
+      
     );
+  }
 
+  static associate(models) {
+    this.belongsTo(models.Company);
+    this.belongsTo(models.ProductType);
+    this.belongsTo(models.UnitOfMeasurement);
+    this.hasOne(models.LogBookInventory);
+    this.hasMany(models.ItemPurchase);
   }
 }
 

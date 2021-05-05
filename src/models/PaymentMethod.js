@@ -16,7 +16,8 @@ class PaymentMethod extends Model {
 
   static associate(models) {
     this.hasMany(models.Purchase);
+    this.hasMany(models.Sales);
   }
 }
 
-export default PaymentMethod;
+module.exports = PaymentMethod;
