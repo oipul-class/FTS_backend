@@ -16,4 +16,4 @@ class Purchase extends Model {
   }
 }
 
-export default Purchase;
+module.exports = Purchase;

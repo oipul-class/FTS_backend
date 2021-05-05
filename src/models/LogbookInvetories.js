@@ -22,4 +22,4 @@ class LogbookInvetories extends Model {
   }
 }
 
-export default LogbookInvetories;
+module.exports = LogbookInvetories;

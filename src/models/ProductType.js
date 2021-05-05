@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize';
+const { DataTypes, Model } = require("sequelize");
 
 class ProductType extends Model {
   static init(sequelize) {
@@ -11,8 +11,7 @@ class ProductType extends Model {
       }
     );
 
-    return this;
   }
 }
 
-export default ProductType;
+module.exports = ProductType;

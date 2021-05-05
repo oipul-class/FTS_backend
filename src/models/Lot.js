@@ -13,8 +13,7 @@ class Lot extends Model {
       }
     );
 
-    return this;
   }
 }
 
-export default Lot;
+module.exports = Lot;

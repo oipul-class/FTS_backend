@@ -17,4 +17,4 @@ class Sale extends Model {
   }
 }
 
-export default Sale;
+module.exports = Sale;
