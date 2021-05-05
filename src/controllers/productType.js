@@ -1,5 +1,4 @@
 const ProductType = require("../models/ProductType");
-const { update } = require("../models/ProductType");
 
 module.exports = {
   async index(req, res) {
