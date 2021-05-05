@@ -20,6 +20,12 @@ class LogbookInvetories extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.belongsTo(models.Branch);
+    this.belongsTo(models.Lot);
+    this.belongsTo(models.Costomer);
+  }
 }
 
 module.exports = LogbookInvetories;
