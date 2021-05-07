@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize';
+const { DataTypes, Model } = require("sequelize");
 
 class Product extends Model {
   static init(sequelize) {
@@ -9,12 +9,13 @@ class Product extends Model {
         unit_of_measurement_id: DataTypes.INTEGER,
         product_type_id: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
-      }, 
+      },
       {
         sequelize,
       }
-      
     );
+
+    return this;
   }
 
   static associate(models) {

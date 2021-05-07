@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+const { DataTypes, Model } = require("sequelize");
 
 class UnitOfMeasurement extends Model {
   static init(sequelize) {

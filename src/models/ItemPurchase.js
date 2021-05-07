@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+const { DataTypes, Model } = require("sequelize");
 
 class ItemPurchase extends Model {
   static init(sequelize) {

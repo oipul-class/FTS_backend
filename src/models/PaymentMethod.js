@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+const { DataTypes, Model } = require("sequelize");
 
 class PaymentMethod extends Model {
   static init(sequelize) {
@@ -16,7 +16,7 @@ class PaymentMethod extends Model {
 
   static associate(models) {
     this.hasMany(models.Purchase);
-    this.hasMany(models.Sales);
+    this.hasMany(models.Sale);
   }
 }
 
