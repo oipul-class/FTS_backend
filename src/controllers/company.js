@@ -101,9 +101,8 @@ module.exports = {
         commercial_email,
       });
 
-      const permissionsArray = permissions.split(",");
 
-      await company.addPermissions(permissionsArray);
+      company.addPermission(1);
 
       res.status(201).send({
         cnpj,
