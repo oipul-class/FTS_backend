@@ -11,13 +11,14 @@ const branchController = require("./controllers/branch");
 const roleController = require("./controllers/role");
 const userController = require("./controllers/user");
 const sessionController = require("./controllers/session");
-const productTypeController = require("./controllers/productType")
+const productTypeController = require("./controllers/productType");
+const unitOfMeasurementController = require("./controllers/unitOfMeasurement");
+const productController = require("./controllers/product");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
 const userMiddleware = require("./validators/user");
 const roleMiddleware = require("./validators/role");
-
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/:id", screenController.find);
@@ -58,6 +59,15 @@ routes.delete("/user/:id", userController.delete);
 
 routes.get("/productType", productTypeController.index);
 routes.get("/productType/:id", productTypeController.find);
-routes.post("/productType",  productTypeController.store);
-routes.put("/productType/:id",  productTypeController.update);
+routes.post("/productType", productTypeController.store);
+routes.put("/productType/:id", productTypeController.update);
 routes.delete("/productType/:id", productTypeController.delete);
+
+routes.get("/unit", unitOfMeasurementController.index);
+routes.get("/unit/:id", unitOfMeasurementController.find);
+
+routes.get("/product", productController.index);
+routes.get("/product/:id", productController.find);
+routes.post("/product", productController.store);
+routes.put("/product/:id", productController.update);
+routes.delete("/product/:id", productController.delete);

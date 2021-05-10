@@ -8,6 +8,7 @@ class UnitOfMeasurement extends Model {
       },
       {
         sequelize,
+        tableName: "units_of_measurement"
       }
     );
 
