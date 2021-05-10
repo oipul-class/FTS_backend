@@ -14,6 +14,8 @@ const sessionController = require("./controllers/session");
 const productTypeController = require("./controllers/productType");
 const unitOfMeasurementController = require("./controllers/unitOfMeasurement");
 const productController = require("./controllers/product");
+const logbookController = require("./controllers/logBookInventory");
+const lotController = require("./controllers/lot")
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -71,3 +73,12 @@ routes.get("/product/:id", productController.find);
 routes.post("/product", productController.store);
 routes.put("/product/:id", productController.update);
 routes.delete("/product/:id", productController.delete);
+
+routes.get("/logbook", logbookController.index);
+routes.get("/logbook/:id", logbookController.find);
+routes.post("/logbook", logbookController.store);
+routes.put("/logbook/:id", logbookController.update);
+
+routes.get("/lot", lotController.index);
+routes.get("/lot/:id", lotController.find);
+routes.put("/lot/:id", lotController.update);
