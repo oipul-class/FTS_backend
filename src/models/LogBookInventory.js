@@ -4,7 +4,7 @@ class LogBookInventory extends Model {
   static init(sequelize) {
     super.init(
       {
-        data_of_acquisition: DataTypes.DATE,
+        date_of_acquisition: DataTypes.DATE,
         cost_per_item: DataTypes.DECIMAL(6, 2),
         quantity_acquired: DataTypes.INTEGER,
         total_value: DataTypes.DECIMAL(6, 2),
@@ -15,6 +15,7 @@ class LogBookInventory extends Model {
       },
       {
         sequelize,
+        tableName: "logbook_inventories",
       }
     );
 

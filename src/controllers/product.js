@@ -5,14 +5,19 @@ const Company = require("../models/Company");
 
 module.exports = {
   async index(req, res) {
-    const products = await Product.findAll();
+    try {
+      const products = await Product.findAll();
 
-    res.send(products);
+      res.send(products);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
   },
 
   async find(req, res) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
 
       const product = await Product.findByPk(id);
 
@@ -31,7 +36,7 @@ module.exports = {
         unit_of_measurement_id,
         product_type_id,
         company_id,
-      } = res.body;
+      } = req.body;
 
       const unit_of_measurement = await UnitOfMeasurement.findByPk(
         unit_of_measurement_id
@@ -66,12 +71,13 @@ module.exports = {
   async update(req, res) {
     try {
       const { id } = req.params;
+
       const {
         product_name,
         total_quantity,
         unit_of_measurement_id,
         product_type_id,
-      } = res.body;
+      } = req.body;
 
       const product = await Product.findByPk(id);
 
