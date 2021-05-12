@@ -19,6 +19,7 @@ const lotController = require("./controllers/lot");
 const costumerController = require("./controllers/costumer");
 const paymentMethodController = require("./controllers/paymentMethod");
 const purchaseController = require("./controllers/purchase");
+const itemPurchaseController = require("./controllers/itemPurchase");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -100,3 +101,8 @@ routes.get("/purchase/:id", purchaseController.find);
 routes.post("/purchase", purchaseController.store);
 routes.put("/purchase/:id", purchaseController.update);
 routes.delete("/purchase/:id", purchaseController.delete);
+
+routes.get("/itemPurchase", itemPurchaseController.index);
+routes.get("/itemPurchase/:id", itemPurchaseController.find);
+routes.post("/itemPurchase", itemPurchaseController.store);
+routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
