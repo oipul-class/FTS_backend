@@ -7,9 +7,11 @@ class ItemPurchase extends Model {
         cost_per_item: DataTypes.DECIMAL(6, 2),
         quantity: DataTypes.INTEGER,
         total_value: DataTypes.DECIMAL(6, 2),
+        logbook_invetory_id: DataTypes.INTEGER
       }, 
       {
         sequelize,
+        paranoid: true,
       }
     );
 
@@ -18,6 +20,7 @@ class ItemPurchase extends Model {
 
   static associate(models) {
     this.belongsTo(models.Product);
+    this.belongsTo(models.LogBookInventory);
     this.belongsTo(models.Purchase);
   }
 }

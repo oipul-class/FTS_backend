@@ -15,6 +15,7 @@ class LogBookInventory extends Model {
       },
       {
         sequelize,
+        paranoid: true,
         tableName: "logbook_inventories",
       }
     );
@@ -27,8 +28,9 @@ class LogBookInventory extends Model {
     this.belongsTo(models.Lot);
     this.belongsTo(models.Costumer);
     this.belongsTo(models.Product);
-    this.hasOne(models.Sale);
-    this.hasOne(models.Purchase);
+    this.hasMany(models.ItemPurchase);
+    this.hasMany(models.ItemSale);
+
   }
 }
 
