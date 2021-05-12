@@ -32,7 +32,7 @@ module.exports = {
         },
       },
 
-      logbook_invetory_id: {
+      logbook_inventory_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "logbook_inventories",
