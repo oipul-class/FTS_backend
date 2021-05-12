@@ -1,4 +1,5 @@
 const Purchase = require("../models/Purchase");
+const PaymentMethod = require("../models/PaymentMethod")
 const ItemPurchase = require("../models/ItemPurchase");
 
 module.exports = {
@@ -29,6 +30,10 @@ module.exports = {
   async store(req, res) {
     try {
       const { payment_method_id, logbook_invetory_id } = req.body;
+
+      const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
+
+      if (!paymentMethod) return res.status(404).send({ erro: "metodo de pagamento não existe"})
 
       const purchase = await Purchase.create({
         payment_method_id,
