@@ -1,5 +1,5 @@
 const Purchase = require("../models/Purchase");
-const { update } = require("../models/Purchase");
+const ItemPurchase = require("../models/ItemPurchase");
 
 module.exports = {
   async index(req, res) {
@@ -74,6 +74,16 @@ module.exports = {
 
       await purchase.destroy();
 
+      const itemPurchases = await ItemPurchase.findAll({
+        where: {
+          purchase_id: purchase.id
+        },
+      });
+
+      itemPurchases.map( async (item) => {
+        await item.destroy();
+      });
+      
       res.send();
     } catch (error) {
       console.error(error);
