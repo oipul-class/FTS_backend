@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -12,15 +12,7 @@ module.exports = {
       payment_method_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "branches",
-          key: "id",
-        },
-      },
-
-      logbook_invetory_id : {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "logbook_inventories",
+          model: "payment_methods",
           key: "id",
         },
       },
@@ -34,10 +26,14 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-    })
+
+      deleted_at: {
+        type: Sequelize.DATE,
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("purchases")
-  }
+    await queryInterface.dropTable("purchases");
+  },
 };

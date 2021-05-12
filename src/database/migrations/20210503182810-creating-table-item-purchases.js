@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -32,12 +32,21 @@ module.exports = {
         },
       },
 
+      logbook_invetory_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "logbook_inventories",
+          key: "id",
+        },
+      },
+
       purchase_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "purchases",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
 
       created_at: {
@@ -49,10 +58,14 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-    })
+
+      deleted_at: {
+        type: Sequelize.DATE,
+      },
+    });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('item_purchase');
-  }
+    await queryInterface.dropTable("item_purchase");
+  },
 };
