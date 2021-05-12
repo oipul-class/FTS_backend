@@ -11,11 +11,10 @@ class LogBookInventory extends Model {
         branch_id: DataTypes.INTEGER,
         lot_id: DataTypes.INTEGER,
         product_id: DataTypes.INTEGER,
-        costumer_id: DataTypes.INTEGER
+        costumer_id: DataTypes.INTEGER,
       },
       {
         sequelize,
-        paranoid: true,
         tableName: "logbook_inventories",
       }
     );
@@ -28,9 +27,8 @@ class LogBookInventory extends Model {
     this.belongsTo(models.Lot);
     this.belongsTo(models.Costumer);
     this.belongsTo(models.Product);
-    this.hasMany(models.ItemPurchase);
+    this.hasMany(models.ItemPurchase, { foreignKey: "logbook_inventory_id" });
     this.hasMany(models.ItemSale);
-
   }
 }
 
