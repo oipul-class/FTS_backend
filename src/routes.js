@@ -20,6 +20,7 @@ const costumerController = require("./controllers/costumer");
 const paymentMethodController = require("./controllers/paymentMethod");
 const purchaseController = require("./controllers/purchase");
 const itemPurchaseController = require("./controllers/itemPurchase");
+const saleController = require("./controllers/sale");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -106,3 +107,9 @@ routes.get("/itemPurchase", itemPurchaseController.index);
 routes.get("/itemPurchase/:id", itemPurchaseController.find);
 routes.post("/itemPurchase", itemPurchaseController.store);
 routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
+
+routes.get("/sale", purchaseController.index);
+routes.get("/sale/:id", purchaseController.find);
+routes.post("/sale", purchaseController.store);
+routes.put("/sale/:id", purchaseController.update);
+routes.delete("/sale/:id", purchaseController.delete);
