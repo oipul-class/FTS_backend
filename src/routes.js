@@ -109,11 +109,11 @@ routes.get("/itemPurchase/:id", itemPurchaseController.find);
 routes.post("/itemPurchase", itemPurchaseController.store);
 routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 
-routes.get("/sale", purchaseController.index);
-routes.get("/sale/:id", purchaseController.find);
-routes.post("/sale", purchaseController.store);
-routes.put("/sale/:id", purchaseController.update);
-routes.delete("/sale/:id", purchaseController.delete);
+routes.get("/sale", saleController.index);
+routes.get("/sale/:id", saleController.find);
+routes.post("/sale", saleController.store);
+routes.put("/sale/:id", saleController.update);
+routes.delete("/sale/:id", saleController.delete);
 
 routes.get("/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
