@@ -118,5 +118,4 @@ routes.delete("/sale/:id", purchaseController.delete);
 routes.get("/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
 routes.post("/itemSale", itemSaleController.store);
-routes.put("/itemSale/:id", itemSaleController.update);
 routes.delete("/itemSale/:id", itemSaleController.delete);
