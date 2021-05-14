@@ -34,7 +34,7 @@ module.exports = {
 
       if (!logbook) return res.status(404).send({ erro: "logbook não existe" });
 
-      let discount;
+      let total_value;
 
       if (discount || discount > 0)
       total_value =
