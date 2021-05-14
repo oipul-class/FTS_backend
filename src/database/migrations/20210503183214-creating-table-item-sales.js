@@ -24,6 +24,10 @@ module.exports = {
         allowNull: false,
       },
 
+      discount: {
+        type: Sequelize.INTEGER,
+      },
+
       product_id: {
         type: Sequelize.INTEGER,
         references: {

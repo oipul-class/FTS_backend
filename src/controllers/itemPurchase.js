@@ -56,6 +56,7 @@ module.exports = {
     try {
       const {
         quantity,
+        discount,
         logbook_invetory_id,
         product_id,
         purchase_id,
@@ -71,10 +72,17 @@ module.exports = {
       if (!product || !purchase)
         return res.status(404).send({ erro: "compra ou produto não existe" });
 
+      let total_value;
+
+      if (discount || discount > 0)
+        total_value =
+          logbook.cost_per_item - (logbook.cost_per_item * discount) / 100;
+      else total_value = logbook.cost_per_item * quantity;
+
       const itemPurchase = await ItemPurchase.create({
         cost_per_item: logbook.cost_per_item,
         quantity,
-        total_value: logbook.cost_per_item * quantity,
+        total_value,
         product_id,
         logbook_invetory_id,
         purchase_id,
