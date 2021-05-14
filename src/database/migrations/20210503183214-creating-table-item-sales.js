@@ -30,14 +30,16 @@ module.exports = {
 
       product_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "products",
           key: "id",
         },
       },
 
-      logbook_invetory_id: {
+      logbook_inventory_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "logbook_inventories",
           key: "id",
@@ -46,6 +48,7 @@ module.exports = {
 
       sale_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "sales",
           key: "id",
