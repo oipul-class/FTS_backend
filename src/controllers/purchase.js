@@ -1,11 +1,17 @@
 const Purchase = require("../models/Purchase");
-const PaymentMethod = require("../models/PaymentMethod")
+const PaymentMethod = require("../models/PaymentMethod");
 const ItemPurchase = require("../models/ItemPurchase");
 
 module.exports = {
   async index(req, res) {
     try {
-      const purchases = await Purchase.findAll();
+      const purchases = await Purchase.findAll({
+        include: [
+          {
+            model: ItemPurchase,
+          },
+        ],
+      });
 
       res.send(purchases);
     } catch (error) {
@@ -18,7 +24,13 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const purchase = await Purchase.findByPk(id);
+      const purchase = await Purchase.findByPk(id, {
+        include: [
+          {
+            model: ItemPurchase,
+          },
+        ],
+      });
 
       res.send(purchase);
     } catch (error) {
@@ -33,7 +45,8 @@ module.exports = {
 
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
 
-      if (!paymentMethod) return res.status(404).send({ erro: "metodo de pagamento não existe"})
+      if (!paymentMethod)
+        return res.status(404).send({ erro: "metodo de pagamento não existe" });
 
       const purchase = await Purchase.create({
         payment_method_id,
@@ -81,14 +94,14 @@ module.exports = {
 
       const itemPurchases = await ItemPurchase.findAll({
         where: {
-          purchase_id: purchase.id
+          purchase_id: purchase.id,
         },
       });
 
-      itemPurchases.map( async (item) => {
+      itemPurchases.map(async (item) => {
         await item.destroy();
       });
-      
+
       res.send();
     } catch (error) {
       console.error(error);
