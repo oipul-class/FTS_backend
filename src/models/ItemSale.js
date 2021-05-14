@@ -8,7 +8,7 @@ class ItemSale extends Model {
         quantity: DataTypes.INTEGER,
         total_value: DataTypes.DECIMAL(6, 2),
         discount: DataTypes.INTEGER,
-        logbook_invetory_id: DataTypes.INTEGER,
+        logbook_inventory_id: DataTypes.INTEGER,
       },
       {
         sequelize,
@@ -20,7 +20,9 @@ class ItemSale extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.LogBookInventory);
+    this.belongsTo(models.LogBookInventory, {
+      foreignKey: "logbook_inventory_id",
+    });
     this.belongsTo(models.Sale);
   }
 }
