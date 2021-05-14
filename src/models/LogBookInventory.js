@@ -28,7 +28,7 @@ class LogBookInventory extends Model {
     this.belongsTo(models.Costumer);
     this.belongsTo(models.Product);
     this.hasMany(models.ItemPurchase, { foreignKey: "logbook_inventory_id" });
-    this.hasMany(models.ItemSale);
+    this.hasMany(models.ItemSale, { foreignKey: "logbook_inventory_id" });
   }
 }
 
