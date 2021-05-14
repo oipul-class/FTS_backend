@@ -6,7 +6,13 @@ const ItemSale = require("../models/ItemSale");
 module.exports = {
   async index(req, res) {
     try {
-      const sales = await Sale.findAll();
+      const sales = await Sale.findAll({
+        include: [
+          {
+            model: ItemSale
+          },
+        ],
+      });
 
       res.send(sales);
     } catch (error) {
