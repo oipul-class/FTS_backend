@@ -1,6 +1,7 @@
 const Purchase = require("../models/Purchase");
 const PaymentMethod = require("../models/PaymentMethod");
 const ItemPurchase = require("../models/ItemPurchase");
+const Product = require("../models/Product");
 
 module.exports = {
   async index(req, res) {
@@ -42,7 +43,7 @@ module.exports = {
   async store(req, res) {
     try {
       const { payment_method_id, logbook_invetory_id } = req.body;
-
+      const items = req.body.items;
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
 
       if (!paymentMethod)
@@ -52,6 +53,28 @@ module.exports = {
         payment_method_id,
         logbook_invetory_id,
       });
+      if (items) {
+        items.map(async (item) => {
+          const product = await Product.findByPk(item.product_id);
+          const logbook = await product.getLogBookInventory();
+
+          let total_value;
+
+          if (item.discount || item.discount > 0)
+            total_value =
+            product.cost_per_item -
+              (product.cost_per_item * item.discount) / 100;
+          else total_value = product.cost_per_item * item.quantity;
+          await purchase.createItemPurchase({
+            cost_per_item: product.cost_per_item,
+            quantity: item.quantity,
+            discount: item.discount,
+            total_value,
+            product_id: item.product_id,
+            logbook_inventory_id: logbook.id,
+          });
+        });
+      }
 
       res.status(404).send(purchase);
     } catch (error) {
@@ -92,11 +115,7 @@ module.exports = {
 
       await purchase.destroy();
 
-      const itemPurchases = await ItemPurchase.findAll({
-        where: {
-          purchase_id: purchase.id,
-        },
-      });
+      const itemPurchases = await purchase.getItemPurchases();
 
       itemPurchases.map(async (item) => {
         await item.destroy();

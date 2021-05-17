@@ -2,6 +2,7 @@ const Sale = require("../models/Sale");
 const Costumer = require("../models/Costumer");
 const PaymentMethod = require("../models/PaymentMethod");
 const ItemSale = require("../models/ItemSale");
+const Product = require("../models/Product");
 
 module.exports = {
   async index(req, res) {
@@ -9,7 +10,7 @@ module.exports = {
       const sales = await Sale.findAll({
         include: [
           {
-            model: ItemSale
+            model: ItemSale,
           },
         ],
       });
@@ -37,6 +38,7 @@ module.exports = {
   async store(req, res) {
     try {
       const { payment_method_id, costumer_id } = req.body;
+      const items = req.body.items;
 
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
 
@@ -47,6 +49,35 @@ module.exports = {
         payment_method_id,
         costumer_id,
       });
+
+      if (items) {
+        items.map(async (item) => {
+          try {
+            const product = await Product.findByPk(item.product_id);
+            const logbook = await product.getLogBookInventory();
+
+            let total_value;
+
+            if (item.discount || item.discount > 0)
+              total_value =
+                product.cost_per_item -
+                (product.cost_per_item * item.discount) / 100;
+            else total_value = product.cost_per_item * item.quantity;
+
+            await sale.createItemSale({
+              cost_per_item: product.cost_per_item,
+              quantity: item.quantity,
+              discount: item.discount,
+              total_value,
+              product_id: item.product_id,
+              logbook_inventory_id: logbook.id,
+            });
+          } catch (error) {
+            console.error(error);
+            return res.status(500).send(error);
+          }
+        });
+      }
 
       res.status(404).send(sale);
     } catch (error) {
@@ -92,11 +123,7 @@ module.exports = {
 
       await sale.destroy();
 
-      const itemSales = await ItemSale.findAll({
-        where: {
-          sale_id: sale.id,
-        },
-      });
+      const itemSales = await sale.getItemSales()
 
       itemSales.map(async (item) => {
         item.destroy();

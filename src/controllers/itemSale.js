@@ -69,6 +69,8 @@ module.exports = {
 
       await itemSale.destroy();
 
+      const itemSales = 
+
       res.send();
     } catch (error) {
       console.error(error);

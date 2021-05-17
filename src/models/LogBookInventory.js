@@ -5,7 +5,6 @@ class LogBookInventory extends Model {
     super.init(
       {
         date_of_acquisition: DataTypes.DATE,
-        cost_per_item: DataTypes.DECIMAL(6, 2),
         quantity_acquired: DataTypes.INTEGER,
         total_value: DataTypes.DECIMAL(6, 2),
         branch_id: DataTypes.INTEGER,

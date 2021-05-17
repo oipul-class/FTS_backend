@@ -33,6 +33,7 @@ module.exports = {
       const {
         product_name,
         total_quantity,
+        cost_per_item,
         unit_of_measurement_id,
         product_type_id,
         company_id,
@@ -56,6 +57,7 @@ module.exports = {
       const product = await Product.create({
         product_name,
         total_quantity,
+        cost_per_item,
         unit_of_measurement_id,
         product_type_id,
         company_id,
@@ -75,6 +77,7 @@ module.exports = {
       const {
         product_name,
         total_quantity,
+        cost_per_item,
         unit_of_measurement_id,
         product_type_id,
       } = req.body;
@@ -85,6 +88,7 @@ module.exports = {
 
       if (product_name) product.product_name = product_name;
       if (total_quantity) product.total_quantity = total_quantity;
+      if (cost_per_item) product.cost_per_item = cost_per_item;
 
       if (unit_of_measurement_id) {
         const unit_of_measurement = await UnitOfMeasurement.findByPk(

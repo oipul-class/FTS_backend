@@ -9,6 +9,8 @@ class ItemSale extends Model {
         total_value: DataTypes.DECIMAL(6, 2),
         discount: DataTypes.INTEGER,
         logbook_inventory_id: DataTypes.INTEGER,
+        product_id: DataTypes.INTEGER,
+        sale_id: DataTypes.INTEGER,
       },
       {
         sequelize,
