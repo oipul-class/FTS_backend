@@ -1,5 +1,6 @@
 const ItemSale = require("../models/ItemSale");
 const LogBookInventory = require("../models/LogBookInventory");
+const Product = require("../models/Product")
 
 module.exports = {
   async index(req, res) {
@@ -28,9 +29,13 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { quantity, discount, logbook_invetory_id } = req.body;
+      const { quantity, discount, product_id, sale_id } = req.body;
 
-      const logbook = await LogBookInventory.findByPk(logbook_invetory_id);
+      const product = await Product.findByPk(product_id);
+
+      if (!product) return res.status(404).send({ erro: "produto não existe"})
+
+      const logbook = await product.getLogBookInventory();
 
       if (!logbook) return res.status(404).send({ erro: "logbook não existe" });
 
@@ -43,10 +48,12 @@ module.exports = {
 
 
       const itemSale = await ItemSale.create({
-        cost_per_item: logbook.cost_per_item,
+        cost_per_item: product.cost_per_item,
         quantity,
+        sale_id,
         total_value,
-        logbook_invetory_id: logbook_invetory_id,
+        product_id,
+        logbook_inventory_id: logbook.id,
       });
 
       res.status(201).send(itemSale);
@@ -69,7 +76,6 @@ module.exports = {
 
       await itemSale.destroy();
 
-      const itemSales = 
 
       res.send();
     } catch (error) {
