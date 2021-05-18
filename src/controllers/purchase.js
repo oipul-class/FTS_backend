@@ -42,7 +42,7 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { payment_method_id, logbook_invetory_id } = req.body;
+      const { payment_method_id } = req.body;
       const items = req.body.items;
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
 
@@ -51,7 +51,6 @@ module.exports = {
 
       const purchase = await Purchase.create({
         payment_method_id,
-        logbook_invetory_id,
       });
       if (items) {
         items.map(async (item) => {
