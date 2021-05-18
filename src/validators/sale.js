@@ -5,7 +5,7 @@ module.exports = {
     [Segments.BODY]: Joi.object().keys({
       payment_method_id: Joi.number().integer().required(),
       costumer_id: Joi.number().integer(),
-      items: Joi,
+      items: Joi.array(),
     }),
   }),
 
