@@ -3,10 +3,9 @@ const { celebrate, Joi, Segments } = require("celebrate");
 module.exports = {
   create: celebrate({
     [Segments.BODY]: Joi.object().keys({
-      data_of_acquisition: Joi.string().required(),
+      date_of_acquisition: Joi.string().required(),
       quantity_acquired: Joi.number().integer().required(),
       branch_id: Joi.number().integer().required(),
-      costumer_id: Joi.number().required(),
       product_id: Joi.number().integer().required(),
       lot: Joi.object(),
     }),
@@ -14,7 +13,7 @@ module.exports = {
 
   update: celebrate({
     [Segments.BODY]: Joi.object().keys({
-      data_of_acquisition: Joi.object(),
+      date_of_acquisition: Joi.string(),
       quantity_acquired: Joi.number().integer(),
       product_id: Joi.number().integer(),
       costumer_id: Joi.number(),
