@@ -35,7 +35,7 @@ const costumerMiddleware = require("./validators/costumer");
 const purchaseMiddleware = require("./validators/purchase");
 const itemPurchaseMiddle = require("./validators/itemPurchase");
 const saleMiddleware = require("./validators/sale");
-const itemSaleMiddleware = require("./validators/itemSale")
+const itemSaleMiddleware = require("./validators/itemSale");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/:id", screenController.find);
@@ -100,15 +100,19 @@ routes.delete("/product/:id", productController.delete);
 routes.get("/logbook", logbookController.index);
 routes.get(
   "/logbook/:id",
-  logBookInventoryMiddleware.create,
+
   logbookController.find
 );
 routes.post(
   "/logbook",
-  logBookInventoryMiddleware.update,
+  logBookInventoryMiddleware.create,
   logbookController.store
 );
-routes.put("/logbook/:id", logbookController.update);
+routes.put(
+  "/logbook/:id",
+  logBookInventoryMiddleware.update,
+  logbookController.update
+);
 
 routes.get("/lot", lotController.index);
 routes.get("/lot/:id", lotController.find);
@@ -139,7 +143,11 @@ routes.delete("/purchase/:id", purchaseController.delete);
 
 routes.get("/itemPurchase", itemPurchaseController.index);
 routes.get("/itemPurchase/:id", itemPurchaseController.find);
-routes.post("/itemPurchase", itemPurchaseMiddle.create, itemPurchaseController.store);
+routes.post(
+  "/itemPurchase",
+  itemPurchaseMiddle.create,
+  itemPurchaseController.store
+);
 routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 
 routes.get("/sale", saleController.index);
