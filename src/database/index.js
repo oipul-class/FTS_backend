@@ -59,9 +59,3 @@ Purchase.associate(connection.models);
 Sale.associate(connection.models);
 ItemPurchase.associate(connection.models);
 ItemSale.associate(connection.models);
-
-for (let assoc of Object.keys(Sale.associations)) {
-     for (let accessor of Object.keys(Sale.associations[assoc].accessors)) {
-         console.log(Sale.name + '.' + Sale.associations[assoc].accessors[accessor] + '()');
-     }
-}
