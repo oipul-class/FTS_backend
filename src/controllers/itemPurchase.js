@@ -67,8 +67,8 @@ module.exports = {
       if (!product || !purchase)
         return res.status(404).send({ erro: "compra ou produto não existe" });
 
-      const logbook = product.getLogBookInventory();
-
+      const logbook = await product.getLogBookInventory();
+      
       if (!logbook) return res.status(404).send({ erro: "logbook não existe" });
 
       let total_value;
@@ -79,11 +79,11 @@ module.exports = {
       else total_value = logbook.cost_per_item * quantity;
 
       const itemPurchase = await ItemPurchase.create({
-        cost_per_item: logbook.cost_per_item,
+        cost_per_item: product.cost_per_item,
         quantity,
         total_value,
         product_id,
-        logbook_invetory_id: logbook.id,
+        logbook_inventory_id: logbook.id,
         purchase_id,
       });
 
