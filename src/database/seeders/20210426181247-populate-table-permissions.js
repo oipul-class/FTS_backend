@@ -14,7 +14,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        permission_name: "Gerentes",
+        permission_name: "Gerente",
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -24,17 +24,12 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        permission_name: "Vendas",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        permission_name: "Compras",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
         permission_name: "Financeiro",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        permission_name: "Caixa",
         created_at: new Date(),
         updated_at: new Date(),
       },

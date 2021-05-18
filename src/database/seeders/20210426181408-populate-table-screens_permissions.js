@@ -34,6 +34,12 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        screen_id: 6,
+        permission_id: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
         screen_id: 1,
         permission_id: 2,
         created_at: new Date(),
@@ -53,19 +59,37 @@ module.exports = {
       },
       {
         screen_id: 3,
-        permission_id: 5,
+        permission_id: 4,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_id: 4,
-        permission_id: 6,
+        permission_id: 4,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        screen_id: 4,
+        permission_id: 5,
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_id: 5,
-        permission_id: 7,
+        permission_id: 5,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        screen_id: 6,
+        permission_id: 5,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        screen_id: 7,
+        permission_id: 6,
         created_at: new Date(),
         updated_at: new Date(),
       },
