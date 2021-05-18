@@ -3,7 +3,7 @@ const { celebrate, Joi, Segments } = require("celebrate");
 module.exports = {
   create: celebrate({
     [Segments.BODY]: Joi.object().keys({
-      data_of_acquisition: Joi.required(),
+      data_of_acquisition: Joi.string().required(),
       quantity_acquired: Joi.number().integer().required(),
       branch_id: Joi.number().integer().required(),
       costumer_id: Joi.number().required(),
