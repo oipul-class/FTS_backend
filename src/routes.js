@@ -27,8 +27,15 @@ const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
 const userMiddleware = require("./validators/user");
 const roleMiddleware = require("./validators/role");
-const productTypeMiddleware = require("./validators/productType")
+const productTypeMiddleware = require("./validators/productType");
 const productMiddleware = require("./validators/product");
+const logBookInventoryMiddleware = require("./validators/logbookInventory");
+const lotMiddleware = require("./validators/lot");
+const costumerMiddleware = require("./validators/costumer");
+const purchaseMiddleware = require("./validators/purchase");
+const itemPurchaseMiddle = require("./validators/itemPurchase");
+const saleMiddleware = require("./validators/sale");
+const itemSaleMiddleware = require("./validators/itemSale")
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/:id", screenController.find);
@@ -69,8 +76,16 @@ routes.delete("/user/:id", userController.delete);
 
 routes.get("/productType", productTypeController.index);
 routes.get("/productType/:id", productTypeController.find);
-routes.post("/productType", productTypeMiddleware.create, productTypeController.store);
-routes.put("/productType/:id", productTypeMiddleware.update, productTypeController.update);
+routes.post(
+  "/productType",
+  productTypeMiddleware.create,
+  productTypeController.store
+);
+routes.put(
+  "/productType/:id",
+  productTypeMiddleware.update,
+  productTypeController.update
+);
 routes.delete("/productType/:id", productTypeController.delete);
 
 routes.get("/unit", unitOfMeasurementController.index);
@@ -83,18 +98,30 @@ routes.put("/product/:id", productMiddleware.update, productController.update);
 routes.delete("/product/:id", productController.delete);
 
 routes.get("/logbook", logbookController.index);
-routes.get("/logbook/:id", logbookController.find);
-routes.post("/logbook", logbookController.store);
+routes.get(
+  "/logbook/:id",
+  logBookInventoryMiddleware.create,
+  logbookController.find
+);
+routes.post(
+  "/logbook",
+  logBookInventoryMiddleware.update,
+  logbookController.store
+);
 routes.put("/logbook/:id", logbookController.update);
 
 routes.get("/lot", lotController.index);
 routes.get("/lot/:id", lotController.find);
-routes.put("/lot/:id", lotController.update);
+routes.put("/lot/:id", lotMiddleware.update, lotController.update);
 
 routes.get("/costumer", costumerController.index);
 routes.get("/costumer/:id", costumerController.find);
-routes.post("/costumer", costumerController.store);
-routes.put("/costumer/:id", costumerController.update);
+routes.post("/costumer", costumerMiddleware.create, costumerController.store);
+routes.put(
+  "/costumer/:id",
+  costumerMiddleware.update,
+  costumerController.update
+);
 routes.delete("/costumer/:id", costumerController.delete);
 
 routes.get("/paymentMethod", paymentMethodController.index);
@@ -102,22 +129,26 @@ routes.get("/paymentMethod/:id", paymentMethodController.find);
 
 routes.get("/purchase", purchaseController.index);
 routes.get("/purchase/:id", purchaseController.find);
-routes.post("/purchase", purchaseController.store);
-routes.put("/purchase/:id", purchaseController.update);
+routes.post("/purchase", purchaseMiddleware.create, purchaseController.store);
+routes.put(
+  "/purchase/:id",
+  purchaseMiddleware.update,
+  purchaseController.update
+);
 routes.delete("/purchase/:id", purchaseController.delete);
 
 routes.get("/itemPurchase", itemPurchaseController.index);
 routes.get("/itemPurchase/:id", itemPurchaseController.find);
-routes.post("/itemPurchase", itemPurchaseController.store);
+routes.post("/itemPurchase", itemPurchaseMiddle.create, itemPurchaseController.store);
 routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 
 routes.get("/sale", saleController.index);
 routes.get("/sale/:id", saleController.find);
-routes.post("/sale", saleController.store);
-routes.put("/sale/:id", saleController.update);
+routes.post("/sale", saleMiddleware.create, saleController.store);
+routes.put("/sale/:id", saleMiddleware.update, saleController.update);
 routes.delete("/sale/:id", saleController.delete);
 
 routes.get("/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
-routes.post("/itemSale", itemSaleController.store);
+routes.post("/itemSale", itemSaleMiddleware.create, itemSaleController.store);
 routes.delete("/itemSale/:id", itemSaleController.delete);
