@@ -1,102 +1,107 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert("screens_permissions", [
+    await queryInterface.bulkInsert('units_of_measurement', [
+      // medida de comprimento
       {
-        screen_id: 1,
-        permission_id: 1,
+        unit_name: "km",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 2,
-        permission_id: 1,
+        unit_name: "m",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 3,
-        permission_id: 1,
+        unit_name: "cm",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+
+      // Unidades de massa
+      {
+        unit_name: "kg",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 4,
-        permission_id: 1,
+        unit_name: "g",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 5,
-        permission_id: 1,
+        unit_name: "mg",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+
+      // Medidas de capacidade
+      {
+        unit_name: "l",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 6,
-        permission_id: 1,
+        unit_name: "ml",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+
+      // Medidas de volume
+      {
+        unit_name: "km3",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 1,
-        permission_id: 2,
+        unit_name: "m3",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 1,
-        permission_id: 3,
+        unit_name: "cm3",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 2,
-        permission_id: 4,
+        unit_name: "Barrica",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      //Outros
+      {
+        unit_name: "un",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 3,
-        permission_id: 4,
+        unit_name: "cx",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 4,
-        permission_id: 4,
+        unit_name: "pacote",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 4,
-        permission_id: 5,
+        unit_name: "sacas",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_id: 5,
-        permission_id: 5,
+        unit_name: "pbr",
         created_at: new Date(),
         updated_at: new Date(),
       },
-      {
-        screen_id: 6,
-        permission_id: 5,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_id: 7,
-        permission_id: 6,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
+
+      
     ]);
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("screens_permissions");
-  },
+    await queryInterface.bulkDelete("units_of_measurement", null, {});
+  }
 };

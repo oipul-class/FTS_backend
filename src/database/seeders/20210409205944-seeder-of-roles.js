@@ -4,12 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert("roles", [
       {
-        role_name: "Gerente de vendas",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        role_name: "Gerente de compras",
+        role_name: "Gerente vendas",
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -19,7 +14,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        role_name: "Gerente de estoque",
+        role_name: "Gerente estoque",
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -34,17 +29,17 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        role_name: "Funcionário de estoque",
+        role_name: "Caixa",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        role_name: "Funcionário de compras",
+        role_name: "Estoque",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        role_name: "Funcionário do financeiro",
+        role_name: "Financeiro",
         created_at: new Date(),
         updated_at: new Date(),
       },
