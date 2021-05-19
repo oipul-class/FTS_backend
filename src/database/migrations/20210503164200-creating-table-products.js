@@ -20,6 +20,11 @@ module.exports = {
         allowNull: false,
       },
 
+      cost_per_item: {
+        type: Sequelize.DECIMAL(6, 2),
+        allowNull: false,
+      },
+      
       unit_of_measurement_id: {
         type: Sequelize.INTEGER,
         references: {

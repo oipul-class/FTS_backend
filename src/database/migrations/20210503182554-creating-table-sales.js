@@ -17,13 +17,7 @@ module.exports = {
         },
       },
 
-      logbook_invetory_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "logbook_inventories",
-          key: "id",
-        },
-      },
+      
 
       costumer_id: {
         type: Sequelize.INTEGER,
@@ -41,6 +35,10 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
+      },
+
+      deleted_at: {
+        type: Sequelize.DATE,
       },
     });
   },

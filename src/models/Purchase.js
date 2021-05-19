@@ -5,10 +5,10 @@ class Purchase extends Model {
     super.init(
       {
         payment_method_id: DataTypes.INTEGER,
-        logbook_invetory_id: DataTypes.INTEGER
       }, 
       {
         sequelize,
+        paranoid: true,
       }
     );
 
@@ -17,7 +17,6 @@ class Purchase extends Model {
   
   static associate(models) {
     this.belongsTo(models.PaymentMethod);
-    this.belongsTo(models.LogBookInventory);
     this.hasMany(models.ItemPurchase);
   }
 }

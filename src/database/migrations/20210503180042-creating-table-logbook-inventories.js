@@ -14,11 +14,6 @@ module.exports = {
         allowNull: false,
       },
 
-      cost_per_item: {
-        type: Sequelize.DECIMAL(6, 2),
-        allowNull: false,
-      },
-
       quantity_acquired: {
         type: Sequelize.INTEGER,
         allowNull: false,

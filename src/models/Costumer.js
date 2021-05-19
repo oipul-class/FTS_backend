@@ -4,7 +4,7 @@ class Costumer extends Model {
   static init(sequelize) {
     super.init(
       {
-        Costumer_name: DataTypes.STRING(45),
+        costumer_name: DataTypes.STRING(45),
         cpf: DataTypes.STRING(14),
       },
       {

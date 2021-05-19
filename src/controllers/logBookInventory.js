@@ -38,7 +38,6 @@ module.exports = {
     try {
       const {
         date_of_acquisition,
-        cost_per_item,
         quantity_acquired,
         branch_id,
         product_id,
