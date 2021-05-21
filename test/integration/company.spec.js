@@ -30,4 +30,12 @@ describe("Testando inserção e listagem com sucesso do modulo de compania", () 
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("cnpj");
   });
+
+  it("é possivel listar todas as companias registrada no sistema com sucesso", async () => {
+
+    const response = await request(app).get("/company").send();
+
+    expect(response.ok).toBeTruthy();
+    expect(response.body).toBeDefined();
+  });
 });
