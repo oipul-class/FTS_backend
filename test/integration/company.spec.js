@@ -8,9 +8,9 @@ describe("Testando inserção e listagem com sucesso do modulo de compania", () 
     connection.close();
   });
 
-  beforeAll(async (donne) => {
+  beforeAll(async (done) => {
     await truncate(connection.models);
-    donne();
+    done();
   });
 
   it("é possivel inserir uma nova compania com sucesso", async () => {
@@ -32,9 +32,9 @@ describe("Testando inserção e listagem com sucesso do modulo de compania", () 
   });
 
   it("é possivel listar todas as companias registrada no sistema com sucesso", async () => {
-
+    
     const response = await request(app).get("/company").send();
-
+    
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
   });
