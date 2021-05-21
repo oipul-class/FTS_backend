@@ -104,17 +104,7 @@ module.exports = {
 
       company.addPermission(1);
 
-      res.status(201).send({
-        cnpj,
-        fantasy_name,
-        social_reason,
-        place_number,
-        permissions,
-        cep,
-        state,
-        nature_of_the_business,
-        commercial_email,
-      });
+      res.status(201).send(company);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
