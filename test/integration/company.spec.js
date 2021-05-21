@@ -3,7 +3,7 @@ const app = require("../../src/app");
 const connection = require("../../src/database");
 const truncate = require("./truncate");
 
-describe("Testando inserção e listagem com sucesso do modulo de compania", () => {
+describe("Testando inserção e listagem com sucesso do modulo de companhia", () => {
   afterAll(() => {
     connection.close();
   });
@@ -13,7 +13,7 @@ describe("Testando inserção e listagem com sucesso do modulo de compania", () 
     done();
   });
 
-  it("é possivel inserir uma nova compania com sucesso", async () => {
+  it("é possivel inserir uma nova companhia com sucesso", async () => {
     const response = await request(app).post("/company").send({
       cnpj: "89.235.804/0001-83",
       fantasy_name: "test company",
@@ -31,7 +31,7 @@ describe("Testando inserção e listagem com sucesso do modulo de compania", () 
     expect(response.body).toHaveProperty("cnpj");
   });
 
-  it("é possivel listar todas as companias registrada no sistema com sucesso", async () => {
+  it("é possivel listar todas as companhias registrada no sistema com sucesso", async () => {
     
     const response = await request(app).get("/company").send();
     
