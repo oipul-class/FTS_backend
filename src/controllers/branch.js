@@ -4,7 +4,7 @@ const Company = require("../models/Company");
 
 module.exports = {
   async index(req, res) {
-    const { company_id } = req.query;
+    const { company_id } = req.body;
 
     try {
       const branches = await Branch.findAll({

@@ -1,21 +1,15 @@
 const request = require("supertest");
 const app = require("../../src/app");
 const connection = require("../../src/database");
-const truncate = require("./truncate");
 
 describe("Testando inserção e listagem com sucesso do modulo de companhia", () => {
   afterAll(() => {
     connection.close();
   });
 
-  beforeAll(async (done) => {
-    await truncate(connection.models);
-    done();
-  });
-
   it("é possivel inserir uma nova companhia com sucesso", async () => {
     const response = await request(app).post("/company").send({
-      cnpj: `${Math.floor(Math.random() * 99) + 10}.235.804/0001-${Math.floor(Math.random() * 99) + 10}`,
+      cnpj: `99.235.804/0001-99`,
       fantasy_name: "test company",
       social_reason: "test test",
       place_number: 1,
@@ -32,9 +26,8 @@ describe("Testando inserção e listagem com sucesso do modulo de companhia", ()
   });
 
   it("é possivel listar todas as companhias registrada no sistema com sucesso", async () => {
-    
-    const response = await request(app).get("/company").send();
-    
+    const response = await request(app).get("/company").send({});
+
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
   });
