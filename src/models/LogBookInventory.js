@@ -6,7 +6,6 @@ class LogBookInventory extends Model {
       {
         date_of_acquisition: DataTypes.DATE,
         quantity_acquired: DataTypes.INTEGER,
-        total_value: DataTypes.DECIMAL(6, 2),
         branch_id: DataTypes.INTEGER,
         lot_id: DataTypes.INTEGER,
         product_id: DataTypes.INTEGER,
