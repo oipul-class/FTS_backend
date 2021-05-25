@@ -97,7 +97,7 @@ routes.post("/product", productMiddleware.create, productController.store);
 routes.put("/product/:id", productMiddleware.update, productController.update);
 routes.delete("/product/:id", productController.delete);
 
-routes.get("/logbook", logbookController.index);
+routes.get("/logbook/:id", logbookController.index);
 routes.get(
   "/logbook/:id",
 
