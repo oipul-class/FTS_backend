@@ -1,3 +1,4 @@
+const Branch = require("../models/Branch");
 const LogBookInventory = require("../models/LogBookInventory");
 const Lot = require("../models/Lot");
 const Product = require("../models/Product");
@@ -57,13 +58,15 @@ module.exports = {
 
       const lotInfo = await Lot.create(lot);
       
-      const total_value = cost_per_item * quantity_acquired;
+      const product = await Product.findByPk(product_id);
+
+      const branch = await Branch.findByPk(branch_id)
+
+      if (!product || !branch) return res.status(404).send({ erro: "produto ou filial não existe"})
 
       const logbook = await LogBookInventory.create({
         date_of_acquisition,
-        cost_per_item,
         quantity_acquired,
-        total_value,
         branch_id,
         product_id,
         lot_id: lotInfo.id,
