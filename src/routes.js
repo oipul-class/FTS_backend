@@ -99,7 +99,7 @@ routes.delete("/product/:id", productController.delete);
 
 routes.get("/logbook/:id", logbookController.index);
 routes.get(
-  "/logbook/:id",
+  "/logbook/find/:id",
 
   logbookController.find
 );
