@@ -5,7 +5,7 @@ const Product = require("../models/Product");
 module.exports = {
   async index(req, res) {
     try {
-      const { id } = body.params;
+      const { id } = req.params;
 
       let logbooks;
 
