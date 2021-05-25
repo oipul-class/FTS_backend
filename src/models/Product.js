@@ -5,7 +5,8 @@ class Product extends Model {
     super.init(
       {
         product_name: DataTypes.STRING(45),
-        total_quantity: DataTypes.INTEGER,
+        description: DataTypes.TEXT,
+        bar_code: DataTypes.STRING,
         cost_per_item: DataTypes.DECIMAL(6, 2),
         unit_of_measurement_id: DataTypes.INTEGER,
         product_type_id: DataTypes.INTEGER,
