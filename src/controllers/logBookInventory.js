@@ -1,14 +1,25 @@
 const LogBookInventory = require("../models/LogBookInventory");
 const Lot = require("../models/Lot");
 const Product = require("../models/Product");
-const Costumer = require("../models/Costumer");
 
 module.exports = {
   async index(req, res) {
     try {
-      const logbooks = await LogBookInventory.findAll({
-        include: Lot,
-      });
+      const { id } = body.params;
+
+      let logbooks;
+
+      if (!id)
+        logbooks = await LogBookInventory.findAll({
+          include: Lot,
+        });
+      else
+        logbooks = await LogBookInventory.findAll({
+          where: {
+            branch_id: id,
+          },
+          include: Lot,
+        });
 
       res.send(logbooks);
     } catch (error) {
@@ -41,12 +52,11 @@ module.exports = {
         quantity_acquired,
         branch_id,
         product_id,
-        costumer_id,
         lot,
       } = req.body;
 
       const lotInfo = await Lot.create(lot);
-
+      
       const total_value = cost_per_item * quantity_acquired;
 
       const logbook = await LogBookInventory.create({
@@ -56,7 +66,6 @@ module.exports = {
         total_value,
         branch_id,
         product_id,
-        costumer_id,
         lot_id: lotInfo.id,
       });
 
@@ -76,7 +85,6 @@ module.exports = {
         cost_per_item,
         quantity_acquired,
         product_id,
-        costumer_id,
       } = req.body;
 
       const logbook = await LogBookInventory.findByPk(id);
@@ -96,14 +104,7 @@ module.exports = {
 
         logbook.product_id = product_id;
       }
-      if (costumer_id) {
-        const costumer = await Costumer.findByPk(costumer_id);
 
-        if (!costumer)
-          return res.status(404).send({ erro: "cliente não existe" });
-
-        logbook.costumer_id = costumer_id;
-      }
       await logbook.save();
 
       res.send(logbook);
