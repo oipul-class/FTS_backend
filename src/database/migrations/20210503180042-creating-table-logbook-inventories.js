@@ -48,14 +48,6 @@ module.exports = {
         },
       },
 
-      costumer_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "costumers",
-          key: "id",
-        },
-      },
-
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

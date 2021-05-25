@@ -16,7 +16,6 @@ class Costumer extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.LogBookInventory);
     this.hasMany(models.Sale);
   }
 }
