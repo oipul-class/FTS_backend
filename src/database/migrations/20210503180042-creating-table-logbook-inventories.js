@@ -18,12 +18,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-
-      total_value: {
-        type: Sequelize.DECIMAL(6, 2),
-        allowNull: false,
-      },
-
+      
       branch_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -44,14 +39,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: "products",
-          key: "id",
-        },
-      },
-
-      costumer_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "costumers",
           key: "id",
         },
       },

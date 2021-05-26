@@ -4,7 +4,7 @@ const Company = require("../models/Company");
 
 module.exports = {
   async index(req, res) {
-    const { company_id } = req.query;
+    const { company_id } = req.body;
 
     try {
       const branches = await Branch.findAll({
@@ -87,13 +87,8 @@ module.exports = {
   },
 
   async store(req, res) {
-    const {
-      branch_name,
-      cep,
-      branch_email,
-      place_number,
-      company_id,
-    } = req.body;
+    const { branch_name, cep, branch_email, place_number, company_id } =
+      req.body;
 
     try {
       const company = await Company.findByPk(company_id);
@@ -109,9 +104,7 @@ module.exports = {
         company_id,
       });
 
-      res
-        .status(201)
-        .send({ branch_name, cep, place_number, companhia: company });
+      res.status(201).send(branch);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -121,13 +114,8 @@ module.exports = {
   async update(req, res) {
     const { id } = req.params;
 
-    const {
-      branch_name,
-      cep,
-      branch_email,
-      place_number,
-      company_id,
-    } = req.body;
+    const { branch_name, cep, branch_email, place_number, company_id } =
+      req.body;
     try {
       const branch = await Branch.findByPk(id, {
         attributes: [

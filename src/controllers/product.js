@@ -6,7 +6,15 @@ const Company = require("../models/Company");
 module.exports = {
   async index(req, res) {
     try {
-      const products = await Product.findAll();
+      const { company_id, bar_code } = req.params;
+
+      let products;
+
+      if (company_id)
+        products = await Product.findAll({ where: { company_id } });
+      else if (bar_code)
+        products = await Product.findAll({ where: { bar_code } });
+      else products = await Product.findAll();
 
       res.send(products);
     } catch (error) {
@@ -32,12 +40,14 @@ module.exports = {
     try {
       const {
         product_name,
-        total_quantity,
+        description,
+        bar_code,
         cost_per_item,
         unit_of_measurement_id,
         product_type_id,
         company_id,
       } = req.body;
+
 
       const unit_of_measurement = await UnitOfMeasurement.findByPk(
         unit_of_measurement_id
@@ -56,7 +66,8 @@ module.exports = {
 
       const product = await Product.create({
         product_name,
-        total_quantity,
+        description,
+        bar_code,
         cost_per_item,
         unit_of_measurement_id,
         product_type_id,
@@ -76,7 +87,8 @@ module.exports = {
 
       const {
         product_name,
-        total_quantity,
+        description,
+        bar_code,
         cost_per_item,
         unit_of_measurement_id,
         product_type_id,
@@ -87,7 +99,8 @@ module.exports = {
       if (!product) return res.status(404).send({ erro: "produto não existe" });
 
       if (product_name) product.product_name = product_name;
-      if (total_quantity) product.total_quantity = total_quantity;
+      if (description) product.description = description;
+      if (bar_code) product.bar_code = bar_code;
       if (cost_per_item) product.cost_per_item = cost_per_item;
 
       if (unit_of_measurement_id) {

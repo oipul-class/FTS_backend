@@ -15,8 +15,12 @@ module.exports = {
         allowNull: false,
       },
 
-      total_quantity: {
-        type: Sequelize.INTEGER,
+      description: {
+        type: Sequelize.TEXT,
+      },
+
+      bar_code: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 

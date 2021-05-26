@@ -59,3 +59,5 @@ Purchase.associate(connection.models);
 Sale.associate(connection.models);
 ItemPurchase.associate(connection.models);
 ItemSale.associate(connection.models);
+
+module.exports = connection;
