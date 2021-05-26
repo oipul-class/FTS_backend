@@ -16,7 +16,7 @@ class BillToReceive extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Sales);
+    this.belongsTo(models.Sale);
   }
 }
 
