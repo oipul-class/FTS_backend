@@ -21,6 +21,8 @@ const Purchase = require("../models/Purchase");
 const Sale = require("../models/Sale");
 const ItemPurchase = require("../models/ItemPurchase");
 const ItemSale = require("../models/ItemSale");
+const BillToPay = require("../models/BillToPay");
+const BillToReceive = require("../models/BillToReceive");
 
 Branch.init(connection);
 Company.init(connection);
@@ -40,6 +42,9 @@ Purchase.init(connection);
 Sale.init(connection);
 ItemPurchase.init(connection);
 ItemSale.init(connection);
+BillToPay.init(connection);
+BillToReceive.init(connection);
+
 
 Branch.associate(connection.models);
 Company.associate(connection.models);
@@ -59,5 +64,7 @@ Purchase.associate(connection.models);
 Sale.associate(connection.models);
 ItemPurchase.associate(connection.models);
 ItemSale.associate(connection.models);
+BillToPay.associate(connection.models);
+BillToReceive.associate(connection.models);
 
 module.exports = connection;
