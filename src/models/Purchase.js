@@ -17,6 +17,7 @@ class Purchase extends Model {
   
   static associate(models) {
     this.belongsTo(models.PaymentMethod);
+    this.hasOne(models.BillToPay);
     this.hasMany(models.ItemPurchase);
   }
 }
