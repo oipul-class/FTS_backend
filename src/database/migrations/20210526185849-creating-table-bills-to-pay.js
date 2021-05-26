@@ -10,7 +10,7 @@ module.exports = {
       },
 
       bills_date: {
-        type: Sequelize.DATETIME,
+        type: Sequelize.DATE,
         allowNull: false,
       },
 
