@@ -4,7 +4,6 @@ class BillToPay extends Model {
   static init(sequelize) {
     super.init(
       {
-        bills_date: DataTypes.DATE,
         paid: DataTypes.BOOLEAN,
       }, 
       {
