@@ -13,7 +13,7 @@ module.exports = {
       if (company_id)
         products = await Product.findAll({ where: { company_id } });
       else if (bar_code)
-        products = await Product.findAll({ where: { bar_code } });
+        products = await Product.findOne({ where: { bar_code } });
       else products = await Product.findAll();
 
       res.send(products);
@@ -47,7 +47,6 @@ module.exports = {
         product_type_id,
         company_id,
       } = req.body;
-
 
       const unit_of_measurement = await UnitOfMeasurement.findByPk(
         unit_of_measurement_id
