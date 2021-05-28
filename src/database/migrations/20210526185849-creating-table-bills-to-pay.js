@@ -9,11 +9,6 @@ module.exports = {
         autoIncrement: true,
       },
 
-      bills_date: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-
       paid: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
@@ -27,6 +22,16 @@ module.exports = {
           key: "id",
         },
         onDelete: "CASCADE",
+      },
+
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
       },
     });
   },
