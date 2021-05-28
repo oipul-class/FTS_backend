@@ -7,5 +7,6 @@ module.exports = {
   define: {
     timestamp: true,
     underscored: true,
+    timezone: "America/Sao_Paulo",
   },
 };
