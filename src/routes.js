@@ -38,6 +38,8 @@ const purchaseMiddleware = require("./validators/purchase");
 const itemPurchaseMiddle = require("./validators/itemPurchase");
 const saleMiddleware = require("./validators/sale");
 const itemSaleMiddleware = require("./validators/itemSale");
+const billToReceiveMiddleware = require("./validators/billToReceive");
+const billToPayMiddleware = require("./validators/billToPay");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/:id", screenController.find);
@@ -167,8 +169,16 @@ routes.delete("/itemSale/:id", itemSaleController.delete);
 
 routes.get("/billToReceive/:branch_id", billToReceiveController.index);
 routes.get("/billToReceive/find/:id", billToReceiveController.find);
-routes.put("/billToReceive/:id", billToReceiveController.update);
+routes.put(
+  "/billToReceive/:id",
+  billToReceiveMiddleware.update,
+  billToReceiveController.update
+);
 
 routes.get("/billToPay/:branch_id", billToPayController.index);
 routes.get("/billToPay/find/:id", billToPayController.find);
-routes.put("/billToPay/:id", billToPayController.update);
+routes.put(
+  "/billToPay/:id",
+  billToPayMiddleware.update,
+  billToPayController.update
+);
