@@ -52,7 +52,7 @@ module.exports = {
 
       const branch = await Branch.findByPk(branch_id);
 
-      if (!branch) return res.status(404).send({ erro: "filial não existe"});
+      if (!branch) return res.status(404).send({ erro: "filial não existe" });
 
       const purchase = await branch.createPurchase({
         payment_method_id,
@@ -67,7 +67,7 @@ module.exports = {
 
           if (item.discount || item.discount > 0)
             total_value =
-            product.cost_per_item -
+              product.cost_per_item -
               (product.cost_per_item * item.discount) / 100;
           else total_value = product.cost_per_item * item.quantity;
           await purchase.createItemPurchase({
@@ -80,6 +80,8 @@ module.exports = {
           });
         });
       }
+
+      await purchase.createBillToPay({ paid: false });
 
       res.status(404).send(purchase);
     } catch (error) {
