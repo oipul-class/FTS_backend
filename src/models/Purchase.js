@@ -19,6 +19,7 @@ class Purchase extends Model {
     this.belongsTo(models.PaymentMethod);
     this.hasOne(models.BillToPay);
     this.hasMany(models.ItemPurchase);
+    this.belongsTo(models.Branch);
   }
 }
 

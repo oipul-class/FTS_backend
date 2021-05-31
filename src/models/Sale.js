@@ -21,6 +21,7 @@ class Sale extends Model {
     this.hasOne(models.BillToReceive);
     this.belongsTo(models.Costumer);
     this.hasMany(models.ItemSale, { foreignKey: "sale_id"});
+    this.belongsTo(models.Branch);
   }
 }
 
