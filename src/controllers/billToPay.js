@@ -29,8 +29,6 @@ module.exports = {
         })
       );
 
-      console.log();
-
       res.send(bills);
     } catch (error) {
       console.error(error);
