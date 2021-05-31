@@ -17,12 +17,19 @@ module.exports = {
         },
       },
 
-      
-
       costumer_id: {
         type: Sequelize.INTEGER,
         references: {
           model: "costumers",
+          key: "id",
+        },
+      },
+
+      branch_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "branches",
           key: "id",
         },
       },
