@@ -8,6 +8,7 @@ class BillToPay extends Model {
       }, 
       {
         sequelize,
+        tableName: "bills_to_pay"
       }
     );
 
