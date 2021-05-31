@@ -165,3 +165,5 @@ routes.post("/itemSale", itemSaleMiddleware.create, itemSaleController.store);
 routes.delete("/itemSale/:id", itemSaleController.delete);
 
 routes.get("/billToReceive/:branch_id", billToReceiveController.index);
+routes.get("/billToReceive/find/:id", billToReceiveController.find);
+routes.put("/billToReceive/:id", billToReceiveController.update);
