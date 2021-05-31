@@ -20,6 +20,8 @@ class Branch extends Model {
     this.belongsTo(models.Company);
     this.hasMany(models.User);
     this.hasMany(models.LogBookInventory);
+    this.hasMany(models.Purchase);
+    this.hasMany(models.Sale);
   }
 }
 

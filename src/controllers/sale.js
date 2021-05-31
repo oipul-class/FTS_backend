@@ -2,6 +2,7 @@ const Sale = require("../models/Sale");
 const Costumer = require("../models/Costumer");
 const PaymentMethod = require("../models/PaymentMethod");
 const ItemSale = require("../models/ItemSale");
+const Branch = require("../models/Branch");
 const Product = require("../models/Product");
 
 module.exports = {
@@ -37,7 +38,7 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { payment_method_id, costumer_id } = req.body;
+      const { payment_method_id, costumer_id, branch_id } = req.body;
       const items = req.body.items;
 
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
@@ -45,7 +46,11 @@ module.exports = {
       if (!paymentMethod)
         return res.status(404).send({ erro: "metodo de pagamento não existe" });
 
-      const sale = await Sale.create({
+      const branch = await Branch.findByPk(branch_id);
+
+      if (!branch) return res.status(404).send({ erro: "filial não existe" });
+
+      const sale = await branch.createSale({
         payment_method_id,
         costumer_id,
       });
@@ -78,6 +83,8 @@ module.exports = {
           }
         });
       }
+
+      await sale.createBillToReceive({ received: false });
 
       res.status(404).send(sale);
     } catch (error) {
@@ -123,7 +130,7 @@ module.exports = {
 
       await sale.destroy();
 
-      const itemSales = await sale.getItemSales()
+      const itemSales = await sale.getItemSales();
 
       itemSales.map(async (item) => {
         item.destroy();

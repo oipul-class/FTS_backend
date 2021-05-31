@@ -18,8 +18,10 @@ class Sale extends Model {
 
   static associate(models) {
     this.belongsTo(models.PaymentMethod);
+    this.hasOne(models.BillToReceive);
     this.belongsTo(models.Costumer);
     this.hasMany(models.ItemSale, { foreignKey: "sale_id"});
+    this.belongsTo(models.Branch);
   }
 }
 

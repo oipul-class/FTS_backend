@@ -1,0 +1,77 @@
+const Branch = require("../models/Branch");
+const BillToPay = require("../models/BillToPay");
+
+module.exports = {
+  async index(req, res) {
+    try {
+      const { branch_id } = req.params;
+
+      const branch = await Branch.findByPk(branch_id);
+
+      if (!branch)
+        return res.status(404).send({ erro: "filial a receber não existe" });
+
+      const purchases = await branch.getPurchases();
+
+      if (!purchases)
+        return res
+          .status(404)
+          .send({ erro: "não foi feito compras nessa filial" });
+
+      let bills = [];
+
+      await Promise.all(
+        purchases.map(async (purchase) => {
+          const bill = await purchase.getBillToPay();
+          if (bill) {
+            bills.push(bill);
+          }
+        })
+      );
+
+      console.log();
+
+      res.send(bills);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async find(req, res) {
+    try {
+      const { id } = req.params;
+
+      const bill = await BillToPay.findByPk(id);
+
+      if (!bill)
+        return res.status(404).send({ erro: "conta a pagar não existe" });
+
+      res.send(bill);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+
+      const bill = await BillToPay.findByPk(id);
+
+      if (!bill)
+        return res.status(404).send({ erro: "conta a pagar não existe" });
+
+      const { paid } = req.body;
+
+      if (paid !== undefined) bill.paid = paid;
+
+      await bill.save();
+      res.send(bill);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+};

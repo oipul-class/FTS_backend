@@ -2,36 +2,26 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("sales", {
+    await queryInterface.createTable("bills_to_pay", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
 
-      payment_method_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "branches",
-          key: "id",
-        },
+      paid: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
       },
 
-      costumer_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: "costumers",
-          key: "id",
-        },
-      },
-
-      branch_id: {
+      purchase_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "branches",
+          model: "purchases",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
 
       created_at: {
@@ -43,14 +33,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-
-      deleted_at: {
-        type: Sequelize.DATE,
-      },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("sales");
+    await queryInterface.dropTable("bills_to_pay");
   },
 };

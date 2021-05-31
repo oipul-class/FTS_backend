@@ -2,8 +2,6 @@ const express = require("express");
 
 const routes = express.Router();
 
-module.exports = routes;
-
 const screenController = require("./controllers/screen");
 const permissionController = require("./controllers/permission");
 const companyController = require("./controllers/company");
@@ -22,6 +20,8 @@ const purchaseController = require("./controllers/purchase");
 const itemPurchaseController = require("./controllers/itemPurchase");
 const saleController = require("./controllers/sale");
 const itemSaleController = require("./controllers/itemSale");
+const billToReceiveController = require("./controllers/BillToReceive");
+const billToPayController = require("./controllers/billToPay");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -36,6 +36,8 @@ const purchaseMiddleware = require("./validators/purchase");
 const itemPurchaseMiddle = require("./validators/itemPurchase");
 const saleMiddleware = require("./validators/sale");
 const itemSaleMiddleware = require("./validators/itemSale");
+const billToReceiveMiddleware = require("./validators/billToReceive");
+const billToPayMiddleware = require("./validators/billToPay");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/:id", screenController.find);
@@ -162,3 +164,21 @@ routes.get("/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
 routes.post("/itemSale", itemSaleMiddleware.create, itemSaleController.store);
 routes.delete("/itemSale/:id", itemSaleController.delete);
+
+routes.get("/billToReceive/:branch_id", billToReceiveController.index);
+routes.get("/billToReceive/find/:id", billToReceiveController.find);
+routes.put(
+  "/billToReceive/:id",
+  billToReceiveMiddleware.update,
+  billToReceiveController.update
+);
+
+routes.get("/billToPay/:branch_id", billToPayController.index);
+routes.get("/billToPay/find/:id", billToPayController.find);
+routes.put(
+  "/billToPay/:id",
+  billToPayMiddleware.update,
+  billToPayController.update
+);
+
+module.exports = routes;

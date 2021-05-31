@@ -1,6 +1,7 @@
 const Purchase = require("../models/Purchase");
 const PaymentMethod = require("../models/PaymentMethod");
 const ItemPurchase = require("../models/ItemPurchase");
+const Branch = require("../models/Branch");
 const Product = require("../models/Product");
 
 module.exports = {
@@ -42,16 +43,21 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { payment_method_id } = req.body;
+      const { payment_method_id, branch_id } = req.body;
       const items = req.body.items;
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
 
       if (!paymentMethod)
         return res.status(404).send({ erro: "metodo de pagamento não existe" });
 
-      const purchase = await Purchase.create({
+      const branch = await Branch.findByPk(branch_id);
+
+      if (!branch) return res.status(404).send({ erro: "filial não existe" });
+
+      const purchase = await branch.createPurchase({
         payment_method_id,
       });
+
       if (items) {
         items.map(async (item) => {
           const product = await Product.findByPk(item.product_id);
@@ -61,7 +67,7 @@ module.exports = {
 
           if (item.discount || item.discount > 0)
             total_value =
-            product.cost_per_item -
+              product.cost_per_item -
               (product.cost_per_item * item.discount) / 100;
           else total_value = product.cost_per_item * item.quantity;
           await purchase.createItemPurchase({
@@ -74,6 +80,8 @@ module.exports = {
           });
         });
       }
+
+      await purchase.createBillToPay({ paid: false });
 
       res.status(404).send(purchase);
     } catch (error) {

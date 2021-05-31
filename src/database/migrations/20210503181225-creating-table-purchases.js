@@ -17,6 +17,15 @@ module.exports = {
         },
       },
 
+      branch_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "branches",
+          key: "id",
+        },
+      },
+
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
