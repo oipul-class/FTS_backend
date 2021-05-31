@@ -2,8 +2,6 @@ const express = require("express");
 
 const routes = express.Router();
 
-module.exports = routes;
-
 const screenController = require("./controllers/screen");
 const permissionController = require("./controllers/permission");
 const companyController = require("./controllers/company");
@@ -182,3 +180,5 @@ routes.put(
   billToPayMiddleware.update,
   billToPayController.update
 );
+
+module.exports = routes;
