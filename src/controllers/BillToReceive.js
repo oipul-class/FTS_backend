@@ -8,14 +8,23 @@ module.exports = {
 
       const branch = await Branch.findByPk(branch_id);
 
+      if (!branch)
+        return res.status(404).send({ erro: "filial a receber não existe" });
+
       const sales = await branch.getSales();
+
+      if (!sales)
+        return res.status(404).send({ erro: "não foi feito vendas nessa filial" });
+
 
       let bills = [];
 
       await Promise.all(
         sales.map(async (sale) => {
           const bill = await sale.getBillToReceive();
-          bills.push(bill);
+          if (bill) {
+            bills.push(bill);
+          }
         })
       );
 
@@ -31,6 +40,9 @@ module.exports = {
       const { id } = req.params;
 
       const bill = await BillToReceive.findByPk(id);
+
+      if (!bill)
+        return res.status(404).send({ erro: "conta a receber não existe" });
 
       res.status(201).send(bill);
     } catch (error) {
@@ -50,7 +62,7 @@ module.exports = {
 
       const { received } = req.body;
 
-      if (received) bill.received = received;
+      if (received !== undefined) bill.received = received;
 
       await bill.save();
       res.send(bill);
