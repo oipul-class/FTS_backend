@@ -80,9 +80,7 @@ module.exports = {
           });
         });
       }
-
-      await purchase.createBillToPay({ paid: false });
-
+      
       res.status(404).send(purchase);
     } catch (error) {
       console.error(error);

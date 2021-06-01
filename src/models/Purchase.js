@@ -9,6 +9,11 @@ class Purchase extends Model {
       {
         sequelize,
         paranoid: true,
+        hooks: {
+          afterCreate: async (purchase, options) => {
+            await purchase.createBillToPay({ paid: false });
+          },
+        }
       }
     );
 
