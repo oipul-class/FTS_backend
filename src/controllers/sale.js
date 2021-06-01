@@ -84,8 +84,6 @@ module.exports = {
         });
       }
 
-      await sale.createBillToReceive({ received: false });
-
       res.status(404).send(sale);
     } catch (error) {
       console.error(error);
