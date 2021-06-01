@@ -68,6 +68,8 @@ module.exports = {
                 product.cost_per_item -
                 (product.cost_per_item * item.discount) / 100;
             else total_value = product.cost_per_item * item.quantity;
+            
+            total_value = total_value.toFixed(2);
 
             await sale.createItemSale({
               cost_per_item: product.cost_per_item,
