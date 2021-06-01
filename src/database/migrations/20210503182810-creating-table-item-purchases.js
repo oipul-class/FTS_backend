@@ -10,7 +10,7 @@ module.exports = {
       },
 
       cost_per_item: {
-        type: Sequelize.DECIMAL(6, 2),
+        type: Sequelize.DECIMAL(15, 2),
         allowNull: false,
       },
 
@@ -20,7 +20,7 @@ module.exports = {
       },
 
       total_value: {
-        type: Sequelize.DECIMAL(6, 2),
+        type: Sequelize.DECIMAL(15, 2),
         allowNull: false,
       },
 
