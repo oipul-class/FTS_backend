@@ -17,6 +17,7 @@ class Company extends Model {
       },
       {
         sequelize,
+        paranoid: true,
       }
     );
   }
