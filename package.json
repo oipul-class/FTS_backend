@@ -4,12 +4,12 @@
   "description": "FTS BackEnd",
   "main": "index.js",
   "scripts": {
-    "db rebuild": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
     "dev": "nodemon src/server",
     "start": "node src/server",
     "pretest": "cross-env NODE_ENV=test sequelize db:migrate && cross-env NODE_ENV=test sequelize db:seed:all",
     "test": "cross-env NODE_ENV=test jest",
-    "posttest": "cross-env NODE_ENV=test sequelize db:migrate:undo:all"
+    "posttest": "cross-env NODE_ENV=test sequelize db:migrate:undo:all",
+    "db rebuild": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
