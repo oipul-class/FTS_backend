@@ -46,6 +46,7 @@ module.exports = {
         logbook.cost_per_item - (logbook.cost_per_item * discount) / 100;
       else total_value = logbook.cost_per_item * quantity;
 
+      total_value.toFixed(2);
 
       const itemSale = await ItemSale.create({
         cost_per_item: product.cost_per_item,

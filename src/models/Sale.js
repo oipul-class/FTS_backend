@@ -10,6 +10,11 @@ class Sale extends Model {
       {
         sequelize,
         paranoid: true,
+        hooks: {
+          afterCreate: async (sale, options) => {
+            await sale.createBillToReceive({ received: false });
+          },
+        },
       }
     );
 
@@ -20,7 +25,7 @@ class Sale extends Model {
     this.belongsTo(models.PaymentMethod);
     this.hasOne(models.BillToReceive);
     this.belongsTo(models.Costumer);
-    this.hasMany(models.ItemSale, { foreignKey: "sale_id"});
+    this.hasMany(models.ItemSale, { foreignKey: "sale_id" });
     this.belongsTo(models.Branch);
   }
 }

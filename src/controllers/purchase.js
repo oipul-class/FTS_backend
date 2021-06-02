@@ -70,6 +70,9 @@ module.exports = {
               product.cost_per_item -
               (product.cost_per_item * item.discount) / 100;
           else total_value = product.cost_per_item * item.quantity;
+
+          total_value.toFixed(2);
+
           await purchase.createItemPurchase({
             cost_per_item: product.cost_per_item,
             quantity: item.quantity,
@@ -80,7 +83,7 @@ module.exports = {
           });
         });
       }
-      
+
       res.status(404).send(purchase);
     } catch (error) {
       console.error(error);

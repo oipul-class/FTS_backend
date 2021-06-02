@@ -54,12 +54,7 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const {
-        quantity,
-        discount,
-        product_id,
-        purchase_id,
-      } = req.body;
+      const { quantity, discount, product_id, purchase_id } = req.body;
 
       const product = await Product.findByPk(product_id);
       const purchase = await Purchase.findByPk(purchase_id);
@@ -68,7 +63,7 @@ module.exports = {
         return res.status(404).send({ erro: "compra ou produto não existe" });
 
       const logbook = await product.getLogBookInventory();
-      
+
       if (!logbook) return res.status(404).send({ erro: "logbook não existe" });
 
       let total_value;
@@ -77,6 +72,8 @@ module.exports = {
         total_value =
           logbook.cost_per_item - (logbook.cost_per_item * discount) / 100;
       else total_value = logbook.cost_per_item * quantity;
+
+      total_value.toFixed(2);
 
       const itemPurchase = await ItemPurchase.create({
         cost_per_item: product.cost_per_item,

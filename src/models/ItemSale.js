@@ -4,9 +4,9 @@ class ItemSale extends Model {
   static init(sequelize) {
     super.init(
       {
-        cost_per_item: DataTypes.DECIMAL(6, 2),
+        cost_per_item: DataTypes.DECIMAL(15, 2),
         quantity: DataTypes.INTEGER,
-        total_value: DataTypes.DECIMAL(6, 2),
+        total_value: DataTypes.DECIMAL(15, 2),
         discount: DataTypes.INTEGER,
         logbook_inventory_id: DataTypes.INTEGER,
         product_id: DataTypes.INTEGER,
@@ -14,6 +14,32 @@ class ItemSale extends Model {
       {
         sequelize,
         paranoid: true,
+        hooks: {
+          afterCreate: async (itemSale, options) => {
+            try {
+              const logbook = await itemSale.getLogBookInventory();
+
+              logbook.quantity_acquired =
+                logbook.quantity_acquired - itemSale.quantity;
+
+              await logbook.save();
+            } catch (error) {
+              console.error(error);
+            }
+          },
+          afterDestroy: async (itemSale, options) => {
+            try {
+              const logbook = await itemSale.getLogBookInventory();
+
+              logbook.quantity_acquired =
+                logbook.quantity_acquired + itemSale.quantity;
+
+              await logbook.save();
+            } catch (error) {
+              console.error(error);
+            }
+          },
+        },
       }
     );
 
