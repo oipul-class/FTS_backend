@@ -60,7 +60,7 @@ routes.delete("/company/:id", companyController.delete);
 
 routes.get("/branch", branchController.index);
 routes.get("company/:id/branch", branchController.index);
-routes.get("/branch/search", branchController.find);
+routes.get("/branch/find/:id", branchController.find);
 routes.post("/branch", branchMiddleware.create, branchController.store);
 routes.put("/branch/:id", branchMiddleware.update, branchController.update);
 routes.delete("/branch/:id", branchController.delete);

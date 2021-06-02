@@ -69,10 +69,10 @@ module.exports = {
   },
 
   async find(req, res) {
-    const { branch_name, cep } = req.body;
+    const { id } = req.params;
 
     try {
-      const branches = await Branch.findAll({
+      const branches = await Branch.findByPk(id, {
         attributes: [
           "branch_name",
           "cep",
@@ -80,19 +80,10 @@ module.exports = {
           "place_number",
           "company_id",
         ],
-        where: {
-          [Op.and]: [
-            {
-              branch_name: { [Op.substring]: branch_name ? branch_name : "" },
-            },
-            {
-              cep: { [Op.substring]: cep ? cep : "" },
-            },
-          ],
-        },
         include: {
           association: "Company",
           attributes: [
+            "id",
             "cnpj",
             "fantasy_name",
             "social_reason",
