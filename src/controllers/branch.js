@@ -195,10 +195,7 @@ module.exports = {
 
       await branch.destroy();
 
-      res.send({
-        status: "deletado",
-        afilial: branch,
-      });
+      res.send();
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
