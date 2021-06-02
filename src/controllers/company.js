@@ -31,9 +31,9 @@ module.exports = {
   },
 
   async find(req, res) {
-    const { id } = req.body;
-
     try {
+      const { id } = req.params;
+
       const company = await Company.findByPk(id, {
         attributes: [
           "id",
@@ -57,21 +57,21 @@ module.exports = {
   },
 
   async store(req, res) {
-    const {
-      cnpj,
-      fantasy_name,
-      social_reason,
-      place_number,
-      companie_password,
-      cep,
-      state,
-      nature_of_the_business,
-      commercial_email,
-    } = req.body;
-
-    const cryptPassword = bcryptjs.hashSync(companie_password);
-
     try {
+      const {
+        cnpj,
+        fantasy_name,
+        social_reason,
+        place_number,
+        companie_password,
+        cep,
+        state,
+        nature_of_the_business,
+        commercial_email,
+      } = req.body;
+
+      const cryptPassword = bcryptjs.hashSync(companie_password);
+
       const company = await Company.create({
         cnpj,
         fantasy_name,
@@ -104,22 +104,21 @@ module.exports = {
   },
 
   async update(req, res) {
-    const { id } = req.params;
-
-    const {
-      cnpj,
-      fantasy_name,
-      social_reason,
-      place_number,
-      companie_password,
-      cep,
-      state,
-      nature_of_the_business,
-      commercial_email,
-      plan_id,
-    } = req.body;
-
     try {
+      const { id } = req.params;
+
+      const {
+        cnpj,
+        fantasy_name,
+        social_reason,
+        place_number,
+        companie_password,
+        cep,
+        state,
+        nature_of_the_business,
+        commercial_email,
+        plan_id,
+      } = req.body;
       const company = await Company.findByPk(id, {
         attributes: [
           "cnpj",
@@ -173,9 +172,9 @@ module.exports = {
   },
 
   async delete(req, res) {
-    const id = req.params.id;
-
     try {
+      const { id } = req.params;
+
       const company = await Company.findByPk(id, {
         attributes: [
           "id",
@@ -192,7 +191,9 @@ module.exports = {
       });
 
       if (!company)
-        return res.status(404).send({ erro: "Companhia requesitada não existe" });
+        return res
+          .status(404)
+          .send({ erro: "Companhia requesitada não existe" });
 
       await company.destroy();
 
