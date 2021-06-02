@@ -29,11 +29,12 @@ module.exports = {
   },
 
   async find(req, res) {
-    const { fantasy_name, cnpj, cep } = req.body;
+    const { id } = req.body;
 
     try {
-      const companies = await Company.findAll({
+      const company = await Company.findByPk(id, {
         attributes: [
+          "id",
           "cnpj",
           "fantasy_name",
           "social_reason",
@@ -44,28 +45,9 @@ module.exports = {
           "commercial_email",
           "plan_id",
         ],
-        where: {
-          [Op.and]: [
-            {
-              fantasy_name: {
-                [Op.substring]: fantasy_name ? fantasy_name : "",
-              },
-            },
-            {
-              cnpj: {
-                [Op.substring]: cnpj ? cnpj : "",
-              },
-            },
-            {
-              cep: {
-                [Op.substring]: cep ? cep : "",
-              },
-            },
-          ],
-        },
       });
 
-      res.send(companies);
+      res.send(company);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);

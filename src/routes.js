@@ -50,7 +50,7 @@ const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 routes.post("/session", sessionController.store);
 
 routes.get("/company", companyController.index);
-routes.get("/company/search", companyController.find);
+routes.get("/company/find/:id", companyController.find);
 routes.post("/company", companyMiddleware.create, companyController.store);
 routes.put("/company/:id", companyMiddleware.update, companyController.update);
 routes.delete("/company/:id", companyController.delete);
