@@ -12,6 +12,7 @@ class Branch extends Model {
       },
       {
         sequelize,
+        paranoid: true,
       }
     );
   }
