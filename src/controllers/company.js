@@ -192,14 +192,11 @@ module.exports = {
       });
 
       if (!company)
-        return res.status(404).send({ erro: "compania não existe" });
+        return res.status(404).send({ erro: "Companhia requesitada não existe" });
 
       await company.destroy();
 
-      res.send({
-        status: "deletado",
-        compania: company,
-      });
+      res.send();
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
