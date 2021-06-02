@@ -101,7 +101,6 @@ module.exports = {
         commercial_email,
       });
 
-
       company.addPermission(1);
 
       res.status(201).send(company);
@@ -202,24 +201,5 @@ module.exports = {
       console.error(error);
       res.status(500).send(error);
     }
-  },
-
-  async setPlan(req, res) {
-    const { company_id, plan_id } = req.body;
-
-    const company = await Company.findByPk(company_id);
-
-    if (!company) return res.status(404).send({ erro: "compania não existe" });
-
-    const plan = await Plan.findByPk(plan_id);
-
-    if (!plan) return res.status(404).send({ erro: "plano não existe" });
-
-    company.plan_id = plan_id;
-
-    res.send({
-      compania: company,
-      plano: plan,
-    });
   },
 };

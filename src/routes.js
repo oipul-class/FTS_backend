@@ -53,10 +53,9 @@ routes.get("/company", companyController.index);
 routes.get("/company/search", companyController.find);
 routes.post("/company", companyMiddleware.create, companyController.store);
 routes.put("/company/:id", companyMiddleware.update, companyController.update);
-routes.put("/company/plan", companyController.setPlan);
 routes.delete("/company/:id", companyController.delete);
 
-// routes.use(tokenAuthMiddleware);
+routes.use(tokenAuthMiddleware);
 
 routes.get("/branch", branchController.index);
 routes.get("/branch/search", branchController.find);
