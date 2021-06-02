@@ -23,6 +23,7 @@ class Company extends Model {
   }
 
   static associate(models) {
+    this.belongsTo(models.Plan)
     this.hasMany(models.Branch);
     this.belongsToMany(models.Permission, { through: "companies_permissions" });
     this.hasMany(models.Product);

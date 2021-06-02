@@ -13,7 +13,7 @@ class Plan extends Model {
   }
 
   static associate(models) {
-    //this.belongsToMany(models.Company);
+    this.hasMany(models.Company);
   }
 }
 
