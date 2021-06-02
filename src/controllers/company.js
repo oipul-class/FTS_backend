@@ -62,7 +62,6 @@ module.exports = {
       fantasy_name,
       social_reason,
       place_number,
-      permissions,
       companie_password,
       cep,
       state,
@@ -85,9 +84,19 @@ module.exports = {
         commercial_email,
       });
 
-      company.addPermission(1);
+      await company.addPermission(1);
 
-      res.status(201).send(company);
+      res.status(201).send({
+        id: company.id,
+        cnpj,
+        fantasy_name,
+        social_reason,
+        place_number,
+        cep,
+        state,
+        nature_of_the_business,
+        commercial_email,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
