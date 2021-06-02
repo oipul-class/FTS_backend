@@ -156,7 +156,16 @@ module.exports = {
       if (place_number) branch.place_number = place_number;
       if (branch_email) branch.branch_email = branch_email;
       if (cep) branch.cep = cep;
-      if (company_id) branch.company_id = company_id;
+      if (company_id) {
+        const company = await Company.findByPk(company_id);
+
+        if (!company)
+          return res
+            .status(404)
+            .send({ erro: "Companhia requesitada não existe" });
+
+        branch.company_id = company_id;
+      }
 
       await branch.save();
 
@@ -181,7 +190,8 @@ module.exports = {
         ],
       });
 
-      if (!branch) return res.status(404).send({ erro: "afilial não existe" });
+      if (!branch)
+        return res.status(404).send({ erro: "Filial requesitada não existe" });
 
       await branch.destroy();
 
