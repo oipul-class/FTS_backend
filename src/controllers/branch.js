@@ -9,57 +9,59 @@ module.exports = {
 
       let branches;
 
-      if (company_id) branches = await Branch.findAll({
-        where: {
-          company_id: id,
-        },
-        attributes: [
-          "id",
-          "branch_name",
-          "cep",
-          "branch_email",
-          "place_number",
-          "company_id",
-        ],
-        include: {
-          association: "Company",
+      if (id)
+        branches = await Branch.findAll({
+          where: {
+            company_id: id,
+          },
           attributes: [
             "id",
-            "cnpj",
-            "fantasy_name",
-            "social_reason",
-            "place_number",
+            "branch_name",
             "cep",
-            "state",
-            "nature_of_the_business",
-            "commercial_email",
+            "branch_email",
+            "place_number",
+            "company_id",
           ],
-        },
-      });
-      else branches = await Branch.findAll({
-        attributes: [
-          "id",
-          "branch_name",
-          "cep",
-          "branch_email",
-          "place_number",
-          "company_id",
-        ],
-        include: {
-          association: "Company",
+          include: {
+            association: "Company",
+            attributes: [
+              "id",
+              "cnpj",
+              "fantasy_name",
+              "social_reason",
+              "place_number",
+              "cep",
+              "state",
+              "nature_of_the_business",
+              "commercial_email",
+            ],
+          },
+        });
+      else
+        branches = await Branch.findAll({
           attributes: [
             "id",
-            "cnpj",
-            "fantasy_name",
-            "social_reason",
-            "place_number",
+            "branch_name",
             "cep",
-            "state",
-            "nature_of_the_business",
-            "commercial_email",
+            "branch_email",
+            "place_number",
+            "company_id",
           ],
-        },
-      });
+          include: {
+            association: "Company",
+            attributes: [
+              "id",
+              "cnpj",
+              "fantasy_name",
+              "social_reason",
+              "place_number",
+              "cep",
+              "state",
+              "nature_of_the_business",
+              "commercial_email",
+            ],
+          },
+        });
 
       res.send(branches);
     } catch (error) {
@@ -74,6 +76,7 @@ module.exports = {
     try {
       const branches = await Branch.findByPk(id, {
         attributes: [
+          "id",
           "branch_name",
           "cep",
           "branch_email",
@@ -81,7 +84,7 @@ module.exports = {
           "company_id",
         ],
         include: {
-          association: "Company",
+          model: Company,
           attributes: [
             "id",
             "cnpj",
@@ -111,7 +114,7 @@ module.exports = {
       const company = await Company.findByPk(company_id);
 
       if (!company)
-        return res.status(404).send({ erro: "compania não existe" });
+        return res.status(404).send({ erro: "Compania requesitada não existe" });
 
       const branch = await Branch.create({
         branch_name,
