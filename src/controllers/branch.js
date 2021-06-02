@@ -71,9 +71,9 @@ module.exports = {
   },
 
   async find(req, res) {
-    const { id } = req.params;
-
     try {
+      const { id } = req.params;
+
       const branches = await Branch.findByPk(id, {
         attributes: [
           "id",
@@ -107,14 +107,16 @@ module.exports = {
   },
 
   async store(req, res) {
-    const { branch_name, cep, branch_email, place_number, company_id } =
-      req.body;
-
     try {
+      const { branch_name, cep, branch_email, place_number, company_id } =
+        req.body;
+
       const company = await Company.findByPk(company_id);
 
       if (!company)
-        return res.status(404).send({ erro: "Compania requesitada não existe" });
+        return res
+          .status(404)
+          .send({ erro: "Compania requesitada não existe" });
 
       const branch = await Branch.create({
         branch_name,
@@ -132,11 +134,12 @@ module.exports = {
   },
 
   async update(req, res) {
-    const { id } = req.params;
-
-    const { branch_name, cep, branch_email, place_number, company_id } =
-      req.body;
     try {
+      const { id } = req.params;
+
+      const { branch_name, cep, branch_email, place_number, company_id } =
+        req.body;
+
       const branch = await Branch.findByPk(id, {
         attributes: [
           "branch_name",
@@ -165,9 +168,9 @@ module.exports = {
   },
 
   async delete(req, res) {
-    const { id } = req.params;
-
     try {
+      const { id } = req.params;
+
       const branch = await Branch.findByPk(id, {
         attributes: [
           "branch_name",
