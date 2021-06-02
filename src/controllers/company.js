@@ -6,7 +6,7 @@ const bcryptjs = require("bcryptjs");
 module.exports = {
   async index(req, res) {
     try {
-      const companys = await Company.findAll({
+      const companies = await Company.findAll({
         attributes: [
           "id",
           "cnpj",
@@ -17,11 +17,13 @@ module.exports = {
           "state",
           "nature_of_the_business",
           "commercial_email",
-          "plan_id",
         ],
+        include: {
+          model: Plan,
+        },
       });
 
-      res.send(companys);
+      res.send(companies);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
