@@ -121,6 +121,7 @@ module.exports = {
       } = req.body;
       const company = await Company.findByPk(id, {
         attributes: [
+          "id",
           "cnpj",
           "fantasy_name",
           "social_reason",
