@@ -66,7 +66,7 @@ routes.put("/branch/:id", branchMiddleware.update, branchController.update);
 routes.delete("/branch/:id", branchController.delete);
 
 routes.get("/role", roleController.index);
-routes.get("/role/search", roleController.find);
+routes.get("/role/find/:id", roleController.find);
 routes.post("/role", roleMiddleware.create, roleController.store);
 routes.put("/role/:id", roleMiddleware.create, roleController.update);
 routes.delete("/role/:id", roleController.delete);
