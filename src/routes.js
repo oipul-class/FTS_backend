@@ -39,22 +39,22 @@ const itemSaleMiddleware = require("./validators/itemSale");
 const billToReceiveMiddleware = require("./validators/billToReceive");
 const billToPayMiddleware = require("./validators/billToPay");
 
+const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
+
 routes.get("/screen", screenController.index);
 routes.get("/screen/:id", screenController.find);
 
 routes.get("/permission", permissionController.index);
 routes.get("/permission/:id", permissionController.find);
 
-const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
-
 routes.post("/session", sessionController.store);
 
 routes.post("/company", companyMiddleware.create, companyController.store);
+routes.get("/company", companyController.index);
+routes.get("/company/find/:id", companyController.find);
 
 routes.use(tokenAuthMiddleware);
 
-routes.get("/company", companyController.index);
-routes.get("/company/find/:id", companyController.find);
 routes.put("/company/:id", companyMiddleware.update, companyController.update);
 routes.delete("/company/:id", companyController.delete);
 
@@ -94,7 +94,7 @@ routes.delete("/productType/:id", productTypeController.delete);
 routes.get("/unit", unitOfMeasurementController.index);
 routes.get("/unit/:id", unitOfMeasurementController.find);
 
-routes.get("/product/company/:company_id", productController.index);
+routes.get("/company/:company_id/product", productController.index);
 routes.get("/product/barCode/:bar_code", productController.index);
 routes.get("/product/find/:id", productController.find);
 routes.post("/product", productMiddleware.create, productController.store);
