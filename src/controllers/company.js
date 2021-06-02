@@ -116,6 +116,7 @@ module.exports = {
       state,
       nature_of_the_business,
       commercial_email,
+      plan_id,
     } = req.body;
 
     try {
@@ -144,7 +145,7 @@ module.exports = {
       if (companie_password) {
         const cryptPassword = bcryptjs.hashSync(companie_password);
 
-        company.companie_password = companie_password;
+        company.companie_password = cryptPassword;
       }
 
       if (cep) company.cep = cep;
@@ -152,6 +153,15 @@ module.exports = {
       if (nature_of_the_business)
         company.nature_of_the_business = nature_of_the_business;
       if (commercial_email) company.commercial_email = commercial_email;
+
+      if (plan_id) {
+        const plan = await Plan.findByPk(plan_id);
+
+        if (!plan)
+          return res.status(404).send({ erro: "Plano requesitado não existe" });
+
+        company.plan_id = plan_id;
+      }
 
       await company.save();
 
