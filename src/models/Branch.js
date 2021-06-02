@@ -5,7 +5,7 @@ class Branch extends Model {
     super.init(
       {
         branch_name: DataTypes.STRING,
-        cep: DataTypes.STRING,
+        cep: DataTypes.STRING(10),
         branch_email: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
