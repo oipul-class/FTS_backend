@@ -22,12 +22,21 @@ describe("Testando inserção e listagem com sucesso do modulo de filial de comp
       commercial_email: "test@test.com",
     });
 
-    const response = await request(app).post("/branch").send({
+    const token = await request(app).post("/session").send({
+      cnpj_ou_cpf: company.body.cnpj,
+      password: "12345678",
+    });
+
+    console.log("Token body", token.body);
+
+    const response = await request(app).post("/branch").set({ Authorization: `Bearer ${token.body.token}`}).send({
       branch_name: "filial de teste",
       cep: "15062-526",
       place_number: 300,
       company_id: company.body.id,
     });
+
+    console.log("responseBody", response.body);
 
     expect(response.ok).toBeTruthy();
     expect(response.body).toHaveProperty("id");
@@ -37,9 +46,7 @@ describe("Testando inserção e listagem com sucesso do modulo de filial de comp
   });
 
   it("é possivel listar todas as filiais cadastradas no sistema com sucesso", async () => {
-    const response = await request(app).get("/branch").send({
-      company_id: companyID,
-    });
+    const response = await request(app).get(`/company/${companyID}/branch`).send();
 
     expect(response.ok).toBeTruthy();
   });
