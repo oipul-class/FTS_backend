@@ -33,11 +33,10 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const roles = await Role.findByPk(id, {
+      const role = await Role.findByPk(id, {
         attributes: ["id", "role_name"],
       });
-
-      res.send(roles);
+      res.send(role);
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
@@ -85,7 +84,7 @@ module.exports = {
 
       const role = await Role.findByPk(id);
 
-      if (!role) return res.status(404).send({ erro: "cargo não existe" });
+      if (!role) return res.status(404).send({ erro: "Cargo requisitado não existe" });
 
       await role.destroy();
 
