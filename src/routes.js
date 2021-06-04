@@ -45,7 +45,7 @@ routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
 
 routes.get("/permission", permissionController.index);
-routes.get("/permission/:id", permissionController.find);
+routes.get("/permission/find/:id", permissionController.find);
 
 routes.post("/session", sessionController.store);
 
