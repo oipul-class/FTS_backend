@@ -135,7 +135,7 @@ module.exports = {
       });
 
       if (!company)
-        return res.status(404).send({ erro: "compania não existe" });
+        return res.status(404).send({ erro: "Compania requisitada não existe" });
 
       if (cnpj) company.cnpj = cnpj;
       if (fantasy_name) company.fantasy_name = fantasy_name;
