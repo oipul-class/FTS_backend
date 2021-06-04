@@ -24,7 +24,7 @@ module.exports = {
 
       res.send(roles);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send(error);
     }
   },
@@ -51,7 +51,7 @@ module.exports = {
 
       res.status(201).send(role);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send(error);
     }
   },
@@ -73,7 +73,7 @@ module.exports = {
 
       res.send(role);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send(error);
     }
   },
@@ -90,7 +90,7 @@ module.exports = {
 
       res.send();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send(error);
     }
   },
