@@ -8,6 +8,7 @@ describe("Testando inserção e listagem com sucesso do modulo de filial de comp
   });
 
   let companyID;
+  let bearerToken
 
   it("é possivel inserir uma filial de uma companhia no sistema com sucesso", async () => {
     const company = await request(app).post("/company").send({
@@ -27,16 +28,14 @@ describe("Testando inserção e listagem com sucesso do modulo de filial de comp
       password: "12345678",
     });
 
-    console.log("Token body", token.body);
+    bearerToken = `Bearer ${token.body.token}`
 
-    const response = await request(app).post("/branch").set({ Authorization: `Bearer ${token.body.token}`}).send({
+    const response = await request(app).post("/branch").set({ Authorization: bearerToken }).send({
       branch_name: "filial de teste",
       cep: "15062-526",
       place_number: 300,
       company_id: company.body.id,
     });
-
-    console.log("responseBody", response.body);
 
     expect(response.ok).toBeTruthy();
     expect(response.body).toHaveProperty("id");
@@ -46,7 +45,7 @@ describe("Testando inserção e listagem com sucesso do modulo de filial de comp
   });
 
   it("é possivel listar todas as filiais cadastradas no sistema com sucesso", async () => {
-    const response = await request(app).get(`/company/${companyID}/branch`).send();
+    const response = await request(app).get(`/company/${companyID}/branch`).set({ Authorization: bearerToken }).send();
 
     expect(response.ok).toBeTruthy();
   });
