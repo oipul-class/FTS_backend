@@ -11,7 +11,6 @@ module.exports = {
 
       costumer_name: {
         type: Sequelize.STRING(45),
-        allowNull: false,
       },
 
       cpf: {
