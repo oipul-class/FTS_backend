@@ -42,7 +42,7 @@ const billToPayMiddleware = require("./validators/billToPay");
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 
 routes.get("/screen", screenController.index);
-routes.get("/screen/:id", screenController.find);
+routes.get("/screen/find/:id", screenController.find);
 
 routes.get("/permission", permissionController.index);
 routes.get("/permission/:id", permissionController.find);
