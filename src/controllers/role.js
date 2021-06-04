@@ -12,9 +12,7 @@ module.exports = {
         roles = await Role.findAll({
           attributes: ["id", "role_name"],
           where: {
-            [Op.substring]: {
-              role_name,
-            },
+            role_name: { [Op.substring]: role_name },
           },
         });
       else
@@ -84,7 +82,8 @@ module.exports = {
 
       const role = await Role.findByPk(id);
 
-      if (!role) return res.status(404).send({ erro: "Cargo requisitado não existe" });
+      if (!role)
+        return res.status(404).send({ erro: "Cargo requisitado não existe" });
 
       await role.destroy();
 
