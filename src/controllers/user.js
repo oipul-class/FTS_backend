@@ -7,7 +7,108 @@ const bcryptjs = require("bcryptjs");
 module.exports = {
   async index(req, res) {
     try {
-      const users = await User.findAll({
+      const { branch_id, cpf } = req.params;
+
+      let users;
+
+      if (branch_id)
+        users = await User.findAll({
+          attributes: ["cpf", "rg", "user_name"],
+          where: {
+            branch_id,
+          },
+          include: [
+            {
+              association: "Branch",
+              attributes: [
+                "id",
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+                "company_id",
+              ],
+            },
+            {
+              association: "Role",
+              attributes: ["id", "role_name"],
+            },
+            {
+              association: "Permissions",
+              attributes: ["id", "permission_name"],
+            },
+          ],
+        });
+      else if (cpf)
+        users = await User.findAll({
+          attributes: ["cpf", "rg", "user_name"],
+          where: {
+            [Op.substring]: {
+              cpf,
+            },
+          },
+          include: [
+            {
+              association: "Branch",
+              attributes: [
+                "id",
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+                "company_id",
+              ],
+            },
+            {
+              association: "Role",
+              attributes: ["id", "role_name"],
+            },
+            {
+              association: "Permissions",
+              attributes: ["id", "permission_name"],
+            },
+          ],
+        });
+      else
+        users = await User.findAll({
+          attributes: ["cpf", "rg", "user_name"],
+          include: [
+            {
+              association: "Branch",
+              attributes: [
+                "id",
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+                "company_id",
+              ],
+            },
+            {
+              association: "Role",
+              attributes: ["id", "role_name"],
+            },
+            {
+              association: "Permissions",
+              attributes: ["id", "permission_name"],
+            },
+          ],
+        });
+
+      res.send(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async find(req, res) {
+    try {
+      const { id } = req.params;
+
+      const user = await User.findByPk(id, {
+        attributes: ["user_name", "cpf", "rg"],
+
         attributes: ["cpf", "rg", "user_name"],
         include: [
           {
@@ -32,45 +133,7 @@ module.exports = {
         ],
       });
 
-      res.send(users);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send(error);
-    }
-  },
-
-  async find(req, res) {
-    const { id } = req.params;
-
-    try {
-      const users = await User.findByPk(id, {
-        attributes: ["user_name", "cpf", "rg"],
-
-        include: [
-          {
-            association: "Branch",
-            attributes: [
-              "id",
-              "branch_name",
-              "cep",
-              "branch_email",
-              "place_number",
-              "company_id",
-            ],
-          },
-
-          {
-            association: "Permissions",
-            attributes: ["id", "permission_name"],
-            include: {
-              association: "Screens",
-              attributes: ["id", "screen_name"],
-            },
-          },
-        ],
-      });
-
-      res.send(users);
+      res.send(user);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -78,31 +141,31 @@ module.exports = {
   },
 
   async store(req, res) {
-    const {
-      cpf,
-      rg,
-      user_password,
-      user_name,
-      branch_id,
-      role_id,
-      permissions,
-    } = req.body;
-
     try {
+      const {
+        cpf,
+        rg,
+        user_password,
+        user_name,
+        branch_id,
+        role_id,
+        permissions,
+      } = req.body;
+
       const branch = await Branch.findByPk(branch_id);
 
-      if (!branch) return res.status(404).send({ erro: "afilial não existe" });
+      if (!branch)
+        return res.status(404).send({ erro: "Filial requesitada não existe" });
 
       const role = await Role.findByPk(role_id);
 
-      if (!role) return res.status(404).send({ erro: "cargo não existe" });
-
-      const cryptPassword = bcryptjs.hashSync(user_password);
+      if (!role)
+        return res.status(404).send({ erro: "Cargo requesitado não existe" });
 
       const user = await User.create({
         cpf,
         rg,
-        user_password: cryptPassword,
+        user_password: bcryptjs.hashSync(user_password),
         user_name,
         branch_id,
         role_id,
@@ -120,44 +183,14 @@ module.exports = {
   },
 
   async update(req, res) {
-    const { id } = req.params;
-
-    const { user_name, cpf, rg, user_password, branch_id, role_id } = req.body;
-
     try {
-      const user = await User.findByPk(id);
+      const { id } = req.params;
 
-      if (!user) return res.status(404).send({ erro: "usuário não existe" });
+      const { user_name, cpf, rg, user_password, branch_id, role_id } =
+        req.body;
 
-      if (user_name) user.user_name = user_name;
-      if (cpf) user.cpf = cpf;
-      if (rg) user.rg = rg;
-      if (user_password) {
-        const cryptPassword = bcryptjs.hashSync(user_password);
-
-        user.user_password = cryptPassword;
-      }
-      if (branch_id) {
-        const branch = await Branch.findByPk(branch_id);
-
-        if (!branch)
-          return res.status(404).send({ erro: "afilial não existe" });
-
-        user.branch_id = branch_id;
-      }
-
-      if (role_id) {
-        const role = await Role.findByPk(role_id);
-
-        if (!role) return res.status(404).send({ erro: "cargo não existe" });
-
-        user.role_id = role_id;
-      }
-
-      await user.save();
-
-      const updatedUser = await User.findByPk(user.id, {
-        attributes: ["cpf", "rg", "user_password", "user_name"],
+      const user = await User.findByPk(id, {
+        attributes: ["id", "cpf", "rg", "user_password", "user_name"],
         include: {
           association: "Branch",
           include: [
@@ -180,7 +213,42 @@ module.exports = {
         },
       });
 
-      res.send(updatedUser);
+      if (!user)
+        return res.status(404).send({ erro: "Usuário requisitado não existe" });
+
+      if (user_name) user.user_name = user_name;
+      if (cpf) user.cpf = cpf;
+      if (rg) user.rg = rg;
+      if (user_password) {
+        const cryptPassword = bcryptjs.hashSync(user_password);
+
+        user.user_password = cryptPassword;
+      }
+      if (branch_id) {
+        const branch = await Branch.findByPk(branch_id);
+
+        if (!branch)
+          return res
+            .status(404)
+            .send({ erro: "Filial requisitada não existe" });
+
+        user.branch_id = branch_id;
+      }
+
+      if (role_id) {
+        const role = await Role.findByPk(role_id);
+
+        if (!role)
+          return res
+            .status(404)
+            .send({ erro: "Cargo requisitaado não existe" });
+
+        user.role_id = role_id;
+      }
+
+      await user.save();
+
+      res.send(user);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -188,16 +256,16 @@ module.exports = {
   },
 
   async delete(req, res) {
-    const { id } = req.params;
-
     try {
+      const { id } = req.params;
+
       const user = await User.findByPk(id);
 
-      if (!user) return res.status(404).send({ erro: "usuario não existe" });
+      if (!user) return res.status(404).send({ erro: "Usuário requesitado não existe" });
 
       await user.destroy();
 
-      res.send({ status: "deletado", usuario: user });
+      res.send();
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
