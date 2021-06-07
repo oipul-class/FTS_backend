@@ -7,13 +7,29 @@ const Product = require("../models/Product");
 module.exports = {
   async index(req, res) {
     try {
-      const purchases = await Purchase.findAll({
-        include: [
-          {
-            model: ItemPurchase,
+      const { branch_id } = req.params;
+
+      let purchases;
+
+      if (branch_id)
+        purchases = await Purchase.findAll({
+          where: {
+            branch_id,
           },
-        ],
-      });
+          include: [
+            {
+              model: ItemPurchase,
+            },
+          ],
+        });
+      else
+        purchases = await Purchase.findAll({
+          include: [
+            {
+              model: ItemPurchase,
+            },
+          ],
+        });
 
       res.send(purchases);
     } catch (error) {
@@ -48,11 +64,14 @@ module.exports = {
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
 
       if (!paymentMethod)
-        return res.status(404).send({ erro: "metodo de pagamento não existe" });
+        return res
+          .status(404)
+          .send({ erro: "Metodo de pagamento requesitado não existe" });
 
       const branch = await Branch.findByPk(branch_id);
 
-      if (!branch) return res.status(404).send({ erro: "filial não existe" });
+      if (!branch)
+        return res.status(404).send({ erro: "Filial requesitada não existe" });
 
       const purchase = await branch.createPurchase({
         payment_method_id,
@@ -84,7 +103,7 @@ module.exports = {
         });
       }
 
-      res.status(404).send(purchase);
+      res.status(201).send(purchase);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -99,7 +118,9 @@ module.exports = {
       const purchase = await Purchase.findByPk(id);
 
       if (!purchase)
-        return res.status(404).send({ erro: "compra não encontrada" });
+        return res
+          .status(404)
+          .send({ erro: "Compra requesitada não encontrada" });
 
       if (payment_method_id) purchase.payment_method_id = payment_method_id;
 
@@ -119,7 +140,9 @@ module.exports = {
       const purchase = await Purchase.findByPk(id);
 
       if (!purchase)
-        return res.status(404).send({ erro: "compra não encontrada" });
+        return res
+          .status(404)
+          .send({ erro: "Compra requesitada não encontrada" });
 
       await purchase.destroy();
 

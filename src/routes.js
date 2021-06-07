@@ -123,7 +123,8 @@ routes.get("/paymentMethod", paymentMethodController.index);
 routes.get("/paymentMethod/find/:id", paymentMethodController.find);
 
 routes.get("/purchase", purchaseController.index);
-routes.get("/purchase/:id", purchaseController.find);
+routes.get("/branch/:branch_id/purchase", purchaseController.index);
+routes.get("/purchase/find/:id", purchaseController.find);
 routes.post("/purchase", purchaseMiddleware.create, purchaseController.store);
 routes.put(
   "/purchase/:id",
