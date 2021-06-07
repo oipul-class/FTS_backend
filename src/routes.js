@@ -80,18 +80,7 @@ routes.put("/user/:id", userMiddleware.update, userController.update);
 routes.delete("/user/:id", userController.delete);
 
 routes.get("/productType", productTypeController.index);
-routes.get("/productType/:id", productTypeController.find);
-routes.post(
-  "/productType",
-  productTypeMiddleware.create,
-  productTypeController.store
-);
-routes.put(
-  "/productType/:id",
-  productTypeMiddleware.update,
-  productTypeController.update
-);
-routes.delete("/productType/:id", productTypeController.delete);
+routes.get("/productType/find/:id", productTypeController.find);
 
 routes.get("/unit", unitOfMeasurementController.index);
 routes.get("/unit/:id", unitOfMeasurementController.find);
