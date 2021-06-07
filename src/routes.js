@@ -81,7 +81,7 @@ routes.get("/productType", productTypeController.index);
 routes.get("/productType/find/:id", productTypeController.find);
 
 routes.get("/unit", unitOfMeasurementController.index);
-routes.get("/unit/:id", unitOfMeasurementController.find);
+routes.get("/unit/find/:id", unitOfMeasurementController.find);
 
 routes.get("/company/:company_id/product", productController.index);
 routes.get("/product/barCode/:bar_code", productController.index);
