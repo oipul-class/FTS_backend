@@ -56,12 +56,12 @@ module.exports = {
       if (!unit_of_measurement || !product_type)
         return res
           .status(404)
-          .send({ erro: "unidade de medida ou tipo de produto não existe" });
+          .send({ erro: "Unidade de medidade ou tipo do produto requisitado não existe" });
 
       const company = await Company.findByPk(company_id);
 
       if (!company)
-        return res.status(404).send({ erro: "compania não existe" });
+        return res.status(404).send({ erro: "Comapnhia requesitada não existe" });
 
       const product = await Product.create({
         product_name,
@@ -95,7 +95,7 @@ module.exports = {
 
       const product = await Product.findByPk(id);
 
-      if (!product) return res.status(404).send({ erro: "produto não existe" });
+      if (!product) return res.status(404).send({ erro: "Produto requesitado não existe" });
 
       if (product_name) product.product_name = product_name;
       if (description) product.description = description;
@@ -108,7 +108,7 @@ module.exports = {
         );
 
         if (!unit_of_measurement)
-          return res.status(404).send({ erro: "unidade de medida não existe" });
+          return res.status(404).send({ erro: "Unidade de medida requesitada não existe" });
 
         product.unit_of_measurement_id = unit_of_measurement_id;
       }
@@ -117,7 +117,7 @@ module.exports = {
         const product_type = await UnitOfMeasurement.findByPk(product_type_id);
 
         if (!product_type)
-          return res.status(404).send({ erro: "tipo de produto não existe" });
+          return res.status(404).send({ erro: "Tipo de produto requesitado não existe" });
 
         product.product_type_id = product_type_id;
       }
@@ -136,7 +136,7 @@ module.exports = {
 
       const product = await Product.findByPk(id);
 
-      if (!product) return res.status(404).send({ erro: "produto não existe" });
+      if (!product) return res.status(404).send({ erro: "Produto requesitado não existe" });
 
       await product.destroy();
 
