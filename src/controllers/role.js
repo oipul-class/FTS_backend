@@ -36,7 +36,7 @@ module.exports = {
       });
       res.send(role);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send(error);
     }
   },
