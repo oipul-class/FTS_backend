@@ -3,7 +3,17 @@ const Lot = require("../models/Lot");
 module.exports = {
   async index(req, res) {
     try {
-      const lots = await Lot.findAll();
+      const { product_id } = req.params;
+
+      let lots;
+
+      if (product_id)
+        lots = await Lot.findOne({
+          where: {
+            product_id,
+          },
+        });
+      else lots = await Lot.findAll();
 
       res.send(lots);
     } catch (error) {
@@ -33,7 +43,7 @@ module.exports = {
 
       const lot = await Lot.findByPk(id);
 
-      if (!lot) return res.send({ erro: "Lot não existe" });
+      if (!lot) return res.send({ erro: "Lot requesitado não existe" });
 
       if (lot_number) lot.lot_number = lot_number;
       if (manufacture_date) lot.manufacture_date = manufacture_date;
