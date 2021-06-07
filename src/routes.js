@@ -109,7 +109,8 @@ routes.put(
 );
 
 routes.get("/lot", lotController.index);
-routes.get("/lot/:id", lotController.find);
+routes.get("product/:product_id/lot", lotController.index);
+routes.get("/lot/find/:id", lotController.find);
 routes.put("/lot/:id", lotMiddleware.update, lotController.update);
 
 routes.get("/costumer", costumerController.index);
