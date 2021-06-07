@@ -1,5 +1,4 @@
 const Lot = require("../models/Lot");
-const LogBookInventory = require("../models/LogBookInventory")
 
 module.exports = {
   async index(req, res) {
