@@ -109,7 +109,7 @@ routes.put(
 );
 
 routes.get("/lot", lotController.index);
-routes.get("product/:product_id/lot", lotController.index);
+routes.get("/logbook/:logbook_id/lot", lotController.index);
 routes.get("/lot/find/:id", lotController.find);
 routes.put("/lot/:id", lotMiddleware.update, lotController.update);
 

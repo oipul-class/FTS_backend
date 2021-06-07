@@ -1,16 +1,21 @@
 const Lot = require("../models/Lot");
+const LogBookInventory = require("../models/LogBookInventory")
 
 module.exports = {
   async index(req, res) {
     try {
-      const { product_id } = req.params;
+      const { logbook_id } = req.params;
 
       let lots;
 
-      if (product_id)
+      if (logbook_id)
         lots = await Lot.findOne({
-          where: {
-            product_id,
+          include: {
+            association: "logbook_inventories",
+            where: {
+              id: logbook_id,
+            },
+            attributes: [],
           },
         });
       else lots = await Lot.findAll();
