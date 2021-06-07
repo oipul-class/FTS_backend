@@ -1,10 +1,22 @@
 const PaymentMethod = require("../models/PaymentMethod");
-const { find } = require("./purchase");
+const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
     try {
-      const paymentMethods = await PaymentMethod.findAll();
+      const { method } = req.body;
+
+      let paymentMethods;
+
+      if (method)
+        paymentMethods = await PaymentMethod.findAll({
+          where: {
+            method: {
+              [Op.substring]: method,
+            },
+          },
+        });
+      else paymentMethods = await PaymentMethod.findAll();
 
       res.send(paymentMethods);
     } catch (error) {
@@ -15,7 +27,6 @@ module.exports = {
 
   async find(req, res) {
     try {
-
       const { id } = req.params;
 
       const paymentMethod = await PaymentMethod.findByPk(id);

@@ -120,7 +120,7 @@ routes.put(
 routes.delete("/costumer/:id", costumerController.delete);
 
 routes.get("/paymentMethod", paymentMethodController.index);
-routes.get("/paymentMethod/:id", paymentMethodController.find);
+routes.get("/paymentMethod/find/:id", paymentMethodController.find);
 
 routes.get("/purchase", purchaseController.index);
 routes.get("/purchase/:id", purchaseController.find);
