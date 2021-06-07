@@ -53,7 +53,7 @@ routes.post("/company", companyMiddleware.create, companyController.store);
 routes.get("/company", companyController.index);
 routes.get("/company/find/:id", companyController.find);
 
-routes.use(tokenAuthMiddleware);
+//routes.use(tokenAuthMiddleware);
 
 routes.put("/company/:id", companyMiddleware.update, companyController.update);
 routes.delete("/company/:id", companyController.delete);
@@ -71,8 +71,6 @@ routes.post("/role", roleMiddleware.create, roleController.store);
 routes.put("/role/:id", roleMiddleware.create, roleController.update);
 routes.delete("/role/:id", roleController.delete);
 
-routes.get("/branch/:branch_id/user", userController.index);
-routes.get("/user/cpf/:cpf", userController.index);
 routes.get("/user", userController.index);
 routes.get("/user/find/:id", userController.find);
 routes.post("/user", userMiddleware.create, userController.store);

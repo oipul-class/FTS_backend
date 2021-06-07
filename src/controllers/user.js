@@ -7,7 +7,7 @@ const bcryptjs = require("bcryptjs");
 module.exports = {
   async index(req, res) {
     try {
-      const { branch_id, cpf } = req.params;
+      const { branch_id, cpf } = req.body;
 
       let users;
 
@@ -43,8 +43,8 @@ module.exports = {
         users = await User.findAll({
           attributes: ["cpf", "rg", "user_name"],
           where: {
-            [Op.substring]: {
-              cpf,
+            cpf: {
+              [Op.substring]: cpf,
             },
           },
           include: [
@@ -186,8 +186,14 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const { user_name, cpf, rg, user_password, branch_id, role_id } =
-        req.body;
+      const {
+        user_name,
+        cpf,
+        rg,
+        user_password,
+        branch_id,
+        role_id,
+      } = req.body;
 
       const user = await User.findByPk(id, {
         attributes: ["id", "cpf", "rg", "user_password", "user_name"],
@@ -261,7 +267,8 @@ module.exports = {
 
       const user = await User.findByPk(id);
 
-      if (!user) return res.status(404).send({ erro: "Usuário requesitado não existe" });
+      if (!user)
+        return res.status(404).send({ erro: "Usuário requesitado não existe" });
 
       await user.destroy();
 
