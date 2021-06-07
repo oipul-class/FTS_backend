@@ -8,13 +8,29 @@ const Product = require("../models/Product");
 module.exports = {
   async index(req, res) {
     try {
-      const sales = await Sale.findAll({
-        include: [
-          {
-            model: ItemSale,
+      const { branch_id } = req.params;
+
+      let sales;
+
+      if (branch_id)
+        sales = await Sale.findAll({
+          where: {
+            branch_id,
           },
-        ],
-      });
+          include: [
+            {
+              model: ItemSale,
+            },
+          ],
+        });
+      else
+        sales = await Sale.findAll({
+          include: [
+            {
+              model: ItemSale,
+            },
+          ],
+        });
 
       res.send(sales);
     } catch (error) {
@@ -44,11 +60,14 @@ module.exports = {
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
 
       if (!paymentMethod)
-        return res.status(404).send({ erro: "metodo de pagamento não existe" });
+        return res
+          .status(404)
+          .send({ erro: "Metodo de pagamento requesitado não existe" });
 
       const branch = await Branch.findByPk(branch_id);
 
-      if (!branch) return res.status(404).send({ erro: "filial não existe" });
+      if (!branch)
+        return res.status(404).send({ erro: "Filial requesitada não existe" });
 
       const sale = await branch.createSale({
         payment_method_id,
@@ -68,7 +87,7 @@ module.exports = {
                 product.cost_per_item -
                 (product.cost_per_item * item.discount) / 100;
             else total_value = product.cost_per_item * item.quantity;
-            
+
             total_value = total_value.toFixed(2);
 
             await sale.createItemSale({
@@ -86,7 +105,7 @@ module.exports = {
         });
       }
 
-      res.status(404).send(sale);
+      res.status(201).send(sale);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -100,14 +119,19 @@ module.exports = {
 
       const sale = await Sale.findByPk(id);
 
-      if (!sale) return res.status(404).send({ erro: "compra não encontrada" });
+      if (!sale)
+        return res
+          .status(404)
+          .send({ erro: "Venda requisitada não encontrada" });
 
       if (payment_method_id) sale.payment_method_id = payment_method_id;
       if (costumer_id) {
         const costumer = await Costumer.findByPk(costumer_id);
 
         if (!costumer)
-          return res.status(404).send({ erro: "cliente não existe" });
+          return res
+            .status(404)
+            .send({ erro: "Cliente requisitado não existe" });
 
         sale.costumer_id = costumer_id;
       }
@@ -126,7 +150,10 @@ module.exports = {
 
       const sale = await Sale.findByPk(id);
 
-      if (!sale) return res.status(404).send({ erro: "venda não encontrada" });
+      if (!sale)
+        return res
+          .status(404)
+          .send({ erro: "Venda requesitada não encontrada" });
 
       await sale.destroy();
 

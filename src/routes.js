@@ -143,7 +143,8 @@ routes.post(
 routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 
 routes.get("/sale", saleController.index);
-routes.get("/sale/:id", saleController.find);
+routes.get("/branch/:branch_id/sale", saleController.index);
+routes.get("/sale/find/:id", saleController.find);
 routes.post("/sale", saleMiddleware.create, saleController.store);
 routes.put("/sale/:id", saleMiddleware.update, saleController.update);
 routes.delete("/sale/:id", saleController.delete);
