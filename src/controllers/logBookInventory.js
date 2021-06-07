@@ -6,19 +6,19 @@ const Product = require("../models/Product");
 module.exports = {
   async index(req, res) {
     try {
-      const { id } = req.params;
+      const { branch_id } = req.params;
 
       let logbooks;
 
-      if (!id)
+      if (branch_id)
         logbooks = await LogBookInventory.findAll({
+          where: {
+            branch_id,
+          },
           include: Lot,
         });
       else
         logbooks = await LogBookInventory.findAll({
-          where: {
-            branch_id: id,
-          },
           include: Lot,
         });
 
@@ -57,12 +57,15 @@ module.exports = {
       } = req.body;
 
       const lotInfo = await Lot.create(lot);
-      
+
       const product = await Product.findByPk(product_id);
 
-      const branch = await Branch.findByPk(branch_id)
+      const branch = await Branch.findByPk(branch_id);
 
-      if (!product || !branch) return res.status(404).send({ erro: "produto ou filial não existe"})
+      if (!product || !branch)
+        return res
+          .status(404)
+          .send({ erro: "Produto ou filial requisitada não existe" });
 
       const logbook = await LogBookInventory.create({
         date_of_acquisition,
@@ -72,7 +75,7 @@ module.exports = {
         lot_id: lotInfo.id,
       });
 
-      res.status(404).send(logbook);
+      res.status(201).send(logbook);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -93,7 +96,7 @@ module.exports = {
       const logbook = await LogBookInventory.findByPk(id);
 
       if (!logbook)
-        return res.status(404).send({ erro: "log book não existe" });
+        return res.status(404).send({ erro: "Logbook requisitado não existe" });
 
       if (date_of_acquisition)
         logbook.date_of_acquisition = date_of_acquisition;
@@ -103,7 +106,9 @@ module.exports = {
         const product = await Product.findByPk(product_id);
 
         if (!product)
-          return res.status(404).send({ erro: "produto não existe" });
+          return res
+            .status(404)
+            .send({ erro: "Produto requisitado não existe" });
 
         logbook.product_id = product_id;
       }
