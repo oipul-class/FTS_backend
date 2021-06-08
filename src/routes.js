@@ -28,7 +28,6 @@ const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
 const userMiddleware = require("./validators/user");
 const roleMiddleware = require("./validators/role");
-const productTypeMiddleware = require("./validators/productType");
 const productMiddleware = require("./validators/product");
 const logBookInventoryMiddleware = require("./validators/logbookInventory");
 const lotMiddleware = require("./validators/lot");
@@ -41,6 +40,8 @@ const billToReceiveMiddleware = require("./validators/billToReceive");
 const billToPayMiddleware = require("./validators/billToPay");
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
+const planUsageCheckMiddleware = require("./middleware/planUsageCheck");
+const securityCheckMiddleware = require("./middleware/SecurityCheck");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -57,15 +58,20 @@ routes.get("/company/find/:id", companyController.find);
 routes.get("/plan", planController.index);
 routes.get("/plan/find/:id", planController.find);
 
-//routes.use(tokenAuthMiddleware);
+routes.use(tokenAuthMiddleware);
 
-routes.put("/company/:id", companyMiddleware.update, companyController.update);
+routes.put("/company/:id", securityCheckMiddleware.CompanyUpdateCheck, companyMiddleware.update, companyController.update);
 routes.delete("/company/:id", companyController.delete);
 
 routes.get("/branch", branchController.index);
 routes.get("/company/:id/branch", branchController.index);
 routes.get("/branch/find/:id", branchController.find);
-routes.post("/branch", branchMiddleware.create, branchController.store);
+routes.post(
+  "/branch",
+  planUsageCheckMiddleware.planBranchLimitCheck,
+  branchMiddleware.create,
+  branchController.store
+);
 routes.put("/branch/:id", branchMiddleware.update, branchController.update);
 routes.delete("/branch/:id", branchController.delete);
 
@@ -77,7 +83,7 @@ routes.delete("/role/:id", roleController.delete);
 
 routes.get("/user", userController.index);
 routes.get("/user/find/:id", userController.find);
-routes.post("/user", userMiddleware.create, userController.store);
+routes.post("/user", planUsageCheckMiddleware.planUserPerBranchLimit, userMiddleware.create, userController.store);
 routes.put("/user/:id", userMiddleware.update, userController.update);
 routes.delete("/user/:id", userController.delete);
 
