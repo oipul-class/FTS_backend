@@ -68,20 +68,25 @@ module.exports = {
         state,
         nature_of_the_business,
         commercial_email,
+        plan_id,
       } = req.body;
 
-      const cryptPassword = bcryptjs.hashSync(companie_password);
+      const plan = await Plan.findByPk(plan_id);
+
+      if (!plan)
+        return res.status(404).send({ error: "Plano requisitado não existe" });
 
       const company = await Company.create({
         cnpj,
         fantasy_name,
         social_reason,
         place_number,
-        companie_password: cryptPassword,
+        companie_password: bcryptjs.hashSync(companie_password),
         cep,
         state,
         nature_of_the_business,
         commercial_email,
+        plan_id,
       });
 
       await company.addPermission(1);
@@ -96,6 +101,7 @@ module.exports = {
         state,
         nature_of_the_business,
         commercial_email,
+        plan,
       });
     } catch (error) {
       console.error(error);
@@ -130,12 +136,16 @@ module.exports = {
           "state",
           "nature_of_the_business",
           "commercial_email",
-          "plan_id",
         ],
+        include: {
+          model: Plan,
+        },
       });
 
       if (!company)
-        return res.status(404).send({ erro: "Compania requisitada não existe" });
+        return res
+          .status(404)
+          .send({ erro: "Compania requisitada não existe" });
 
       if (cnpj) company.cnpj = cnpj;
       if (fantasy_name) company.fantasy_name = fantasy_name;
