@@ -86,6 +86,7 @@ module.exports = {
       } else {
         const token = generateToken({
           id: company.id,
+          cnpj: company.cnpj,
           fantasy_name: company.fantasy_name,
         });
 
