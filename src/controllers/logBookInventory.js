@@ -2,6 +2,8 @@ const Branch = require("../models/Branch");
 const LogBookInventory = require("../models/LogBookInventory");
 const Lot = require("../models/Lot");
 const Product = require("../models/Product");
+const UnitOfMeasurement = require("../models/UnitOfMeasurement");
+const ProductType = require("../models/ProductType");
 
 module.exports = {
   async index(req, res) {
@@ -12,14 +14,76 @@ module.exports = {
 
       if (branch_id)
         logbooks = await LogBookInventory.findAll({
+          attributes: ["id", "date_of_acquisition", "quantity_acquired"],
           where: {
             branch_id,
           },
-          include: Lot,
+          include: [
+            {
+              model: Product,
+              attributes: [
+                "id",
+                "product_name",
+                "description",
+                "bar_code",
+                "cost_per_item",
+              ],
+              include: [
+                {
+                  model: UnitOfMeasurement,
+                  attributes: ["id", "unit_name"],
+                },
+                {
+                  model: ProductType,
+                  attributes: ["id", "type"],
+                },
+              ],
+            },
+            {
+              model: Lot,
+              attributes: [
+                "id",
+                "lot_number",
+                "manufacture_date",
+                "expiration_date",
+              ],
+            },
+          ],
         });
       else
         logbooks = await LogBookInventory.findAll({
-          include: Lot,
+          attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+          include: [
+            {
+              model: Product,
+              attributes: [
+                "id",
+                "product_name",
+                "description",
+                "bar_code",
+                "cost_per_item",
+              ],
+              include: [
+                {
+                  model: UnitOfMeasurement,
+                  attributes: ["id", "unit_name"],
+                },
+                {
+                  model: ProductType,
+                  attributes: ["id", "type"],
+                },
+              ],
+            },
+            {
+              model: Lot,
+              attributes: [
+                "id",
+                "lot_number",
+                "manufacture_date",
+                "expiration_date",
+              ],
+            },
+          ],
         });
 
       res.send(logbooks);
@@ -34,9 +98,38 @@ module.exports = {
       const { id } = req.params;
 
       const logbook = await LogBookInventory.findByPk(id, {
-        include: {
-          model: Lot,
-        },
+        attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+        include: [
+          {
+            model: Product,
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+            ],
+            include: [
+              {
+                model: UnitOfMeasurement,
+                attributes: ["id", "unit_name"],
+              },
+              {
+                model: ProductType,
+                attributes: ["id", "type"],
+              },
+            ],
+          },
+          {
+            model: Lot,
+            attributes: [
+              "id",
+              "lot_number",
+              "manufacture_date",
+              "expiration_date",
+            ],
+          },
+        ],
       });
 
       res.send(logbook);
