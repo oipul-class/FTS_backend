@@ -2,6 +2,7 @@ const express = require("express");
 
 const routes = express.Router();
 
+const planController = require("./controllers/plan");
 const screenController = require("./controllers/screen");
 const permissionController = require("./controllers/permission");
 const companyController = require("./controllers/company");
@@ -52,6 +53,9 @@ routes.post("/session", sessionController.store);
 routes.post("/company", companyMiddleware.create, companyController.store);
 routes.get("/company", companyController.index);
 routes.get("/company/find/:id", companyController.find);
+
+routes.get("/plan", planController.index);
+routes.get("/plan/find/:id", planController.find);
 
 //routes.use(tokenAuthMiddleware);
 
