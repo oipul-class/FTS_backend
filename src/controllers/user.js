@@ -13,7 +13,7 @@ module.exports = {
 
       if (branch_id)
         users = await User.findAll({
-          attributes: ["cpf", "rg", "user_name"],
+          attributes: ["id", "user_name", "cpf", "rg"],
           where: {
             branch_id,
           },
@@ -41,7 +41,7 @@ module.exports = {
         });
       else if (cpf)
         users = await User.findAll({
-          attributes: ["cpf", "rg", "user_name"],
+          attributes: ["id", "user_name", "cpf", "rg"],
           where: {
             cpf: {
               [Op.substring]: cpf,
@@ -71,7 +71,7 @@ module.exports = {
         });
       else
         users = await User.findAll({
-          attributes: ["cpf", "rg", "user_name"],
+          attributes: ["id", "user_name", "cpf", "rg"],
           include: [
             {
               association: "Branch",
@@ -107,9 +107,7 @@ module.exports = {
       const { id } = req.params;
 
       const user = await User.findByPk(id, {
-        attributes: ["user_name", "cpf", "rg"],
-
-        attributes: ["cpf", "rg", "user_name"],
+        attributes: ["id", "user_name", "cpf", "rg"],
         include: [
           {
             association: "Branch",
@@ -186,14 +184,8 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const {
-        user_name,
-        cpf,
-        rg,
-        user_password,
-        branch_id,
-        role_id,
-      } = req.body;
+      const { user_name, cpf, rg, user_password, branch_id, role_id } =
+        req.body;
 
       const user = await User.findByPk(id, {
         attributes: ["id", "cpf", "rg", "user_password", "user_name"],
