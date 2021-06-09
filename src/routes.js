@@ -60,7 +60,12 @@ routes.get("/plan/find/:id", planController.find);
 
 routes.use(tokenAuthMiddleware);
 
-routes.put("/company/:id", securityCheckMiddleware.CompanyUpdateCheck, companyMiddleware.update, companyController.update);
+routes.put(
+  "/company/:id",
+  securityCheckMiddleware.CompanyUpdateCheck,
+  companyMiddleware.update,
+  companyController.update
+);
 routes.delete("/company/:id", companyController.delete);
 
 routes.get("/branch", branchController.index);
@@ -72,7 +77,12 @@ routes.post(
   branchMiddleware.create,
   branchController.store
 );
-routes.put("/branch/:id", branchMiddleware.update, branchController.update);
+routes.put(
+  "/branch/:id",
+  securityCheckMiddleware.BranchUpdateCheck,
+  branchMiddleware.update,
+  branchController.update
+);
 routes.delete("/branch/:id", branchController.delete);
 
 routes.get("/role", roleController.index);
@@ -83,7 +93,12 @@ routes.delete("/role/:id", roleController.delete);
 
 routes.get("/user", userController.index);
 routes.get("/user/find/:id", userController.find);
-routes.post("/user", planUsageCheckMiddleware.planUserPerBranchLimit, userMiddleware.create, userController.store);
+routes.post(
+  "/user",
+  planUsageCheckMiddleware.planUserPerBranchLimit,
+  userMiddleware.create,
+  userController.store
+);
 routes.put("/user/:id", userMiddleware.update, userController.update);
 routes.delete("/user/:id", userController.delete);
 
