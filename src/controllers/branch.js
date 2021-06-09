@@ -137,17 +137,25 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const { branch_name, cep, branch_email, place_number, company_id } =
+      const { branch_name, cep, branch_email, place_number } =
         req.body;
 
       const branch = await Branch.findByPk(id, {
-        attributes: [
-          "branch_name",
-          "cep",
-          "branch_email",
-          "place_number",
-          "company_id",
-        ],
+        attributes: ["branch_name", "cep", "branch_email", "place_number"],
+        include: {
+          model: Company,
+          attributes: [
+            "id",
+            "cnpj",
+            "fantasy_name",
+            "social_reason",
+            "place_number",
+            "cep",
+            "state",
+            "nature_of_the_business",
+            "commercial_email",
+          ],
+        },
       });
 
       if (!branch) return res.status(404).send({ erro: "afilial não existe" });
@@ -156,16 +164,6 @@ module.exports = {
       if (place_number) branch.place_number = place_number;
       if (branch_email) branch.branch_email = branch_email;
       if (cep) branch.cep = cep;
-      if (company_id) {
-        const company = await Company.findByPk(company_id);
-
-        if (!company)
-          return res
-            .status(404)
-            .send({ erro: "Companhia requesitada não existe" });
-
-        branch.company_id = company_id;
-      }
 
       await branch.save();
 

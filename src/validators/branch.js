@@ -17,7 +17,6 @@ module.exports = {
       cep: Joi.string().length(9),
       branch_email: Joi.string().email().min(5).max(255),
       place_number: Joi.number().integer(),
-      company_id: Joi.number().integer().required(),
     }),
   }),
 };
