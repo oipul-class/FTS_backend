@@ -141,7 +141,7 @@ module.exports = {
         req.body;
 
       const branch = await Branch.findByPk(id, {
-        attributes: ["branch_name", "cep", "branch_email", "place_number"],
+        attributes: ["id", "branch_name", "cep", "branch_email", "place_number"],
         include: {
           model: Company,
           attributes: [
