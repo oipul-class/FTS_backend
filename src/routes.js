@@ -181,7 +181,7 @@ routes.get("/itemSale/:id", itemSaleController.find);
 routes.post("/itemSale", itemSaleMiddleware.create, itemSaleController.store);
 routes.delete("/itemSale/:id", itemSaleController.delete);
 
-routes.get("/billToReceive/:branch_id", billToReceiveController.index);
+routes.get("/branch/:branch_id/billToReceive", billToReceiveController.index);
 routes.get("/billToReceive/find/:id", billToReceiveController.find);
 routes.put(
   "/billToReceive/:id",
@@ -189,7 +189,7 @@ routes.put(
   billToReceiveController.update
 );
 
-routes.get("/billToPay/:branch_id", billToPayController.index);
+routes.get("/branch/:branch_id/billToPay", billToPayController.index);
 routes.get("/billToPay/find/:id", billToPayController.find);
 routes.put(
   "/billToPay/:id",
