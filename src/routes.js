@@ -189,7 +189,7 @@ routes.put(
   billToReceiveController.update
 );
 
-routes.get("/billToPay/:branch_id", billToPayController.index);
+routes.get("/branch/:branch_id/billToPay", billToPayController.index);
 routes.get("/billToPay/find/:id", billToPayController.find);
 routes.put(
   "/billToPay/:id",
