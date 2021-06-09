@@ -133,7 +133,7 @@ module.exports = {
 
       if (items) {
         items.map(async (item) => {
-          if (!item.product_id) {
+          if (item.product_id) {
             const product = await Product.findByPk(item.product_id);
             const logbook = await product.getLogBookInventory();
 
