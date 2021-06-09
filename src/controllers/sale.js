@@ -149,27 +149,29 @@ module.exports = {
       if (items) {
         items.map(async (item) => {
           try {
-            const product = await Product.findByPk(item.product_id);
-            const logbook = await product.getLogBookInventory();
+            if (item.product_id) {
+              const product = await Product.findByPk(item.product_id);
+              const logbook = await product.getLogBookInventory();
 
-            let total_value;
+              let total_value;
 
-            if (item.discount || item.discount > 0)
-              total_value =
-                product.cost_per_item -
-                (product.cost_per_item * item.discount) / 100;
-            else total_value = product.cost_per_item * item.quantity;
+              if (item.discount || item.discount > 0)
+                total_value =
+                  product.cost_per_item -
+                  (product.cost_per_item * item.discount) / 100;
+              else total_value = product.cost_per_item * item.quantity;
 
-            total_value = total_value.toFixed(2);
+              total_value = total_value.toFixed(2);
 
-            await sale.createItemSale({
-              cost_per_item: product.cost_per_item,
-              quantity: item.quantity,
-              discount: item.discount,
-              total_value,
-              product_id: item.product_id,
-              logbook_inventory_id: logbook.id,
-            });
+              await sale.createItemSale({
+                cost_per_item: product.cost_per_item,
+                quantity: item.quantity,
+                discount: item.discount,
+                total_value,
+                product_id: item.product_id,
+                logbook_inventory_id: logbook.id,
+              });
+            }
           } catch (error) {
             console.error(error);
             return res.status(500).send(error);
