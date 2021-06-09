@@ -3,7 +3,7 @@ const Costumer = require("../models/Costumer");
 module.exports = {
   async index(req, res) {
     try {
-      const { cpf } = req.body;
+      const { cpf } = req.query;
 
       let costumers;
 
