@@ -159,6 +159,7 @@ routes.put(
 routes.delete("/purchase/:id", purchaseController.delete);
 
 routes.get("/itemPurchase", itemPurchaseController.index);
+routes.get("/purchase/:purhcase_id/itemPurchase", itemPurchaseController.index);
 routes.get("/itemPurchase/:id", itemPurchaseController.find);
 routes.post(
   "/itemPurchase",
