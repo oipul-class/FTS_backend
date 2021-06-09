@@ -176,6 +176,7 @@ routes.put("/sale/:id", saleMiddleware.update, saleController.update);
 routes.delete("/sale/:id", saleController.delete);
 
 routes.get("/itemSale", itemSaleController.index);
+routes.get("/sale/:sale_id/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
 routes.post("/itemSale", itemSaleMiddleware.create, itemSaleController.store);
 routes.delete("/itemSale/:id", itemSaleController.delete);
