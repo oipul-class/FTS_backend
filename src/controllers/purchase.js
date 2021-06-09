@@ -13,20 +13,56 @@ module.exports = {
 
       if (branch_id)
         purchases = await Purchase.findAll({
+          attributes: ["id"],
           where: {
             branch_id,
           },
           include: [
             {
               model: ItemPurchase,
+              attributes: [
+                "id",
+                "cost_per_item",
+                "quantity",
+                "total_value",
+                "discount",
+              ],
+            },
+            {
+              model: Branch,
+              attributes: [
+                "id",
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+              ],
             },
           ],
         });
       else
         purchases = await Purchase.findAll({
+          attributes: ["id"],
           include: [
             {
               model: ItemPurchase,
+              attributes: [
+                "id",
+                "cost_per_item",
+                "quantity",
+                "total_value",
+                "discount",
+              ],
+            },
+            {
+              model: Branch,
+              attributes: [
+                "id",
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+              ],
             },
           ],
         });
@@ -43,9 +79,27 @@ module.exports = {
       const { id } = req.params;
 
       const purchase = await Purchase.findByPk(id, {
+        attributes: ["id"],
         include: [
           {
             model: ItemPurchase,
+            attributes: [
+              "id",
+              "cost_per_item",
+              "quantity",
+              "total_value",
+              "discount",
+            ],
+          },
+          {
+            model: Branch,
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+            ],
           },
         ],
       });
@@ -79,27 +133,29 @@ module.exports = {
 
       if (items) {
         items.map(async (item) => {
-          const product = await Product.findByPk(item.product_id);
-          const logbook = await product.getLogBookInventory();
+          if (!item.product_id) {
+            const product = await Product.findByPk(item.product_id);
+            const logbook = await product.getLogBookInventory();
 
-          let total_value;
+            let total_value;
 
-          if (item.discount || item.discount > 0)
-            total_value =
-              product.cost_per_item -
-              (product.cost_per_item * item.discount) / 100;
-          else total_value = product.cost_per_item * item.quantity;
+            if (item.discount || item.discount > 0)
+              total_value =
+                product.cost_per_item -
+                (product.cost_per_item * item.discount) / 100;
+            else total_value = product.cost_per_item * item.quantity;
 
-          total_value.toFixed(2);
+            total_value.toFixed(2);
 
-          await purchase.createItemPurchase({
-            cost_per_item: product.cost_per_item,
-            quantity: item.quantity,
-            discount: item.discount,
-            total_value,
-            product_id: item.product_id,
-            logbook_inventory_id: logbook.id,
-          });
+            await purchase.createItemPurchase({
+              cost_per_item: product.cost_per_item,
+              quantity: item.quantity,
+              discount: item.discount,
+              total_value,
+              product_id: item.product_id,
+              logbook_inventory_id: logbook.id,
+            });
+          }
         });
       }
 
@@ -115,7 +171,31 @@ module.exports = {
       const { id } = req.params;
       const { payment_method_id } = req.body;
 
-      const purchase = await Purchase.findByPk(id);
+      const purchase = await Purchase.findByPk(id, {
+        attributes: ["id"],
+        include: [
+          {
+            model: ItemPurchase,
+            attributes: [
+              "id",
+              "cost_per_item",
+              "quantity",
+              "total_value",
+              "discount",
+            ],
+          },
+          {
+            model: Branch,
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+            ],
+          },
+        ],
+      });
 
       if (!purchase)
         return res

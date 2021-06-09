@@ -14,20 +14,64 @@ module.exports = {
 
       if (branch_id)
         sales = await Sale.findAll({
+          attributes: ["id"],
           where: {
             branch_id,
           },
           include: [
             {
               model: ItemSale,
+              attributes: [
+                "id",
+                "cost_per_item",
+                "quantity",
+                "total_value",
+                "discount",
+              ],
+            },
+            {
+              model: Branch,
+              attributes: [
+                "id",
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+              ],
+            },
+            {
+              model: Costumer,
+              attributes: ["id", "costumer_name", "cpf"],
             },
           ],
         });
       else
         sales = await Sale.findAll({
+          attributes: ["id"],
           include: [
             {
               model: ItemSale,
+              attributes: [
+                "id",
+                "cost_per_item",
+                "quantity",
+                "total_value",
+                "discount",
+              ],
+            },
+            {
+              model: Branch,
+              attributes: [
+                "id",
+                "branch_name",
+                "cep",
+                "branch_email",
+                "place_number",
+              ],
+            },
+            {
+              model: Costumer,
+              attributes: ["id", "costumer_name", "cpf"],
             },
           ],
         });
@@ -43,7 +87,35 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const sale = await Sale.findByPk(id);
+      const sale = await Sale.findByPk(id, {
+        attributes: ["id"],
+        include: [
+          {
+            model: ItemSale,
+            attributes: [
+              "id",
+              "cost_per_item",
+              "quantity",
+              "total_value",
+              "discount",
+            ],
+          },
+          {
+            model: Branch,
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+            ],
+          },
+          {
+            model: Costumer,
+            attributes: ["id", "costumer_name", "cpf"],
+          },
+        ],
+      });
 
       res.send(sale);
     } catch (error) {
@@ -117,7 +189,35 @@ module.exports = {
       const { id } = req.params;
       const { payment_method_id, costumer_id } = req.body;
 
-      const sale = await Sale.findByPk(id);
+      const sale = await Sale.findByPk(id, {
+        attributes: ["id"],
+        include: [
+          {
+            model: ItemSale,
+            attributes: [
+              "id",
+              "cost_per_item",
+              "quantity",
+              "total_value",
+              "discount",
+            ],
+          },
+          {
+            model: Branch,
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+            ],
+          },
+          {
+            model: Costumer,
+            attributes: ["id", "costumer_name", "cpf"],
+          },
+        ],
+      });
 
       if (!sale)
         return res
