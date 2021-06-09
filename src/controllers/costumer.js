@@ -7,8 +7,12 @@ module.exports = {
 
       let costumers;
 
-      if (cpf) costumers = await Costumer.findAll({ where: { cpf } });
-      else costumers = await Costumer.findAll();
+      if (cpf) {
+        costumers = await Costumer.findAll({ where: { cpf } });
+
+        if (costumers == "")
+          res.status(400).send({ error: "Cliente não cadastrado" });
+      } else costumers = await Costumer.findAll();
 
       res.send(costumers);
     } catch (error) {
