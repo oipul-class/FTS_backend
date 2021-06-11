@@ -5,6 +5,7 @@ module.exports = {
     try {
       const plans = await Plan.findAll({
         attributes: [
+          "id",
           "plan_name",
           "branch_limit",
           "user_limit_per_branch",
@@ -25,6 +26,7 @@ module.exports = {
 
       const plan = await Plan.findByPk(id, {
         attributes: [
+          "id",
           "plan_name",
           "branch_limit",
           "user_limit_per_branch",
