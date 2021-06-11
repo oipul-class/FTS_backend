@@ -42,6 +42,7 @@ const billToPayMiddleware = require("./validators/billToPay");
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 const planUsageCheckMiddleware = require("./middleware/planUsageCheck");
 const securityCheckMiddleware = require("./middleware/SecurityCheck");
+const logbookSecurityCheckMiddleware = require("./middleware/logbookSecurityCheck");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -156,7 +157,7 @@ routes.get("/paymentMethod/find/:id", paymentMethodController.find);
 routes.get("/purchase", purchaseController.index);
 routes.get("/branch/:branch_id/purchase", purchaseController.index);
 routes.get("/purchase/find/:id", purchaseController.find);
-routes.post("/purchase", purchaseMiddleware.create, purchaseController.store);
+routes.post("/purchase", logbookSecurityCheckMiddleware.verfityArrayOfItems, purchaseMiddleware.create, purchaseController.store);
 routes.put(
   "/purchase/:id",
   purchaseMiddleware.update,
@@ -169,6 +170,7 @@ routes.get("/purchase/:purhcase_id/itemPurchase", itemPurchaseController.index);
 routes.get("/itemPurchase/:id", itemPurchaseController.find);
 routes.post(
   "/itemPurchase",
+  logbookSecurityCheckMiddleware.verfityItem,
   itemPurchaseMiddle.create,
   itemPurchaseController.store
 );
@@ -177,14 +179,14 @@ routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 routes.get("/sale", saleController.index);
 routes.get("/branch/:branch_id/sale", saleController.index);
 routes.get("/sale/find/:id", saleController.find);
-routes.post("/sale", saleMiddleware.create, saleController.store);
+routes.post("/sale", logbookSecurityCheckMiddleware.verfityArrayOfItems, saleMiddleware.create, saleController.store);
 routes.put("/sale/:id", saleMiddleware.update, saleController.update);
 routes.delete("/sale/:id", saleController.delete);
 
 routes.get("/itemSale", itemSaleController.index);
 routes.get("/sale/:sale_id/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
-routes.post("/itemSale", itemSaleMiddleware.create, itemSaleController.store);
+routes.post("/itemSale", logbookSecurityCheckMiddleware.verfityItem, itemSaleMiddleware.create, itemSaleController.store);
 routes.delete("/itemSale/:id", itemSaleController.delete);
 
 routes.get("/branch/:branch_id/billToReceive", billToReceiveController.index);
