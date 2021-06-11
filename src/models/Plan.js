@@ -9,6 +9,7 @@ class Plan extends Model {
         user_limit_per_branch: DataTypes.INTEGER,
         use_phone_for_sale: DataTypes.BOOLEAN,
         value: DataTypes.DECIMAL(15, 2),
+        description: DataTypes.TEXT,
       },
       {
         sequelize,
