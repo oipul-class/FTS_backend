@@ -55,6 +55,10 @@ routes.post("/company", companyMiddleware.create, companyController.store);
 routes.get("/company", companyController.index);
 routes.get("/company/find/:id", companyController.find);
 
+routes.get("/branch", branchController.index);
+routes.get("/company/:id/branch", branchController.index);
+routes.get("/branch/find/:id", branchController.find);
+
 routes.get("/plan", planController.index);
 routes.get("/plan/find/:id", planController.find);
 
@@ -66,11 +70,12 @@ routes.put(
   companyMiddleware.update,
   companyController.update
 );
-routes.delete("/company/:id", companyController.delete);
+routes.delete(
+  "/company/:id",
+  securityCheckMiddleware.CompanyUpdateCheck,
+  companyController.delete
+);
 
-routes.get("/branch", branchController.index);
-routes.get("/company/:id/branch", branchController.index);
-routes.get("/branch/find/:id", branchController.find);
 routes.post(
   "/branch",
   planUsageCheckMiddleware.planBranchLimitCheck,
