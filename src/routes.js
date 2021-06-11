@@ -135,6 +135,7 @@ routes.get("/lot/find/:id", lotController.find);
 routes.put("/lot/:id", lotMiddleware.update, lotController.update);
 
 routes.get("/costumer", costumerController.index);
+routes.get("/costumer/cpf/:cpf", costumerController.index);
 routes.get("/costumer/:id", costumerController.find);
 routes.post("/costumer", costumerMiddleware.create, costumerController.store);
 routes.put(
