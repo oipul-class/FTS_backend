@@ -47,6 +47,9 @@ module.exports = {
           "commercial_email",
           "plan_id",
         ],
+        include: {
+          model: Plan,
+        },
       });
 
       res.send(company);
