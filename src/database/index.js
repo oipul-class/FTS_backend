@@ -68,9 +68,3 @@ BillToPay.associate(connection.models);
 BillToReceive.associate(connection.models);
 
 module.exports = connection;
-
-for (let assoc of Object.keys(ItemSale.associations)) {
-     for (let accessor of Object.keys(ItemSale.associations[assoc].accessors)) {
-         console.log(ItemSale.name + '.' + ItemSale.associations[assoc].accessors[accessor] + '()');
-     }
-}
