@@ -11,6 +11,8 @@ module.exports = {
           user_limit_per_branch: 10,
           use_phone_for_sale: false,
           value: 50.0,
+          description:
+            "Este é o plano ideal para você que tem um pequeno negócio e quer introduzir o seu comércio a tecnologia que nós oferecemos, possuimos um sistema simples e rápido, com uma ótima capacidade para somar no dia a dia da sua empresa",
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -20,6 +22,8 @@ module.exports = {
           user_limit_per_branch: 50,
           use_phone_for_sale: true,
           value: 200.0,
+          description:
+            "Este é o plano ideal para você que tem um pequeno negócio e quer introduzir o seu comércio a tecnologia que nós oferecemos, possuimos um sistema simples e rápido, com uma ótima capacidade para somar no dia a dia da sua empresa",
           created_at: new Date(),
           updated_at: new Date(),
         },
@@ -29,6 +33,8 @@ module.exports = {
           user_limit_per_branch: 100,
           use_phone_for_sale: true,
           value: 500.0,
+          description:
+            "Este é o plano ideal para você que tem um pequeno negócio e quer introduzir o seu comércio a tecnologia que nós oferecemos, possuimos um sistema simples e rápido, com uma ótima capacidade para somar no dia a dia da sua empresa",
           created_at: new Date(),
           updated_at: new Date(),
         },
