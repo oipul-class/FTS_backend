@@ -10,12 +10,12 @@ module.exports = {
       },
 
       cpf: {
-        type: Sequelize.STRING(14),
+        type: Sequelize.STRING(11),
         allowNull: false,
       },
 
       rg: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(10),
       },
 
       user_password: {

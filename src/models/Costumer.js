@@ -5,7 +5,7 @@ class Costumer extends Model {
     super.init(
       {
         costumer_name: DataTypes.STRING(45),
-        cpf: DataTypes.STRING(14),
+        cpf: DataTypes.STRING(11),
       },
       {
         sequelize,
