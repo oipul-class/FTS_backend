@@ -88,6 +88,12 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        screen_id: 8,
+        permission_id: 5,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
         screen_id: 7,
         permission_id: 6,
         created_at: new Date(),
