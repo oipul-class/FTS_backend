@@ -184,31 +184,33 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const { user_name, cpf, rg, user_password, branch_id, role_id } =
-        req.body;
+      const {
+        user_name,
+        cpf,
+        rg,
+        user_password,
+        role_id,
+      } = req.body;
 
       const user = await User.findByPk(id, {
         attributes: ["id", "cpf", "rg", "user_password", "user_name"],
-        include: {
-          association: "Branch",
-          include: [
-            {
-              association: "Branch",
-              attributes: [
-                "id",
-                "branch_name",
-                "cep",
-                "branch_email",
-                "place_number",
-                "company_id",
-              ],
-            },
-            {
-              association: "Roles",
-              attributes: ["id", "role_name"],
-            },
-          ],
-        },
+        include: [
+          {
+            association: "Branch",
+            attributes: [
+              "id",
+              "branch_name",
+              "cep",
+              "branch_email",
+              "place_number",
+              "company_id",
+            ],
+          },
+          {
+            association: "Role",
+            attributes: ["id", "role_name"],
+          },
+        ],
       });
 
       if (!user)
@@ -221,16 +223,6 @@ module.exports = {
         const cryptPassword = bcryptjs.hashSync(user_password);
 
         user.user_password = cryptPassword;
-      }
-      if (branch_id) {
-        const branch = await Branch.findByPk(branch_id);
-
-        if (!branch)
-          return res
-            .status(404)
-            .send({ erro: "Filial requisitada não existe" });
-
-        user.branch_id = branch_id;
       }
 
       if (role_id) {
