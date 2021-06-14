@@ -94,7 +94,7 @@ module.exports = {
           user: {
             id: company.id,
             fantasy_name: company.fantasy_name,
-            branches: company.Branches,
+            branch: company.Branches,
             permissions: company.Permissions,
           },
           token: token,
