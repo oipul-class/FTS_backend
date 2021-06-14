@@ -101,8 +101,8 @@ routes.post(
   userMiddleware.create,
   userController.store
 );
-routes.put("/user/:id", userMiddleware.update, userController.update);
-routes.delete("/user/:id", userController.delete);
+routes.put("/user/:id", securityCheckMiddleware.userUpdateCheck, userMiddleware.update, userController.update);
+routes.delete("/user/:id", securityCheckMiddleware.userUpdateCheck, userController.delete);
 
 routes.get("/productType", productTypeController.index);
 routes.get("/productType/find/:id", productTypeController.find);
