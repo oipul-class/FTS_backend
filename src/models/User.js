@@ -13,6 +13,11 @@ class User extends Model {
       },
       {
         sequelize,
+        hooks: {
+          beforeDestroy: async (user) => {
+            await user.removePermissions();
+          },
+        },
       }
     );
   }
