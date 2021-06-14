@@ -23,7 +23,7 @@ module.exports = {
             "company_id",
           ],
           include: {
-            association: "Company",
+            model: Company,
             attributes: [
               "id",
               "cnpj",
@@ -48,7 +48,7 @@ module.exports = {
             "company_id",
           ],
           include: {
-            association: "Company",
+            model: Company,
             attributes: [
               "id",
               "cnpj",
