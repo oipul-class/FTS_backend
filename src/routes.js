@@ -39,9 +39,11 @@ const billToReceiveMiddleware = require("./validators/billToReceive");
 const billToPayMiddleware = require("./validators/billToPay");
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
+
 const planUsageCheckMiddleware = require("./middleware/planUsageCheck");
 const securityCheckMiddleware = require("./middleware/SecurityCheck");
 const logbookSecurityCheckMiddleware = require("./middleware/logbookSecurityCheck");
+const productCheckMiddleware = require("./middleware/productSecurityCheck");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -113,7 +115,7 @@ routes.get("/unit/find/:id", unitOfMeasurementController.find);
 routes.get("/company/:company_id/product", productController.index);
 routes.get("/product/barCode/:bar_code", productController.index);
 routes.get("/product/find/:id", productController.find);
-routes.post("/product", productMiddleware.create, productController.store);
+routes.post("/product", productCheckMiddleware.productStoreCheck, productMiddleware.create, productController.store);
 routes.put("/product/:id", productMiddleware.update, productController.update);
 routes.delete("/product/:id", productController.delete);
 
