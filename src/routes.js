@@ -27,7 +27,6 @@ const billToPayController = require("./controllers/billToPay");
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
 const userMiddleware = require("./validators/user");
-const roleMiddleware = require("./validators/role");
 const productMiddleware = require("./validators/product");
 const logBookInventoryMiddleware = require("./validators/logbookInventory");
 const lotMiddleware = require("./validators/lot");
@@ -89,13 +88,10 @@ routes.put(
   branchMiddleware.update,
   branchController.update
 );
-routes.delete("/branch/:id", branchController.delete);
+routes.delete("/branch/:id", securityCheckMiddleware.BranchUpdateCheck, branchController.delete);
 
 routes.get("/role", roleController.index);
 routes.get("/role/find/:id", roleController.find);
-routes.post("/role", roleMiddleware.create, roleController.store);
-routes.put("/role/:id", roleMiddleware.create, roleController.update);
-routes.delete("/role/:id", roleController.delete);
 
 routes.get("/user", userController.index);
 routes.get("/user/find/:id", userController.find);
