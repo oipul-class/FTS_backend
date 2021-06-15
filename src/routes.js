@@ -43,8 +43,9 @@ const companySecurityFunctionsMiddleware = require("./middleware/companySecurity
 const branchSecurityFunctionsMiddleware = require("./middleware/branchSecurityFunctions");
 const userSecurityFunctionsMiddleware = require("./middleware/userSecurityFunctions");
 const planUsageSecurityFunctions = require("./middleware/planUsageFunctions");
-const logbookSecurityFunctionsMiddleware = require("./middleware/logbookSecurityFunctions");
+const itemCartSecurityFunctionsMiddleware = require("./middleware/ItemCartSecurityFunctions");
 const productSecurityFunctionsMiddleware = require("./middleware/productSecurityFunctions");
+const logbookSecurityFunctionsMiddleware = require("./middleware/logbookSecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -152,6 +153,7 @@ routes.get("/branch/:branch_id/logbook", logbookController.index);
 routes.get("/logbook/find/:id", logbookController.find);
 routes.post(
   "/logbook",
+  logbookSecurityFunctionsMiddleware.logbookStoreCheck,
   logBookInventoryMiddleware.create,
   logbookController.store
 );
@@ -185,7 +187,7 @@ routes.get("/branch/:branch_id/purchase", purchaseController.index);
 routes.get("/purchase/find/:id", purchaseController.find);
 routes.post(
   "/purchase",
-  logbookSecurityFunctionsMiddleware.verfityArrayOfItems,
+  itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
   purchaseMiddleware.create,
   purchaseController.store
 );
@@ -201,7 +203,7 @@ routes.get("/purchase/:purhcase_id/itemPurchase", itemPurchaseController.index);
 routes.get("/itemPurchase/:id", itemPurchaseController.find);
 routes.post(
   "/itemPurchase",
-  logbookSecurityFunctionsMiddleware.verfityItem,
+  itemCartSecurityFunctionsMiddleware.verfityItem,
   itemPurchaseMiddle.create,
   itemPurchaseController.store
 );
@@ -212,7 +214,7 @@ routes.get("/branch/:branch_id/sale", saleController.index);
 routes.get("/sale/find/:id", saleController.find);
 routes.post(
   "/sale",
-  logbookSecurityFunctionsMiddleware.verfityArrayOfItems,
+  itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
   saleMiddleware.create,
   saleController.store
 );
@@ -224,7 +226,7 @@ routes.get("/sale/:sale_id/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
 routes.post(
   "/itemSale",
-  logbookSecurityFunctionsMiddleware.verfityItem,
+  itemCartSecurityFunctionsMiddleware.verfityItem,
   itemSaleMiddleware.create,
   itemSaleController.store
 );
