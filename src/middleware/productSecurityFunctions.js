@@ -127,7 +127,7 @@ module.exports = {
           .status(400)
           .send({
             error:
-              "Produto requesitado a ser alterado não pertence a companhia do usuário",
+              "Produto requesitado a ser alterado não pertence ou não esta cadastrado na companhia",
           });
 
       next();
