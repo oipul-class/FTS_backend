@@ -46,6 +46,7 @@ const planUsageSecurityFunctions = require("./middleware/planUsageFunctions");
 const itemCartSecurityFunctionsMiddleware = require("./middleware/ItemCartSecurityFunctions");
 const productSecurityFunctionsMiddleware = require("./middleware/productSecurityFunctions");
 const logbookSecurityFunctionsMiddleware = require("./middleware/logbookSecurityFunctions");
+const lotSecurityFunctionsMiddleware = require("./middleware/lotSecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -159,6 +160,7 @@ routes.post(
 );
 routes.put(
   "/logbook/:id",
+  logbookSecurityFunctionsMiddleware.logbookUpdateCheck,
   logBookInventoryMiddleware.update,
   logbookController.update
 );
@@ -166,7 +168,7 @@ routes.put(
 routes.get("/lot", lotController.index);
 routes.get("/logbook/:logbook_id/lot", lotController.index);
 routes.get("/lot/find/:id", lotController.find);
-routes.put("/lot/:id", lotMiddleware.update, lotController.update);
+routes.put("/lot/:id", lotSecurityFunctionsMiddleware.lotUpdateCheck, lotMiddleware.update, lotController.update);
 
 routes.get("/costumer", costumerController.index);
 routes.get("/costumer/cpf/:cpf", costumerController.index);
