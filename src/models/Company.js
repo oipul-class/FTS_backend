@@ -14,6 +14,7 @@ class Company extends Model {
         nature_of_the_business: DataTypes.STRING,
         commercial_email: DataTypes.STRING,
         plan_id: DataTypes.INTEGER,
+        address_id: DataTypes.INTEGER
       },
       {
         sequelize,
@@ -27,6 +28,7 @@ class Company extends Model {
     this.hasMany(models.Branch);
     this.belongsToMany(models.Permission, { through: "companies_permissions" });
     this.hasMany(models.Product);
+    this.belongsTo(models.Address);
   }
 }
 module.exports = Company;
