@@ -47,6 +47,7 @@ const itemCartSecurityFunctionsMiddleware = require("./middleware/ItemCartSecuri
 const productSecurityFunctionsMiddleware = require("./middleware/productSecurityFunctions");
 const logbookSecurityFunctionsMiddleware = require("./middleware/logbookSecurityFunctions");
 const lotSecurityFunctionsMiddleware = require("./middleware/lotSecurityFunctions");
+const costumerSecurityFunctionsMiddleware = require("./middleware/costumerSecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -168,12 +169,22 @@ routes.put(
 routes.get("/lot", lotController.index);
 routes.get("/logbook/:logbook_id/lot", lotController.index);
 routes.get("/lot/find/:id", lotController.find);
-routes.put("/lot/:id", lotSecurityFunctionsMiddleware.lotUpdateCheck, lotMiddleware.update, lotController.update);
+routes.put(
+  "/lot/:id",
+  lotSecurityFunctionsMiddleware.lotUpdateCheck,
+  lotMiddleware.update,
+  lotController.update
+);
 
 routes.get("/costumer", costumerController.index);
 routes.get("/costumer/cpf/:cpf", costumerController.index);
 routes.get("/costumer/:id", costumerController.find);
-routes.post("/costumer", costumerMiddleware.create, costumerController.store);
+routes.post(
+  "/costumer",
+  costumerSecurityFunctionsMiddleware.costumerStoreCheck,
+  costumerMiddleware.create,
+  costumerController.store
+);
 routes.put(
   "/costumer/:id",
   costumerMiddleware.update,
