@@ -35,11 +35,6 @@ module.exports = {
         allowNull: false,
       },
 
-      cep: {
-        type: Sequelize.STRING(8),
-        allowNull: false,
-      },
-
       state: {
         type: Sequelize.STRING,
         allowNull: false,
