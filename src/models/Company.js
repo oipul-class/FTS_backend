@@ -9,7 +9,6 @@ class Company extends Model {
         social_reason: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         companie_password: DataTypes.STRING,
-        cep: DataTypes.STRING(8),
         state: DataTypes.STRING,
         nature_of_the_business: DataTypes.STRING,
         commercial_email: DataTypes.STRING,
