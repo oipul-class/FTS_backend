@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const Address = require("../models/Address");
 const Branch = require("../models/Branch");
 const Company = require("../models/Company");
 
@@ -17,50 +18,75 @@ module.exports = {
           attributes: [
             "id",
             "branch_name",
-            "cep",
             "branch_email",
             "place_number",
             "company_id",
           ],
-          include: {
-            model: Company,
-            attributes: [
-              "id",
-              "cnpj",
-              "fantasy_name",
-              "social_reason",
-              "place_number",
-              "cep",
-              "state",
-              "nature_of_the_business",
-              "commercial_email",
-            ],
-          },
+          include: [
+            {
+              model: Address,
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
+            },
+            {
+              model: Company,
+              attributes: [
+                "id",
+                "cnpj",
+                "fantasy_name",
+                "social_reason",
+                "place_number",
+                "cep",
+                "state",
+                "nature_of_the_business",
+                "commercial_email",
+              ],
+            },
+          ],
         });
       else
         branches = await Branch.findAll({
           attributes: [
             "id",
             "branch_name",
-            "cep",
             "branch_email",
             "place_number",
             "company_id",
           ],
-          include: {
-            model: Company,
-            attributes: [
-              "id",
-              "cnpj",
-              "fantasy_name",
-              "social_reason",
-              "place_number",
-              "cep",
-              "state",
-              "nature_of_the_business",
-              "commercial_email",
-            ],
-          },
+          include: [
+            {
+              model: Address,
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
+            },
+            {
+              model: Company,
+              attributes: [
+                "id",
+                "cnpj",
+                "fantasy_name",
+                "social_reason",
+                "place_number",
+                "state",
+                "nature_of_the_business",
+                "commercial_email",
+              ],
+            },
+          ],
         });
 
       res.send(branches);
@@ -78,25 +104,37 @@ module.exports = {
         attributes: [
           "id",
           "branch_name",
-          "cep",
           "branch_email",
           "place_number",
           "company_id",
         ],
-        include: {
-          model: Company,
-          attributes: [
-            "id",
-            "cnpj",
-            "fantasy_name",
-            "social_reason",
-            "place_number",
-            "cep",
-            "state",
-            "nature_of_the_business",
-            "commercial_email",
-          ],
-        },
+        include: [
+          {
+            model: Address,
+            attributes: [
+              "id",
+              "cep",
+              "street",
+              "complement",
+              "district",
+              "city",
+              "uf",
+            ],
+          },
+          {
+            model: Company,
+            attributes: [
+              "id",
+              "cnpj",
+              "fantasy_name",
+              "social_reason",
+              "place_number",
+              "state",
+              "nature_of_the_business",
+              "commercial_email",
+            ],
+          },
+        ],
       });
 
       res.send(branches);
@@ -108,7 +146,7 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { branch_name, cep, branch_email, place_number, company_id } =
+      const { branch_name, cep, branch_email, place_number, company_id, address } =
         req.body;
 
       const company = await Company.findByPk(company_id);
@@ -118,13 +156,60 @@ module.exports = {
           .status(404)
           .send({ erro: "Compania requesitada não existe" });
 
-      const branch = await Branch.create({
-        branch_name,
-        cep,
-        branch_email,
-        place_number,
-        company_id,
+      let branchAddress;
+
+      const addressFind = await Address.findOne({
+        where: {
+          cep: address.cep,
+        },
       });
+
+      if (addressFind) branchAddress = addressFind;
+      else {
+        const newAddress = await Address.create(address);
+
+        branchAddress = newAddress;
+      }
+      const branch = await Branch.create(
+        {
+          branch_name,
+          cep,
+          branch_email,
+          place_number,
+          company_id,
+          address_id: branchAddress.id,
+        },
+        {
+          include: [
+            {
+              model: Address,
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
+            },
+            {
+              model: Company,
+              attributes: [
+                "id",
+                "cnpj",
+                "fantasy_name",
+                "social_reason",
+                "place_number",
+                "cep",
+                "state",
+                "nature_of_the_business",
+                "commercial_email",
+              ],
+            },
+          ],
+        }
+      );
 
       res.status(201).send(branch);
     } catch (error) {
@@ -137,11 +222,16 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const { branch_name, cep, branch_email, place_number } =
-        req.body;
+      const { branch_name, cep, branch_email, place_number } = req.body;
 
       const branch = await Branch.findByPk(id, {
-        attributes: ["id", "branch_name", "cep", "branch_email", "place_number"],
+        attributes: [
+          "id",
+          "branch_name",
+          "cep",
+          "branch_email",
+          "place_number",
+        ],
         include: {
           model: Company,
           attributes: [
@@ -178,15 +268,7 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const branch = await Branch.findByPk(id, {
-        attributes: [
-          "branch_name",
-          "cep",
-          "branch_email",
-          "place_number",
-          "company_id",
-        ],
-      });
+      const branch = await Branch.findByPk(id);
 
       if (!branch)
         return res.status(404).send({ erro: "Filial requesitada não existe" });
