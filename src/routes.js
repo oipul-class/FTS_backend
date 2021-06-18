@@ -23,6 +23,7 @@ const saleController = require("./controllers/sale");
 const itemSaleController = require("./controllers/itemSale");
 const billToReceiveController = require("./controllers/BillToReceive");
 const billToPayController = require("./controllers/billToPay");
+const addressController = require("./controllers/address");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -37,6 +38,7 @@ const saleMiddleware = require("./validators/sale");
 const itemSaleMiddleware = require("./validators/itemSale");
 const billToReceiveMiddleware = require("./validators/billToReceive");
 const billToPayMiddleware = require("./validators/billToPay");
+const addressMiddleware = require("./validators/address");
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 const companySecurityFunctionsMiddleware = require("./middleware/companySecurityFunctions");
@@ -260,5 +262,7 @@ routes.put(
   billToPayMiddleware.update,
   billToPayController.update
 );
+
+routes.put("/address/:id", addressMiddleware.update, addressController.update);
 
 module.exports = routes;
