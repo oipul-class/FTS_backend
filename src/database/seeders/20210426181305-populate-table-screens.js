@@ -5,58 +5,58 @@ module.exports = {
     await queryInterface.bulkInsert("screens", [
       {
         screen_name: "Cadastro de usuários",
-        route: "usersRegister",
+        route: "/usersRegister",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "Cadastro de produtos",
-        route: "productsRegister",
+        route: "/productsRegister",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "Estoque",
-        route: "inventory",
+        route: "/inventory",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "Relatório de estoque",
-        route: "inventoryReports",
+        route: "/inventoryReports",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "Relatório de movimento",
-        route: "purchasesReports",
+        route: "/purchasesReports",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "Contas",
-        route: "bills",
+        route: "/bills",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "PDV",
-        route: "pdv",
+        route: "/pdv",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "Compras",
-        route: "purchases",
+        route: "/purchases",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
         screen_name: "Cadastro de Filial",
-        route: "registerBranch",
+        route: "/registerBranch",
         created_at: new Date(),
         updated_at: new Date(),
-      }
+      },
     ]);
   },
 
