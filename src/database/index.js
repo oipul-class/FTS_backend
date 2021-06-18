@@ -23,7 +23,7 @@ const ItemPurchase = require("../models/ItemPurchase");
 const ItemSale = require("../models/ItemSale");
 const BillToPay = require("../models/BillToPay");
 const BillToReceive = require("../models/BillToReceive");
-const Address = require("../models/address");
+const Address = require("../models/Address");
 
 Branch.init(connection);
 Company.init(connection);

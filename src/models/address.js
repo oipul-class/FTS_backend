@@ -10,12 +10,12 @@ class Address extends Model {
         district: DataTypes.STRING,
         city: DataTypes.STRING,
         uf: DataTypes.STRING(2),
-      }, 
+      },
       {
         sequelize,
+        tableName: "adresses",
       }
     );
-
   }
 
   static associate(models) {
