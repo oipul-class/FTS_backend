@@ -50,6 +50,7 @@ const productSecurityFunctionsMiddleware = require("./middleware/productSecurity
 const logbookSecurityFunctionsMiddleware = require("./middleware/logbookSecurityFunctions");
 const lotSecurityFunctionsMiddleware = require("./middleware/lotSecurityFunctions");
 const costumerSecurityFunctionsMiddleware = require("./middleware/costumerSecurityFunctions");
+const addressSecurityFunctionsMiddleware = require("./middleware/addressSecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -263,6 +264,6 @@ routes.put(
   billToPayController.update
 );
 
-routes.put("/address/:id", addressMiddleware.update, addressController.update);
+routes.put("/address/:id", addressSecurityFunctionsMiddleware.addressUpdateCheck, addressMiddleware.update, addressController.update);
 
 module.exports = routes;
