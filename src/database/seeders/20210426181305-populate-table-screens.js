@@ -53,7 +53,7 @@ module.exports = {
       },
       {
         screen_name: "Cadastro de Filial",
-        route: "/registerBranch",
+        route: "/branchRegister",
         created_at: new Date(),
         updated_at: new Date(),
       },
