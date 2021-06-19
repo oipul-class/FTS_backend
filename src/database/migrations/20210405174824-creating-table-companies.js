@@ -35,11 +35,6 @@ module.exports = {
         allowNull: false,
       },
 
-      state: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-
       nature_of_the_business: {
         type: Sequelize.STRING,
       },

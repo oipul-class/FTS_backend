@@ -29,7 +29,6 @@ module.exports = {
       social_reason: Joi.string().min(5).max(255),
       place_number: Joi.number().integer().max(999),
       companie_password: Joi.string().min(8).max(255),
-      state: Joi.string().length(2),
       nature_of_the_business: Joi.string().min(10).max(255),
       commercial_email: Joi.string().email().min(5).max(255),
       plan_id: Joi.number().integer(),
