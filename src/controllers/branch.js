@@ -146,7 +146,7 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { branch_name, cep, branch_email, place_number, company_id, address } =
+      const { branch_name, branch_email, place_number, company_id, address } =
         req.body;
 
       const company = await Company.findByPk(company_id);
@@ -173,7 +173,6 @@ module.exports = {
       const branch = await Branch.create(
         {
           branch_name,
-          cep,
           branch_email,
           place_number,
           company_id,
