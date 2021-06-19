@@ -108,7 +108,6 @@ module.exports = {
         social_reason,
         place_number,
         companie_password,
-        state,
         nature_of_the_business,
         commercial_email,
         plan_id,
