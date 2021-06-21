@@ -41,6 +41,7 @@ const billToPayMiddleware = require("./validators/billToPay");
 const addressMiddleware = require("./validators/address");
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
+
 const companySecurityFunctionsMiddleware = require("./middleware/companySecurityFunctions");
 const branchSecurityFunctionsMiddleware = require("./middleware/branchSecurityFunctions");
 const userSecurityFunctionsMiddleware = require("./middleware/userSecurityFunctions");
@@ -111,6 +112,7 @@ routes.get("/user/find/:id", userController.find);
 routes.post(
   "/user",
   planUsageSecurityFunctions.planUserPerBranchLimit,
+  userSecurityFunctionsMiddleware.userStoreCheck,
   userMiddleware.create,
   userController.store
 );
@@ -264,6 +266,11 @@ routes.put(
   billToPayController.update
 );
 
-routes.put("/address/:id", addressSecurityFunctionsMiddleware.addressUpdateCheck, addressMiddleware.update, addressController.update);
+routes.put(
+  "/address/:id",
+  addressSecurityFunctionsMiddleware.addressUpdateCheck,
+  addressMiddleware.update,
+  addressController.update
+);
 
 module.exports = routes;
