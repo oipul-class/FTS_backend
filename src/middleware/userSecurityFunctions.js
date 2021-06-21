@@ -66,7 +66,8 @@ module.exports = {
 
         if (!userAdmin.Permission)
           return res.status(400).send({
-            error: "Usuario logado não tem permissão para criar um usuário novo",
+            error:
+              "Usuario logado não tem permissão para criar um usuário novo",
           });
 
         if (!userAdmin.Branch)
@@ -116,14 +117,22 @@ module.exports = {
             include: {
               model: Screen,
               require: true,
+              where: {
+                id: 1,
+              },
             },
           },
         });
 
-        if (!userAdmin)
+        if (!userAdmin.Permission)
           return res.status(400).send({
             error:
-              "Usiario requesitado não é o mesmo que esta logado ou não tem permissão para fazer modificações no usuário requesitado",
+              "Usuario logado não tem permissão para alterar dados de um usuário",
+          });
+
+        if (!userAdmin.Branch)
+          return res.status(400).send({
+            error: "Usuario logado não pertence a filial requesitada",
           });
       }
 
