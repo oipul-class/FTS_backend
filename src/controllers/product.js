@@ -10,7 +10,8 @@ module.exports = {
       const { company_id, bar_code } = req.params;
       let { product_name } = req.query;
 
-      product_name = product_name.replace('"', "").replace('\"', "");
+      if (product_name)
+        product_name = product_name.replace('"', "").replace('"', "");
 
       let products;
 
