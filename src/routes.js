@@ -52,6 +52,7 @@ const logbookSecurityFunctionsMiddleware = require("./middleware/logbookSecurity
 const lotSecurityFunctionsMiddleware = require("./middleware/lotSecurityFunctions");
 const costumerSecurityFunctionsMiddleware = require("./middleware/costumerSecurityFunctions");
 const addressSecurityFunctionsMiddleware = require("./middleware/addressSecurityFunctions");
+const purchaseSecurityFunctionsMiddleware = require("./middleware/purchaseSecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -206,15 +207,17 @@ routes.get("/purchase/find/:id", purchaseController.find);
 routes.post(
   "/purchase",
   itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
+  purchaseSecurityFunctionsMiddleware.userStoreCheck,
   purchaseMiddleware.create,
   purchaseController.store
 );
 routes.put(
   "/purchase/:id",
+  purchaseSecurityFunctionsMiddleware.userUpdateCheck,
   purchaseMiddleware.update,
   purchaseController.update
 );
-routes.delete("/purchase/:id", purchaseController.delete);
+routes.delete("/purchase/:id", purchaseSecurityFunctionsMiddleware.userUpdateCheck, purchaseController.delete);
 
 routes.get("/itemPurchase", itemPurchaseController.index);
 routes.get("/purchase/:purhcase_id/itemPurchase", itemPurchaseController.index);
