@@ -205,13 +205,19 @@ module.exports = {
           },
           {
             model: Branch,
-            attributes: [
-              "id",
-              "branch_name",
-              "cep",
-              "branch_email",
-              "place_number",
-            ],
+            attributes: ["id", "branch_name", "branch_email", "place_number"],
+            include: {
+              model: Address,
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
+            },
           },
         ],
       });
