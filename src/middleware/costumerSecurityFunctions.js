@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const auth = require("../config/auth");
 const User = require("../models/User");
 const Permission = require("../models/Permission");
+const Screen = require("../models/Screen");
 
 module.exports = {
   costumerStoreCheck: async (req, res, next) => {
@@ -23,9 +24,12 @@ module.exports = {
         },
         include: {
           model: Permission,
-          required: true,
-          where: {
-            permission_name: { [Op.substring]: "Caixa" },
+          include: {
+            model: Screen,
+            require: true,
+            where: {
+              id: 7,
+            },
           },
         },
       });
