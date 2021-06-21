@@ -1,5 +1,10 @@
+const jwt = require("jsonwebtoken");
+const auth = require("../config/auth");
 const Purchase = require("../models/Purchase");
 const Branch = require("../models/Branch");
+const Permission = require("../models/Permission");
+const User = require("../models/User");
+const Screen = require("../models/Screen");
 
 module.exports = {
   userStoreCheck: async (req, res, next) => {
@@ -42,7 +47,7 @@ module.exports = {
         ],
       });
 
-      if (!user.Permission)
+      if (!user.Permissions)
         return res.status(400).send({
           error: "Usuario logado não tem permissão para cadastrar uma compra",
         });
@@ -102,12 +107,12 @@ module.exports = {
         },
       });
 
-      if (!user.Permission)
+      if (!user.Permissions)
         return res.status(400).send({
           error: "Usuario logado não tem permissão para uma compra",
         });
 
-      if (!user.Branch.id !== purchase.Branch.id)
+      if (user.Branch.id !== purchase.Branch.id)
         return res.status(400).send({
           error:
             "Usuario logado não pertence a filial requesitada para alterar os dado da compra",
