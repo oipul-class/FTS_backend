@@ -21,7 +21,7 @@ const purchaseController = require("./controllers/purchase");
 const itemPurchaseController = require("./controllers/itemPurchase");
 const saleController = require("./controllers/sale");
 const itemSaleController = require("./controllers/itemSale");
-const billToReceiveController = require("./controllers/BillToReceive");
+const billToReceiveController = require("./controllers/billToReceive");
 const billToPayController = require("./controllers/billToPay");
 const addressController = require("./controllers/address");
 
