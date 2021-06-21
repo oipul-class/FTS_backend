@@ -8,7 +8,9 @@ module.exports = {
   async index(req, res) {
     try {
       const { company_id, bar_code } = req.params;
-      const { product_name } = req.query;
+      let { product_name } = req.query;
+
+      product_name = product_name.replace('"', "").replace('\"', "");
 
       let products;
 
