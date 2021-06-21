@@ -6,6 +6,7 @@ const auth = require("../config/auth");
 const Branch = require("../models/Branch");
 const Company = require("../models/Company");
 const Product = require("../models/Product");
+const Screen = require("../models/Screen")
 
 module.exports = {
   productStoreCheck: async (req, res, next) => {
@@ -27,9 +28,12 @@ module.exports = {
         include: [
           {
             model: Permission,
-            required: true,
-            where: {
-              permission_name: { [Op.substring]: "Estoque" },
+            include: {
+              model: Screen,
+              required: true,
+              where: {
+                id: 2,
+              },
             },
           },
           {
@@ -42,6 +46,9 @@ module.exports = {
           },
         ],
       });
+
+      console.log(user);
+      
 
       if (!user)
         return res.status(400).send({
@@ -83,9 +90,12 @@ module.exports = {
         include: [
           {
             model: Permission,
-            required: true,
-            where: {
-              permission_name: { [Op.substring]: "Estoque" },
+            include: {
+              model: Screen,
+              required: true,
+              where: {
+                id: 2,
+              },
             },
           },
           {
@@ -99,7 +109,7 @@ module.exports = {
         ],
       });
 
-      if (!user)
+      if (!user.Permission)
         return res.status(400).send({
           error:
             "Usuário logado não tem permissão para alterar dados de produtos cadastrados na companhia",
@@ -123,12 +133,10 @@ module.exports = {
       });
 
       if (!product)
-        return res
-          .status(400)
-          .send({
-            error:
-              "Produto requesitado a ser alterado não pertence ou não esta cadastrado na companhia",
-          });
+        return res.status(400).send({
+          error:
+            "Produto requesitado a ser alterado não pertence ou não esta cadastrado na companhia",
+        });
 
       next();
     } catch (error) {
