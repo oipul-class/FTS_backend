@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Branch = require("../models/Branch");
 const Role = require("../models/Role");
+const Address = require("../models/address");
 const { Op } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 
@@ -23,11 +24,22 @@ module.exports = {
               attributes: [
                 "id",
                 "branch_name",
-                "cep",
                 "branch_email",
                 "place_number",
                 "company_id",
               ],
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
             },
             {
               association: "Role",
@@ -53,11 +65,22 @@ module.exports = {
               attributes: [
                 "id",
                 "branch_name",
-                "cep",
                 "branch_email",
                 "place_number",
                 "company_id",
               ],
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
             },
             {
               association: "Role",
@@ -78,11 +101,22 @@ module.exports = {
               attributes: [
                 "id",
                 "branch_name",
-                "cep",
                 "branch_email",
                 "place_number",
                 "company_id",
               ],
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
             },
             {
               association: "Role",
@@ -114,11 +148,22 @@ module.exports = {
             attributes: [
               "id",
               "branch_name",
-              "cep",
               "branch_email",
               "place_number",
               "company_id",
             ],
+            include: {
+              association: "Address",
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
+            },
           },
           {
             association: "Role",
@@ -184,13 +229,7 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const {
-        user_name,
-        cpf,
-        rg,
-        user_password,
-        role_id,
-      } = req.body;
+      const { user_name, cpf, rg, user_password, role_id } = req.body;
 
       const user = await User.findByPk(id, {
         attributes: ["id", "cpf", "rg", "user_password", "user_name"],
@@ -200,11 +239,22 @@ module.exports = {
             attributes: [
               "id",
               "branch_name",
-              "cep",
               "branch_email",
               "place_number",
               "company_id",
             ],
+            include: {
+              association: "Address",
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
+            },
           },
           {
             association: "Role",
