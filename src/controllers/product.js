@@ -18,12 +18,74 @@ module.exports = {
       if (company_id && product_name)
         products = await Product.findAll({
           where: { product_name: { [Op.substring]: product_name }, company_id },
+          attributes: [
+            "product_name",
+            "description",
+            "bar_code",
+            "cost_per_item",
+            "unit_of_measurement_id",
+            "product_type_id",
+            "company_id",
+            "created_at",
+          ],
+          include: {
+            model: ProductType,
+            attributes: ["type"],
+          },
         });
       else if (company_id && !product_name)
-        products = await Product.findAll({ company_id });
+        products = await Product.findAll({
+          where: { company_id },
+          attributes: [
+            "product_name",
+            "description",
+            "bar_code",
+            "cost_per_item",
+            "unit_of_measurement_id",
+            "product_type_id",
+            "company_id",
+            "created_at",
+          ],
+          include: {
+            model: ProductType,
+            attributes: ["type"],
+          },
+        });
       else if (bar_code)
-        products = await Product.findOne({ where: { bar_code } });
-      else products = await Product.findAll();
+        products = await Product.findOne({
+          where: { bar_code },
+          attributes: [
+            "product_name",
+            "description",
+            "bar_code",
+            "cost_per_item",
+            "unit_of_measurement_id",
+            "product_type_id",
+            "company_id",
+            "created_at",
+          ],
+          include: {
+            model: ProductType,
+            attributes: ["type"],
+          },
+        });
+      else
+        products = await Product.findAll({
+          attributes: [
+            "product_name",
+            "description",
+            "bar_code",
+            "cost_per_item",
+            "unit_of_measurement_id",
+            "product_type_id",
+            "company_id",
+            "created_at",
+          ],
+          include: {
+            model: ProductType,
+            attributes: ["type"],
+          },
+        });
 
       res.send(products);
     } catch (error) {
@@ -36,7 +98,22 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const product = await Product.findByPk(id);
+      const product = await Product.findByPk(id, {
+        attributes: [
+          "product_name",
+          "description",
+          "bar_code",
+          "cost_per_item",
+          "unit_of_measurement_id",
+          "product_type_id",
+          "company_id",
+          "created_at",
+        ],
+        include: {
+          model: ProductType,
+          attributes: ["type"],
+        },
+      });
 
       res.send(product);
     } catch (error) {
