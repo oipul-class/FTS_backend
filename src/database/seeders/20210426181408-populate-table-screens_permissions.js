@@ -46,42 +46,6 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        screen_id: 10,
-        permission_id: 1,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_id: 10,
-        permission_id: 2,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_id: 10,
-        permission_id: 3,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_id: 10,
-        permission_id: 4,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_id: 10,
-        permission_id: 5,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_id: 10,
-        permission_id: 6,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
         screen_id: 1,
         permission_id: 2,
         created_at: new Date(),

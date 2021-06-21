@@ -57,12 +57,6 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
-      {
-        screen_name: "Home",
-        route: "/home",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
     ]);
   },
 
