@@ -6,6 +6,7 @@ const Company = require("../models/Company");
 const Permission = require("../models/Permission");
 const Product = require("../models/Product");
 const User = require("../models/User");
+const Screen = require("../models/Screen");
 
 module.exports = {
   logbookStoreCheck: async (req, res, next) => {
@@ -27,9 +28,12 @@ module.exports = {
         include: [
           {
             model: Permission,
-            required: true,
-            where: {
-              permission_name: { [Op.substring]: "Estoque" },
+            include: {
+              model: Screen,
+              require: true,
+              where: {
+                id: 3,
+              },
             },
           },
           {
@@ -75,8 +79,7 @@ module.exports = {
 
       if (!product)
         return res.status(400).send({
-          error:
-            "Produto requesitado não existe ou não pertence a companhia",
+          error: "Produto requesitado não existe ou não pertence a companhia",
         });
 
       next();
@@ -105,9 +108,12 @@ module.exports = {
         include: [
           {
             model: Permission,
-            required: true,
-            where: {
-              permission_name: { [Op.substring]: "Estoque" },
+            include: {
+              model: Screen,
+              require: true,
+              where: {
+                id: 3,
+              },
             },
           },
           {
@@ -137,9 +143,9 @@ module.exports = {
       });
 
       if (!product)
-        return res
-          .status(404)
-          .send({ error: "Produto requesitado não existe ou não pertence a companhia" });
+        return res.status(404).send({
+          error: "Produto requesitado não existe ou não pertence a companhia",
+        });
 
       if (!product.Company.id != user.Branch.Company.id)
         return res.status(400).send({
