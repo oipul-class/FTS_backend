@@ -30,7 +30,7 @@ module.exports = {
         }
       });
 
-      if(!address) return res.status(400).send({ error: "Endereço não é da companhia logada"})
+      if(!address.Branch) return res.status(400).send({ error: "Endereço não é da companhia logada"})
 
       next();
     } catch (error) {
