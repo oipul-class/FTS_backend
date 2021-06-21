@@ -4,7 +4,7 @@ const PaymentMethod = require("../models/PaymentMethod");
 const ItemSale = require("../models/ItemSale");
 const Branch = require("../models/Branch");
 const Product = require("../models/Product");
-const Address = require("../models/address")
+const Address = require("../models/address");
 
 module.exports = {
   async index(req, res) {
@@ -224,21 +224,19 @@ module.exports = {
             ],
           },
           {
-            {
-              model: Branch,
-              attributes: ["id", "branch_name", "branch_email", "place_number"],
-              include: {
-                model: Address,
-                attributes: [
-                  "id",
-                  "cep",
-                  "street",
-                  "complement",
-                  "district",
-                  "city",
-                  "uf",
-                ],
-              },
+            model: Branch,
+            attributes: ["id", "branch_name", "branch_email", "place_number"],
+            include: {
+              model: Address,
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
             },
           },
           {
