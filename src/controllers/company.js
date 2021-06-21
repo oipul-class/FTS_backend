@@ -14,7 +14,6 @@ module.exports = {
           "fantasy_name",
           "social_reason",
           "place_number",
-          "state",
           "nature_of_the_business",
           "commercial_email",
         ],
@@ -62,7 +61,6 @@ module.exports = {
           "fantasy_name",
           "social_reason",
           "place_number",
-          "state",
           "nature_of_the_business",
           "commercial_email",
           "plan_id",
@@ -201,13 +199,33 @@ module.exports = {
           "fantasy_name",
           "social_reason",
           "place_number",
-          "state",
           "nature_of_the_business",
           "commercial_email",
         ],
-        include: {
-          model: Plan,
-        },
+        include: [
+          {
+            model: Plan,
+            attributes: [
+              "id",
+              "plan_name",
+              "branch_limit",
+              "user_limit_per_branch",
+              "use_phone_for_sale",
+            ],
+          },
+          {
+            model: Address,
+            attributes: [
+              "id",
+              "cep",
+              "street",
+              "complement",
+              "district",
+              "city",
+              "uf",
+            ],
+          },
+        ],
       });
 
       if (!company)
