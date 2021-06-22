@@ -9,7 +9,12 @@ module.exports = {
 
       if (logbook_id)
         lots = await Lot.findOne({
-          attributes: ["lot_number", "manufacture_date", "expiration_date"],
+          attributes: [
+            "id",
+            "lot_number",
+            "manufacture_date",
+            "expiration_date",
+          ],
           include: {
             association: "logbook_inventories",
             where: {
@@ -19,12 +24,14 @@ module.exports = {
         });
       else
         lots = await Lot.findAll({
-          attributes: ["lot_number", "manufacture_date", "expiration_date"],
+          attributes: [
+            "id",
+            "lot_number",
+            "manufacture_date",
+            "expiration_date",
+          ],
           include: {
             association: "logbook_inventories",
-            where: {
-              id: logbook_id,
-            },
           },
         });
 
@@ -40,7 +47,7 @@ module.exports = {
       const { id } = req.params;
 
       const lot = await Lot.findByPk(id, {
-        attributes: ["lot_number", "manufacture_date", "expiration_date"],
+        attributes: ["id", "lot_number", "manufacture_date", "expiration_date"],
       });
 
       res.send(lot);
