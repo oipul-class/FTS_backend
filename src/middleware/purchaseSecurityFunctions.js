@@ -109,13 +109,13 @@ module.exports = {
 
       if (!user.Permissions)
         return res.status(400).send({
-          error: "Usuario logado não tem permissão para uma compra",
+          error: "Usuario logado não tem permissão para uma alterar os dados da compra",
         });
 
       if (user.Branch.id !== purchase.Branch.id)
         return res.status(400).send({
           error:
-            "Usuario logado não pertence a filial requesitada para alterar os dado da compra",
+            "Usuario logado não pertence a filial requesitada para alterar os dados da compra",
         });
 
       next();
