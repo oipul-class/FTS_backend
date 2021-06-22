@@ -4,7 +4,7 @@ const PaymentMethod = require("../models/PaymentMethod");
 const ItemSale = require("../models/ItemSale");
 const Branch = require("../models/Branch");
 const Product = require("../models/Product");
-const Address = require("../models/address");
+const Address = require("../models/Address");
 
 module.exports = {
   async index(req, res) {
@@ -88,7 +88,7 @@ module.exports = {
             },
           ],
         });
-
+      
       res.send(sales);
     } catch (error) {
       console.error(error);
@@ -227,7 +227,7 @@ module.exports = {
             model: Branch,
             attributes: ["id", "branch_name", "branch_email", "place_number"],
             include: {
-              model: Address,
+              model: AddAddressress,
               attributes: [
                 "id",
                 "cep",
