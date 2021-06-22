@@ -218,7 +218,14 @@ module.exports = {
 
       await user.addPermissions(permissionsArray);
 
-      res.status(201).send(user);
+      res.status(201).send({
+        id: user.id,
+        cpf: user.cpf,
+        rg: user.rg,
+        user_name: user.user_name,
+        branch_id: user.branch_id,
+        role_id: user.role_id,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
