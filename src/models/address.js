@@ -13,7 +13,7 @@ class Address extends Model {
       },
       {
         sequelize,
-        tableName: "adresses",
+        tableName: "addresses",
       }
     );
   }

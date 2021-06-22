@@ -6,7 +6,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: "adresses",
+        model: "addresses",
         key: "id",
       },
     });
@@ -15,7 +15,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
-        model: "adresses",
+        model: "addresses",
         key: "id",
       },
     });
