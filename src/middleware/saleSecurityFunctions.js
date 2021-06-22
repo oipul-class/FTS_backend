@@ -16,7 +16,7 @@ module.exports = {
 
       const { branch_id } = req.body;
 
-      if (!payload.id && !payload.cpf)
+      if (!payload.user_rg  && !payload.user_cpf)
         return res
           .status(400)
           .send({ error: "Usuário logado não é um funcionario" });
@@ -24,6 +24,7 @@ module.exports = {
       const user = await User.findOne({
         where: {
           id: payload.id,
+          cpf: payload.user_cpf
         },
         include: [
           {
@@ -75,7 +76,7 @@ module.exports = {
 
       const { id } = req.params;
 
-      if (!payload.id && !payload.cpf)
+      if (!payload.id && !payload.user_cpf)
         return res
           .status(400)
           .send({ error: "Usuário logado não é um funcionario" });
@@ -83,6 +84,7 @@ module.exports = {
       const user = await User.findOne({
         where: {
           id: payload.id,
+          cpf: payload.user_cpf
         },
         include: [
           {
