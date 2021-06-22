@@ -17,7 +17,16 @@ module.exports = {
             },
           },
         });
-      else lots = await Lot.findAll();
+      else
+        lots = await Lot.findAll({
+          attributes: ["lot_number", "manufacture_date", "expiration_date"],
+          include: {
+            association: "logbook_inventories",
+            where: {
+              id: logbook_id,
+            },
+          },
+        });
 
       res.send(lots);
     } catch (error) {
