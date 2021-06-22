@@ -50,7 +50,7 @@ module.exports = {
       console.log(user);
       
 
-      if (!user)
+      if (!user.Permissions[0])
         return res.status(400).send({
           error:
             "Usuário logado não tem permissão de cadastrar produto na companhia",

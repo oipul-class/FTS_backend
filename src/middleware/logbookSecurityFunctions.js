@@ -47,7 +47,7 @@ module.exports = {
         ],
       });
 
-      if (!user)
+      if (!user.Permissions[0])
         return res.status(400).send({
           error: "Usuário não é permitido criar item no inventario da filial",
         });

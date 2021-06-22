@@ -34,7 +34,7 @@ module.exports = {
         },
       });
 
-      if (!user)
+      if (!user.Permissions[0])
         return res.status(400).send({
           error: "Usuário logado não tem permissão para cadastrar um cliente",
         });

@@ -64,7 +64,7 @@ module.exports = {
           ],
         });
 
-        if (!userAdmin.Permission)
+        if (!userAdmin.Permissions[0])
           return res.status(400).send({
             error:
               "Usuario logado não tem permissão para criar um usuário novo",

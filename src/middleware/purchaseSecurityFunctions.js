@@ -48,7 +48,7 @@ module.exports = {
         ],
       });
 
-      if (!user.Permissions)
+      if (!user.Permissions[0])
         return res.status(400).send({
           error: "Usuario logado não tem permissão para cadastrar uma compra",
         });
