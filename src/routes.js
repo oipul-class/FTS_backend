@@ -53,6 +53,7 @@ const lotSecurityFunctionsMiddleware = require("./middleware/lotSecurityFunction
 const costumerSecurityFunctionsMiddleware = require("./middleware/costumerSecurityFunctions");
 const addressSecurityFunctionsMiddleware = require("./middleware/addressSecurityFunctions");
 const purchaseSecurityFunctionsMiddleware = require("./middleware/purchaseSecurityFunctions");
+const saleSecurityFunctionsMiddleware = require("./middleware/saleSecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -217,7 +218,11 @@ routes.put(
   purchaseMiddleware.update,
   purchaseController.update
 );
-routes.delete("/purchase/:id", purchaseSecurityFunctionsMiddleware.userUpdateCheck, purchaseController.delete);
+routes.delete(
+  "/purchase/:id",
+  purchaseSecurityFunctionsMiddleware.userUpdateCheck,
+  purchaseController.delete
+);
 
 routes.get("/itemPurchase", itemPurchaseController.index);
 routes.get("/purchase/:purhcase_id/itemPurchase", itemPurchaseController.index);
@@ -236,10 +241,16 @@ routes.get("/sale/find/:id", saleController.find);
 routes.post(
   "/sale",
   itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
+  saleSecurityFunctionsMiddleware.userStoreCheck,
   saleMiddleware.create,
   saleController.store
 );
-routes.put("/sale/:id", saleMiddleware.update, saleController.update);
+routes.put(
+  "/sale/:id",
+  saleSecurityFunctionsMiddleware.userUpdateCheck,
+  saleMiddleware.update,
+  saleController.update
+);
 routes.delete("/sale/:id", saleController.delete);
 
 routes.get("/itemSale", itemSaleController.index);
