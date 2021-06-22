@@ -58,7 +58,7 @@ module.exports = {
         });
 
         if (!user || !bcryptjs.compareSync(password, user.user_password))
-          return res.status(404).send({ erro: "Usuário/senha incorretos" });
+          return res.status(404).send({ error: "Usuário/senha incorretos" });
         else {
           const token = generateToken({
             id: user.id,

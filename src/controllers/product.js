@@ -141,7 +141,7 @@ module.exports = {
 
       if (!unit_of_measurement || !product_type)
         return res.status(404).send({
-          erro: "Unidade de medidade ou tipo do produto requisitado não existe",
+          error: "Unidade de medidade ou tipo do produto requisitado não existe",
         });
 
       const company = await Company.findByPk(company_id);
@@ -149,7 +149,7 @@ module.exports = {
       if (!company)
         return res
           .status(404)
-          .send({ erro: "Comapnhia requesitada não existe" });
+          .send({ error: "Comapnhia requesitada não existe" });
 
       const product = await Product.create({
         product_name,
@@ -184,7 +184,7 @@ module.exports = {
       const product = await Product.findByPk(id);
 
       if (!product)
-        return res.status(404).send({ erro: "Produto requesitado não existe" });
+        return res.status(404).send({ error: "Produto requesitado não existe" });
 
       if (product_name) product.product_name = product_name;
       if (description) product.description = description;
@@ -199,7 +199,7 @@ module.exports = {
         if (!unit_of_measurement)
           return res
             .status(404)
-            .send({ erro: "Unidade de medida requesitada não existe" });
+            .send({ error: "Unidade de medida requesitada não existe" });
 
         product.unit_of_measurement_id = unit_of_measurement_id;
       }
@@ -210,7 +210,7 @@ module.exports = {
         if (!product_type)
           return res
             .status(404)
-            .send({ erro: "Tipo de produto requesitado não existe" });
+            .send({ error: "Tipo de produto requesitado não existe" });
 
         product.product_type_id = product_type_id;
       }
@@ -230,7 +230,7 @@ module.exports = {
       const product = await Product.findByPk(id);
 
       if (!product)
-        return res.status(404).send({ erro: "Produto requesitado não existe" });
+        return res.status(404).send({ error: "Produto requesitado não existe" });
 
       await product.destroy();
 

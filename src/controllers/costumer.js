@@ -59,7 +59,7 @@ module.exports = {
       const costumer = await Costumer.findByPk(id);
 
       if (!costumer)
-        return res.status(404).send({ erro: "Cliente requesitado não existe" });
+        return res.status(404).send({ error: "Cliente requesitado não existe" });
 
       if (costumer_name) costumer.costumer_name = costumer_name;
       if (cpf) costumer.cpf = cpf;
@@ -80,7 +80,7 @@ module.exports = {
       const costumer = await Costumer.findByPk(id);
 
       if (!costumer)
-        return res.status(404).send({ erro: "Cliente requesitado não existe" });
+        return res.status(404).send({ error: "Cliente requesitado não existe" });
 
       await costumer.destroy();
 

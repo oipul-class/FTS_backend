@@ -139,12 +139,12 @@ module.exports = {
       if (!paymentMethod)
         return res
           .status(404)
-          .send({ erro: "Metodo de pagamento requesitado não existe" });
+          .send({ error: "Metodo de pagamento requesitado não existe" });
 
       const branch = await Branch.findByPk(branch_id);
 
       if (!branch)
-        return res.status(404).send({ erro: "Filial requesitada não existe" });
+        return res.status(404).send({ error: "Filial requesitada não existe" });
 
       const purchase = await branch.createPurchase({
         payment_method_id,
@@ -225,7 +225,7 @@ module.exports = {
       if (!purchase)
         return res
           .status(404)
-          .send({ erro: "Compra requesitada não encontrada" });
+          .send({ error: "Compra requesitada não encontrada" });
 
       if (payment_method_id) purchase.payment_method_id = payment_method_id;
 
@@ -247,7 +247,7 @@ module.exports = {
       if (!purchase)
         return res
           .status(404)
-          .send({ erro: "Compra requesitada não encontrada" });
+          .send({ error: "Compra requesitada não encontrada" });
 
       await purchase.destroy();
 

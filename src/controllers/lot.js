@@ -65,7 +65,7 @@ module.exports = {
 
       const lot = await Lot.findByPk(id);
 
-      if (!lot) return res.send({ erro: "Lot requesitado não existe" });
+      if (!lot) return res.send({ error: "Lot requesitado não existe" });
 
       if (lot_number) lot.lot_number = lot_number;
       if (manufacture_date) lot.manufacture_date = manufacture_date;

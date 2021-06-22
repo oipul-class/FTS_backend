@@ -158,7 +158,7 @@ module.exports = {
       if (!product || !branch)
         return res
           .status(404)
-          .send({ erro: "Produto ou filial requisitada não existe" });
+          .send({ error: "Produto ou filial requisitada não existe" });
 
       const logbook = await LogBookInventory.create({
         date_of_acquisition,
@@ -189,7 +189,7 @@ module.exports = {
       const logbook = await LogBookInventory.findByPk(id);
 
       if (!logbook)
-        return res.status(404).send({ erro: "Logbook requisitado não existe" });
+        return res.status(404).send({ error: "Logbook requisitado não existe" });
 
       if (date_of_acquisition)
         logbook.date_of_acquisition = date_of_acquisition;
@@ -201,7 +201,7 @@ module.exports = {
         if (!product)
           return res
             .status(404)
-            .send({ erro: "Produto requisitado não existe" });
+            .send({ error: "Produto requisitado não existe" });
 
         logbook.product_id = product_id;
       }

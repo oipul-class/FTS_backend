@@ -231,7 +231,7 @@ module.exports = {
       if (!company)
         return res
           .status(404)
-          .send({ erro: "Compania requisitada não existe" });
+          .send({ error: "Compania requisitada não existe" });
 
       if (cnpj) company.cnpj = cnpj;
       if (fantasy_name) company.fantasy_name = fantasy_name;
@@ -253,7 +253,7 @@ module.exports = {
         const plan = await Plan.findByPk(plan_id);
 
         if (!plan)
-          return res.status(404).send({ erro: "Plano requesitado não existe" });
+          return res.status(404).send({ error: "Plano requesitado não existe" });
 
         company.plan_id = plan_id;
       }
@@ -276,7 +276,7 @@ module.exports = {
       if (!company)
         return res
           .status(404)
-          .send({ erro: "Companhia requesitada não existe" });
+          .send({ error: "Companhia requesitada não existe" });
 
       await company.destroy();
 

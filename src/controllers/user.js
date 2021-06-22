@@ -198,12 +198,12 @@ module.exports = {
       const branch = await Branch.findByPk(branch_id);
 
       if (!branch)
-        return res.status(404).send({ erro: "Filial requesitada não existe" });
+        return res.status(404).send({ error: "Filial requesitada não existe" });
 
       const role = await Role.findByPk(role_id);
 
       if (!role)
-        return res.status(404).send({ erro: "Cargo requesitado não existe" });
+        return res.status(404).send({ error: "Cargo requesitado não existe" });
 
       const user = await User.create({
         cpf,
@@ -271,7 +271,7 @@ module.exports = {
       });
 
       if (!user)
-        return res.status(404).send({ erro: "Usuário requisitado não existe" });
+        return res.status(404).send({ error: "Usuário requisitado não existe" });
 
       if (user_name) user.user_name = user_name;
       if (cpf) user.cpf = cpf;
@@ -288,7 +288,7 @@ module.exports = {
         if (!role)
           return res
             .status(404)
-            .send({ erro: "Cargo requisitaado não existe" });
+            .send({ error: "Cargo requisitaado não existe" });
 
         user.role_id = role_id;
       }
@@ -309,7 +309,7 @@ module.exports = {
       const user = await User.findByPk(id);
 
       if (!user)
-        return res.status(404).send({ erro: "Usuário requesitado não existe" });
+        return res.status(404).send({ error: "Usuário requesitado não existe" });
 
       await user.destroy();
 

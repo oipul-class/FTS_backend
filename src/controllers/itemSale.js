@@ -141,11 +141,11 @@ module.exports = {
 
       const product = await Product.findByPk(product_id);
 
-      if (!product) return res.status(404).send({ erro: "Produto requesitado não existe" });
+      if (!product) return res.status(404).send({ error: "Produto requesitado não existe" });
 
       const logbook = await product.getLogBookInventory();
 
-      if (!logbook) return res.status(404).send({ erro: "Logbook requesitado não existe" });
+      if (!logbook) return res.status(404).send({ error: "Logbook requesitado não existe" });
 
       let total_value;
 
@@ -181,7 +181,7 @@ module.exports = {
       if (!itemSale)
         return res
           .status(404)
-          .send({ erro: "Item no carrinho de venda requesitado não existe" });
+          .send({ error: "Item no carrinho de venda requesitado não existe" });
 
       await itemSale.destroy();
 

@@ -9,12 +9,12 @@ module.exports = {
       const branch = await Branch.findByPk(branch_id);
 
       if (!branch)
-        return res.status(404).send({ erro: "Filial requesitada não existe" });
+        return res.status(404).send({ error: "Filial requesitada não existe" });
 
       const sales = await branch.getSales();
 
       if (!sales)
-        return res.status(400).send({ erro: "Não foi feito vendas nessa filial" });
+        return res.status(400).send({ error: "Não foi feito vendas nessa filial" });
 
       let bills = [];
 
@@ -41,7 +41,7 @@ module.exports = {
       const bill = await BillToReceive.findByPk(id);
 
       if (!bill)
-        return res.status(404).send({ erro: "Conta a receber requesitada não existe" });
+        return res.status(404).send({ error: "Conta a receber requesitada não existe" });
 
       res.status(201).send(bill);
     } catch (error) {
@@ -57,7 +57,7 @@ module.exports = {
       const bill = await BillToReceive.findByPk(id);
 
       if (!bill)
-        return res.status(404).send({ erro: "Conta a receber requesitada não existe" });
+        return res.status(404).send({ error: "Conta a receber requesitada não existe" });
 
       const { received } = req.body;
 
