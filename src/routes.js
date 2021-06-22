@@ -55,6 +55,7 @@ const addressSecurityFunctionsMiddleware = require("./middleware/addressSecurity
 const purchaseSecurityFunctionsMiddleware = require("./middleware/purchaseSecurityFunctions");
 const saleSecurityFunctionsMiddleware = require("./middleware/saleSecurityFunctions");
 const billToReceiveSecurityFunctionsMiddleware = require("./middleware/billToReceiveSecurityFunctions");
+const billToPaySecurityFunctionsMiddleware = require("./middleware/billToPaySecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -278,6 +279,7 @@ routes.get("/branch/:branch_id/billToPay", billToPayController.index);
 routes.get("/billToPay/find/:id", billToPayController.find);
 routes.put(
   "/billToPay/:id",
+  billToPaySecurityFunctionsMiddleware.userUpdateCheck,
   billToPayMiddleware.update,
   billToPayController.update
 );
