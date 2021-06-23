@@ -3,6 +3,8 @@ const UnitOfMeasurement = require("../models/UnitOfMeasurement");
 const ProductType = require("../models/ProductType");
 const Company = require("../models/Company");
 const { Op } = require("sequelize");
+const jwt = require("jsonwebtoken");
+const auth = require("../config/auth");
 
 module.exports = {
   async index(req, res) {
@@ -15,26 +17,63 @@ module.exports = {
 
       let products;
 
-      if (company_id && product_name)
-        products = await Product.findAll({
-          where: { product_name: { [Op.substring]: product_name }, company_id },
-          attributes: [
-            "id",
-            "product_name",
-            "description",
-            "bar_code",
-            "cost_per_item",
-            "unit_of_measurement_id",
-            "product_type_id",
-            "company_id",
-            "created_at",
-          ],
-          include: {
-            model: ProductType,
-            attributes: ["type"],
-          },
-        });
-      else if (company_id && !product_name)
+      if (company_id && product_name) {
+        const token = req.headers.authorization;
+        const [Bearer, retriviedToken] = token.split(" ");
+
+        const payload = jwt.verify(retriviedToken, auth.secret);
+
+        if (payload.user_cpf && payload.user_rg) {
+          products = await Product.findAll({
+            where: { product_name: { [Op.substring]: product_name } },
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+              "unit_of_measurement_id",
+              "product_type_id",
+              "company_id",
+              "created_at",
+            ],
+            include: {
+              model: ProductType,
+              attributes: ["type"],
+            },
+            include: {
+              model: Logbook,
+              required: true,
+              attributes: ["id"],
+              where: {
+                branch_id: payload.branch.id,
+              },
+            },
+          });
+        } else if (payload.cnpj) {
+          products = await Product.findAll({
+            where: {
+              product_name: { [Op.substring]: product_name },
+              company_id: payload.id,
+            },
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+              "unit_of_measurement_id",
+              "product_type_id",
+              "company_id",
+              "created_at",
+            ],
+            include: {
+              model: ProductType,
+              attributes: ["type"],
+            },
+          });
+        }
+      } else if (company_id && !product_name)
         products = await Product.findAll({
           where: { company_id },
           attributes: [
@@ -146,7 +185,8 @@ module.exports = {
 
       if (!unit_of_measurement || !product_type)
         return res.status(404).send({
-          error: "Unidade de medidade ou tipo do produto requisitado não existe",
+          error:
+            "Unidade de medidade ou tipo do produto requisitado não existe",
         });
 
       const company = await Company.findByPk(company_id);
@@ -189,7 +229,9 @@ module.exports = {
       const product = await Product.findByPk(id);
 
       if (!product)
-        return res.status(404).send({ error: "Produto requesitado não existe" });
+        return res
+          .status(404)
+          .send({ error: "Produto requesitado não existe" });
 
       if (product_name) product.product_name = product_name;
       if (description) product.description = description;
@@ -235,7 +277,9 @@ module.exports = {
       const product = await Product.findByPk(id);
 
       if (!product)
-        return res.status(404).send({ error: "Produto requesitado não existe" });
+        return res
+          .status(404)
+          .send({ error: "Produto requesitado não existe" });
 
       await product.destroy();
 
