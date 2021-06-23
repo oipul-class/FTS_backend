@@ -6,6 +6,7 @@ const Company = require("../models/Company");
 const Permission = require("../models/Permission");
 const User = require("../models/User");
 const Lot = require("../models/Lot");
+const Screen = require("../models/Screen");
 
 module.exports = {
   lotUpdateCheck: async (req, res, next) => {
@@ -15,57 +16,123 @@ module.exports = {
 
       const payload = jwt.verify(retriviedToken, auth.secret);
 
-      const user = await User.findOne({
-        where: {
-          id: payload.id,
-        },
-        include: [
-          {
-            model: Permission,
-            required: true,
-            where: {
-              permission_name: { [Op.substring]: "Estoque" },
-            },
+      if (payload.user_cpf && payload.user_rg) {
+        const user = await User.findOne({
+          where: {
+            id: payload.id,
+            cpf: payload.cpf,
           },
-          {
-            model: Branch,
+          include: [
+            {
+              model: Permission,
+              required: true,
+              include: {
+                model: Screen,
+                required: true,
+                where: {
+                  id: 3,
+                },
+              },
+            },
+            {
+              model: Branch,
+              attributes: ["id"],
+              include: {
+                model: Company,
+                attributes: ["id"],
+              },
+            },
+          ],
+        });
+
+        if (!user.Permissions[0])
+          return res.status(400).send({
+            error:
+              "Usuário não é permitido alterar dados de um item no inventario da filial",
+          });
+
+        const { id } = req.params;
+
+        const lot = await Lot.findByPk(id, {
+          include: {
+            association: "logbook_inventories",
             attributes: ["id"],
             include: {
-              model: Company,
+              model: Branch,
               attributes: ["id"],
             },
           },
-        ],
-      });
-
-      if (!user.Permissions[0])
-        return res.status(400).send({
-          error:
-            "Usuário não é permitido alterar dados de um item no inventario da filial",
         });
 
-      const { id } = req.params;
+        if (!lot)
+          return res.status(404).send({ error: "Lot requesitado não existe" });
+        if (lot.logbook_inventories[0].Branch.id != user.Branch.id)
+          return res.status(400).send({
+            error:
+              "Lot requesitado pertence a um item no inventario de uma filial que o usuário não trabalha",
+          });
 
-      const lot = await Lot.findByPk(id, {
-        include: {
-          association: "logbook_inventories",
-          attributes: ["id"],
+        return next();
+      } else if (payload.cnpj) {
+        const { id } = req.params;
+
+        const lot = await Lot.findByPk(id, {
           include: {
-            model: Branch,
+            association: "logbook_inventories",
             attributes: ["id"],
+            include: {
+              model: Branch,
+              attributes: ["id"],
+            },
           },
-        },
-      });
-
-      if (!lot)
-        return res.status(404).send({ error: "Lot requesitado não existe" });
-      if (lot.logbook_inventories[0].Branch.id != user.Branch.id)
-        return res.status(400).send({
-          error:
-            "Lot requesitado pertence a um item no inventario de uma filial que o usuário não trabalha",
         });
 
-      next();
+        if (!lot)
+          return res.status(404).send({ error: "Lot requesitado não existe" });
+
+        const user = await Company.findOne({
+          where: {
+            id: payload.id,
+            cnpj: payload.cnpj,
+          },
+          include: [
+            {
+              model: Permission,
+              required: true,
+              include: {
+                model: Screen,
+                required: true,
+                where: {
+                  id: 3,
+                },
+              },
+            },
+            {
+              model: Branch,
+              attributes: ["id"],
+              required: true,
+              where: {
+                id: lot.logbook_inventories[0].Branch.id,
+              },
+            },
+          ],
+        });
+
+        if (!user.Permissions[0] || !user.Permissions[0].Screens[0])
+          return res.status(400).send({
+            error:
+              "Companhia logada não tem permissão para alterar dados de um lot",
+          });
+
+        if (lot.logbook_inventories[0].Branch.id != user.Branches[0].id)
+          return res.status(400).send({
+            error:
+              "Lot requesitado pertence a um item no inventario é de uma filial que não pertence a companhia logada",
+          });
+
+        return next();
+      }
+      return res.status(404).send({ error: "Dados para verificação faltando" });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
