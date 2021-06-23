@@ -87,7 +87,7 @@ module.exports = {
           ],
         });
 
-        if (!user.Permissions[0] || user.Permissions[0].Screen)
+        if (!user.Permissions[0] || user.Permissions[0].Screens)
           return res.status(400).send({
             error:
               "Companhia logada não tem permissão de cadastrar produto na companhia",
@@ -203,17 +203,10 @@ module.exports = {
           ],
         });
 
-        if (!user.Permission[0] || !user.Permission[0].Screen)
+        if (!user.Permissions[0] || !user.Permissions[0].Screens)
           return res.status(400).send({
             error:
               "Comapnhia logada não tem permissão para alterar dados de produtos cadastrados",
-          });
-
-        const { company_id } = req.body;
-
-        if (user.id != company_id)
-          return res.status(400).send({
-            error: "Filial recebida não é da companhia logada",
           });
 
         const { id } = req.params;
@@ -221,7 +214,7 @@ module.exports = {
         const product = await Product.findOne({
           where: {
             id,
-            company_id,
+            company_id: user.id,
           },
         });
 
