@@ -5,6 +5,7 @@ const Branch = require("../models/Branch");
 const Permission = require("../models/Permission");
 const User = require("../models/User");
 const Screen = require("../models/Screen");
+const Company = require("../models/Company");
 
 module.exports = {
   userStoreCheck: async (req, res, next) => {
@@ -16,45 +17,89 @@ module.exports = {
 
       const { branch_id } = req.body;
 
-      const user = await User.findOne({
-        where: {
-          id: payload.id,
-          cpf: payload.user_cpf,
-        },
-        include: [
-          {
-            model: Permission,
-            include: {
-              model: Screen,
-              require: true,
-              where: {
-                id: 8,
+      if (payload.user_cpf && payload.user_rg) {
+        const user = await User.findOne({
+          where: {
+            id: payload.id,
+            cpf: payload.user_cpf,
+          },
+          include: [
+            {
+              model: Permission,
+              include: {
+                model: Screen,
+                require: true,
+                where: {
+                  id: 8,
+                },
               },
             },
-          },
-          {
-            model: Branch,
-            required: true,
-            attributes: ["id"],
-            where: {
-              id: branch_id,
+            {
+              model: Branch,
+              required: true,
+              attributes: ["id"],
+              where: {
+                id: branch_id,
+              },
             },
+          ],
+        });
+
+        if (!user.Permissions[0])
+          return res.status(400).send({
+            error: "Usuario logado não tem permissão para cadastrar uma compra",
+          });
+
+        if (!user.Branch)
+          return res.status(400).send({
+            error:
+              "Usuario logado não pertence a filial requesitada para cadastrar a compra",
+          });
+
+        return next();
+      } else if (payload.cnpj) {
+        const user = await Company.findOne({
+          where: {
+            id: payload.id,
+            cnpj: payload.cnpj,
           },
-        ],
-      });
-
-      if (!user.Permissions[0])
-        return res.status(400).send({
-          error: "Usuario logado não tem permissão para cadastrar uma compra",
+          include: [
+            {
+              model: Permission,
+              include: {
+                model: Screen,
+                require: true,
+                where: {
+                  id: 8,
+                },
+              },
+            },
+            {
+              model: Branch,
+              required: true,
+              attributes: ["id"],
+              where: {
+                id: branch_id,
+              },
+            },
+          ],
         });
 
-      if (!user.Branch)
-        return res.status(400).send({
-          error:
-            "Usuario logado não pertence a filial requesitada para cadastrar a compra",
-        });
+        if (!user.Permissions[0] || !user.Permissions[0].Screens)
+          return res.status(400).send({
+            error:
+              "Companhia logada não tem permissão para cadastrar uma compra",
+          });
 
-      next();
+        if (!user.Branch)
+          return res.status(400).send({
+            error:
+              "Filial relacionada a compra não pertence a companhia logada",
+          });
+
+        return next();
+      }
+      return res.status(404).send({ error: "Dados para verificação faltando" });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -69,54 +114,96 @@ module.exports = {
 
       const { id } = req.params;
 
-      if (!payload.user_rg  && !payload.user_cpf)
-        return res
-          .status(400)
-          .send({ error: "Usuário logado não é um funcionario" });
-
-      const user = await User.findOne({
-        where: {
-          id: payload.id,
-          cpf: payload.user_cpf,
-        },
-        include: [
-          {
-            model: Permission,
-            include: {
-              model: Screen,
-              require: true,
-              where: {
-                id: 8,
+      if (payload.user_cpf || payload.user_rg) {
+        const user = await User.findOne({
+          where: {
+            id: payload.id,
+            cpf: payload.user_cpf,
+          },
+          include: [
+            {
+              model: Permission,
+              include: {
+                model: Screen,
+                require: true,
+                where: {
+                  id: 8,
+                },
               },
             },
-          },
-          {
+            {
+              model: Branch,
+              attributes: ["id"],
+            },
+          ],
+        });
+
+        const purchase = await Purchase.findByPk(id, {
+          include: {
             model: Branch,
             attributes: ["id"],
           },
-        ],
-      });
-
-      const purchase = await Purchase.findByPk(id, {
-        include: {
-          model: Branch,
-          attributes: ["id"],
-        },
-      });
-
-      if (!user.Permissions)
-        return res.status(400).send({
-          error:
-            "Usuario logado não tem permissão para uma alterar os dados da compra",
         });
 
-      if (user.Branch.id !== purchase.Branch.id)
-        return res.status(400).send({
-          error:
-            "Usuario logado não pertence a filial requesitada para alterar os dados da compra",
+        if (!user.Permissions)
+          return res.status(400).send({
+            error:
+              "Usuario logado não tem permissão para uma alterar os dados da compra",
+          });
+
+        if (user.Branch.id !== purchase.Branch.id)
+          return res.status(400).send({
+            error:
+              "Usuario logado não pertence a filial requesitada para alterar os dados da compra",
+          });
+
+        return next();
+      } else if (payload.cnpj) {
+        const user = await Company.findOne({
+          where: {
+            id: payload.id,
+            cnpj: payload.cnpj,
+          },
+          include: [
+            {
+              model: Permission,
+              include: {
+                model: Screen,
+                require: true,
+                where: {
+                  id: 8,
+                },
+              },
+            },
+            {
+              model: Branch,
+              attributes: ["id"],
+            },
+          ],
         });
 
-      next();
+        const purchase = await Purchase.findByPk(id, {
+          include: {
+            model: Branch,
+            attributes: ["id"],
+          },
+        });
+
+        if (!user.Permissions)
+          return res.status(400).send({
+            error:
+              "Companhia logada não tem permissão para uma alterar os dados da compra",
+          });
+
+        if (user.Branch.id !== purchase.Branch.id)
+          return res.status(400).send({
+            error: "Filial da compra não é da companhia logada",
+          });
+
+        return next();
+      }
+
+      return res.status(404).send({ error: "Dados para verificação faltando" });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
