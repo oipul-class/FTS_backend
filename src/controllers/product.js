@@ -19,6 +19,7 @@ module.exports = {
         products = await Product.findAll({
           where: { product_name: { [Op.substring]: product_name }, company_id },
           attributes: [
+            "id",
             "product_name",
             "description",
             "bar_code",
@@ -37,6 +38,7 @@ module.exports = {
         products = await Product.findAll({
           where: { company_id },
           attributes: [
+            "id",
             "product_name",
             "description",
             "bar_code",
@@ -55,6 +57,7 @@ module.exports = {
         products = await Product.findOne({
           where: { bar_code },
           attributes: [
+            "id",
             "product_name",
             "description",
             "bar_code",
@@ -72,6 +75,7 @@ module.exports = {
       else
         products = await Product.findAll({
           attributes: [
+            "id",
             "product_name",
             "description",
             "bar_code",
@@ -100,6 +104,7 @@ module.exports = {
 
       const product = await Product.findByPk(id, {
         attributes: [
+          "id",
           "product_name",
           "description",
           "bar_code",
