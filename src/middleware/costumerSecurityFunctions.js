@@ -13,6 +13,8 @@ module.exports = {
 
       const payload = jwt.verify(retriviedToken, auth.secret);
 
+      if (payload.cnpj) return res.status(400).send({ error: "Usuário logado não é um funcionario"})
+
       const user = await User.findOne({
         where: {
           id: payload.id,
