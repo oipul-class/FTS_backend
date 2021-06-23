@@ -256,7 +256,7 @@ module.exports = {
             error: "Comapnhia não tem permissão para cadastrar um produto no inventario",
           });
 
-        if (!user.Branch)
+        if (!user.Branches[0])
           return res.status(400).send({
             error:
               "Produto requesitado não pertence a companhia dona da filial que o usuário logado trabalha",
