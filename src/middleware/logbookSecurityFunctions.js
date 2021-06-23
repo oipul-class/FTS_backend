@@ -224,7 +224,7 @@ module.exports = {
 
         if (!logbook) return res.status(404).send({ error: "Item no inventario não existe"})
 
-        const user = await User.findOne({
+        const user = await Company.findOne({
           where: {
             id: payload.id,
             cnpj: payload.cnpj
