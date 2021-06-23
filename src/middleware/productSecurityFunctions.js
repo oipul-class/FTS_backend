@@ -87,7 +87,8 @@ module.exports = {
           ],
         });
 
-        if (!user.Permissions[0] || user.Permissions[0].Screens)
+
+        if (!user.Permissions[0] || !user.Permissions[0].Screens[0])
           return res.status(400).send({
             error:
               "Companhia logada não tem permissão de cadastrar produto na companhia",
@@ -97,7 +98,7 @@ module.exports = {
 
         if (user.id != company_id)
           return res.status(400).send({
-            error: "Filial recebida não é da companhia logada",
+            error: "Companhia recebida não é a mesma que esta logada",
           });
 
         return next();
