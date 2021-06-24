@@ -6,8 +6,6 @@ class ItemSale extends Model {
       {
         cost_per_item: DataTypes.DECIMAL(15, 2),
         quantity: DataTypes.INTEGER,
-        total_value: DataTypes.DECIMAL(15, 2),
-        discount: DataTypes.INTEGER,
         logbook_inventory_id: DataTypes.INTEGER,
         product_id: DataTypes.INTEGER,
       },

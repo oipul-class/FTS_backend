@@ -15,20 +15,14 @@ module.exports = {
 
       if (branch_id)
         sales = await Sale.findAll({
-          attributes: ["id"],
+          attributes: ["id", "total_value", "discount"],
           where: {
             branch_id,
           },
           include: [
             {
               model: ItemSale,
-              attributes: [
-                "id",
-                "cost_per_item",
-                "quantity",
-                "total_value",
-                "discount",
-              ],
+              attributes: ["id", "cost_per_item", "quantity"],
             },
             {
               model: Branch,
@@ -54,17 +48,11 @@ module.exports = {
         });
       else
         sales = await Sale.findAll({
-          attributes: ["id"],
+          attributes: ["id", "total_value", "discount"],
           include: [
             {
               model: ItemSale,
-              attributes: [
-                "id",
-                "cost_per_item",
-                "quantity",
-                "total_value",
-                "discount",
-              ],
+              attributes: ["id", "cost_per_item", "quantity"],
             },
             {
               model: Branch,
@@ -101,17 +89,11 @@ module.exports = {
       const { id } = req.params;
 
       const sale = await Sale.findByPk(id, {
-        attributes: ["id"],
+        attributes: ["id", "discount", "total_value"],
         include: [
           {
             model: ItemSale,
-            attributes: [
-              "id",
-              "cost_per_item",
-              "quantity",
-              "total_value",
-              "discount",
-            ],
+            attributes: ["id", "cost_per_item", "quantity"],
           },
           {
             model: Branch,
@@ -146,7 +128,6 @@ module.exports = {
   async store(req, res) {
     try {
       const { payment_method_id, costumer_id, branch_id, discount } = req.body;
-      console.log("the discount", discount);
       const items = req.body.items;
 
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
@@ -164,58 +145,46 @@ module.exports = {
       const sale = await branch.createSale({
         payment_method_id,
         costumer_id,
+        total_value: 0.0,
+        discount: discount ? discount : 0,
       });
 
+      let sale_total_value = 0;
+
       if (items) {
-        items.map(async (item) => {
-          try {
-            if (item.product_id) {
-              const product = await Product.findByPk(item.product_id);
-              const logbook = await product.getLogBookInventory();
+        await Promise.all(
+          items.map(async (item) => {
+            try {
+              if (item.product_id) {
+                const product = await Product.findByPk(item.product_id);
+                const logbook = await product.getLogBookInventory();
 
-              let total_value;
+                await sale.createItemSale({
+                  cost_per_item: product.cost_per_item,
+                  quantity: item.quantity,
+                  product_id: item.product_id,
+                  logbook_inventory_id: logbook.id,
+                });
 
-              const sale_discount = discount;
-
-              if (sale_discount && sale_discount > 0)
-                total_value =
-                  (product.cost_per_item -
-                    (product.cost_per_item * sale_discount) / 100) *
-                  item.quantity;
-              else if (item.discount && item.discount > 0)
-                total_value =
-                  (product.cost_per_item -
-                    (product.cost_per_item * item.discount) / 100) *
-                  item.quantity;
-              else total_value = product.cost_per_item * item.quantity;
-
-              total_value = total_value.toFixed(2);
-              console.log(
-                "discount: ",
-                item.discount
-                  ? item.discount
-                  : sale_discount
-                  ? sale_discount
-                  : null
-              );
-              await sale.createItemSale({
-                cost_per_item: product.cost_per_item,
-                quantity: item.quantity,
-                discount: item.discount
-                  ? item.discount
-                  : sale_discount
-                  ? sale_discount
-                  : null,
-                total_value,
-                product_id: item.product_id,
-                logbook_inventory_id: logbook.id,
-              });
+                sale_total_value =
+                  sale_total_value + product.cost_per_item * item.quantity;
+              }
+            } catch (error) {
+              console.error(error);
+              return res.status(500).send(error);
             }
-          } catch (error) {
-            console.error(error);
-            return res.status(500).send(error);
-          }
-        });
+          })
+        );
+      }
+
+      if (discount && discount > 0) {
+        sale.total_value =
+          sale_total_value - (sale_total_value * discount) / 100;
+
+        await sale.save();
+      } else {
+        sale.total_value = sale_total_value;
+        await sale.save();
       }
 
       res.status(201).send(sale);

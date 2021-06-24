@@ -19,15 +19,6 @@ module.exports = {
         allowNull: false,
       },
 
-      total_value: {
-        type: Sequelize.DECIMAL(15, 2),
-        allowNull: false,
-      },
-
-      discount: {
-        type: Sequelize.INTEGER,
-      },
-
       product_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
