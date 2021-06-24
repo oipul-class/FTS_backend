@@ -88,7 +88,7 @@ module.exports = {
             },
           ],
         });
-      
+
       res.send(sales);
     } catch (error) {
       console.error(error);
@@ -145,7 +145,8 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { payment_method_id, costumer_id, branch_id } = req.body;
+      const { payment_method_id, costumer_id, branch_id, discount } = req.body;
+      console.log("the discount", discount);
       const items = req.body.items;
 
       const paymentMethod = await PaymentMethod.findByPk(payment_method_id);
@@ -174,18 +175,37 @@ module.exports = {
 
               let total_value;
 
-              if (item.discount || item.discount > 0)
+              const sale_discount = discount;
+
+              if (sale_discount && sale_discount > 0)
                 total_value =
-                  product.cost_per_item -
-                  (product.cost_per_item * item.discount) / 100;
+                  (product.cost_per_item -
+                    (product.cost_per_item * sale_discount) / 100) *
+                  item.quantity;
+              else if (item.discount && item.discount > 0)
+                total_value =
+                  (product.cost_per_item -
+                    (product.cost_per_item * item.discount) / 100) *
+                  item.quantity;
               else total_value = product.cost_per_item * item.quantity;
 
               total_value = total_value.toFixed(2);
-
+              console.log(
+                "discount: ",
+                item.discount
+                  ? item.discount
+                  : sale_discount
+                  ? sale_discount
+                  : null
+              );
               await sale.createItemSale({
                 cost_per_item: product.cost_per_item,
                 quantity: item.quantity,
-                discount: item.discount,
+                discount: item.discount
+                  ? item.discount
+                  : sale_discount
+                  ? sale_discount
+                  : null,
                 total_value,
                 product_id: item.product_id,
                 logbook_inventory_id: logbook.id,
