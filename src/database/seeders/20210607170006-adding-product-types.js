@@ -115,6 +115,11 @@ module.exports = {
           created_at: new Date(),
           updated_at: new Date(),
         },
+        {
+          type: "Outro",
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
       ],
       {}
     );
