@@ -113,6 +113,9 @@ routes.get("/role", roleController.index);
 routes.get("/role/find/:id", roleController.find);
 
 routes.get("/user", userController.index);
+routes.get("/branch/:branch_id/user", userController.index);
+routes.get("/company/:company_id/user", userController.index);
+routes.get("/user/cpf/:cpf", userController.index);
 routes.get("/user/find/:id", userController.find);
 routes.post(
   "/user",

@@ -8,7 +8,7 @@ const bcryptjs = require("bcryptjs");
 module.exports = {
   async index(req, res) {
     try {
-      const { branch_id, cpf } = req.body;
+      const { company_id, branch_id, cpf } = req.params;
 
       let users;
 
@@ -28,6 +28,46 @@ module.exports = {
                 "place_number",
                 "company_id",
               ],
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
+            },
+            {
+              association: "Role",
+              attributes: ["id", "role_name"],
+            },
+            {
+              association: "Permissions",
+              attributes: ["id", "permission_name"],
+            },
+          ],
+        });
+      else if (company_id)
+        users = await User.findAll({
+          attributes: ["id", "user_name", "cpf", "rg"],
+          include: [
+            {
+              association: "Branch",
+              required: true,
+              attributes: [
+                "id",
+                "branch_name",
+                "branch_email",
+                "place_number",
+                "company_id",
+              ],
+              where: {
+                company_id,
+              },
               include: {
                 association: "Address",
                 attributes: [
@@ -271,7 +311,9 @@ module.exports = {
       });
 
       if (!user)
-        return res.status(404).send({ error: "Usuário requisitado não existe" });
+        return res
+          .status(404)
+          .send({ error: "Usuário requisitado não existe" });
 
       if (user_name) user.user_name = user_name;
       if (cpf) user.cpf = cpf;
@@ -309,7 +351,9 @@ module.exports = {
       const user = await User.findByPk(id);
 
       if (!user)
-        return res.status(404).send({ error: "Usuário requesitado não existe" });
+        return res
+          .status(404)
+          .send({ error: "Usuário requesitado não existe" });
 
       await user.destroy();
 
