@@ -4,13 +4,13 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert("screens", [
       {
-        screen_name: "Cadastro de usuários",
+        screen_name: "Usuários",
         route: "/usersRegister",
         created_at: new Date(),
         updated_at: new Date(),
       },
       {
-        screen_name: "Cadastro de produtos",
+        screen_name: "Produtos",
         route: "/productsRegister",
         created_at: new Date(),
         updated_at: new Date(),
@@ -22,23 +22,23 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        screen_name: "Relatório de estoque",
+        screen_name: "Rel. de estoque",
         route: "/inventoryReports",
         created_at: new Date(),
         updated_at: new Date(),
       },
-      {
-        screen_name: "Relatório de movimento",
-        route: "/purchasesReports",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        screen_name: "Contas",
-        route: "/bills",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
+      // {
+      //   screen_name: "Rel. de movimento",
+      //   route: "/purchasesReports",
+      //   created_at: new Date(),
+      //   updated_at: new Date(),
+      // },
+      // {
+      //   screen_name: "Contas",
+      //   route: "/bills",
+      //   created_at: new Date(),
+      //   updated_at: new Date(),
+      // },
       {
         screen_name: "PDV",
         route: "/pdv",
@@ -52,7 +52,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        screen_name: "Cadastro de Filial",
+        screen_name: "Filiais",
         route: "/branchRegister",
         created_at: new Date(),
         updated_at: new Date(),
