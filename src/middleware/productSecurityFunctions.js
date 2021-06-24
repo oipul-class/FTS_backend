@@ -20,7 +20,7 @@ module.exports = {
         const user = await User.findOne({
           where: {
             id: payload.id,
-            cpf: payload.cpf,
+            cpf: payload.user_cpf,
           },
           include: [
             {
