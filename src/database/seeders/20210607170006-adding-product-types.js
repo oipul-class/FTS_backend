@@ -16,11 +16,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          type: "Liquido",
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
           type: "Remédio",
           created_at: new Date(),
           updated_at: new Date(),
@@ -117,11 +112,6 @@ module.exports = {
         },
         {
           type: "Frutos do Mar",
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
-          type: "Outro",
           created_at: new Date(),
           updated_at: new Date(),
         },
