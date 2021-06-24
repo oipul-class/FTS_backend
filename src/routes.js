@@ -24,6 +24,7 @@ const itemSaleController = require("./controllers/itemSale");
 const billToReceiveController = require("./controllers/billToReceive");
 const billToPayController = require("./controllers/billToPay");
 const addressController = require("./controllers/address");
+const inventoryReportController = require("./controllers/inventoryReport");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -289,6 +290,11 @@ routes.put(
   addressSecurityFunctionsMiddleware.addressUpdateCheck,
   addressMiddleware.update,
   addressController.update
+);
+
+routes.get(
+  "/branch/:branch_id/inventory/report",
+  inventoryReportController.index
 );
 
 module.exports = routes;
