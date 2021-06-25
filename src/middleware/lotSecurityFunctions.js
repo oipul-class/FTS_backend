@@ -103,7 +103,7 @@ module.exports = {
                 model: Screen,
                 required: true,
                 where: {
-                  id: 3,
+                  route: "/inventory"
                 },
               },
             },

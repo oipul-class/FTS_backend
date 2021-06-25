@@ -118,7 +118,7 @@ module.exports = {
               model: Screen,
               require: true,
               where: {
-                id: 1,
+                route: "/usersRegister",
               },
             },
           },

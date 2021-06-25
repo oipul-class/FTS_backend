@@ -73,7 +73,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 7,
+                  route: "/pdv",
                 },
                 attributes: ["id"],
               },
@@ -131,7 +131,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 7,
+                  route: "/pdv",
                 },
                 attributes: ["id"],
               },
@@ -177,7 +177,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 7,
+                  route: "/pdv",
                 },
                 attributes: ["id"],
               },

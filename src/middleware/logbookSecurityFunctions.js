@@ -115,7 +115,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 3,
+                  route: "/inventory",
                 },
               },
             },
@@ -170,7 +170,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 3,
+                  route: "/inventory",
                 },
               },
             },
@@ -239,7 +239,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 3,
+                  route: "/inventory",
                 },
               },
             },

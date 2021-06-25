@@ -30,7 +30,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 8,
+                  route: "/purchases",
                 },
               },
             },
@@ -127,7 +127,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 8,
+                  route: "/purchases",
                 },
               },
             },
@@ -171,7 +171,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 8,
+                  route: "/purchases",
                 },
               },
             },
