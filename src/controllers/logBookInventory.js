@@ -160,6 +160,20 @@ module.exports = {
           .status(404)
           .send({ error: "Produto ou filial requisitada não existe" });
 
+      const existingLogbook = await LogBookInventory.findOne({
+        where: {
+          product_id,
+          branch_id,
+        },
+      });
+
+      if (existingLogbook)
+        return res
+          .status(400)
+          .send({
+            error: "Já existe o produto requesitado no inventario da filial",
+          });
+
       const logbook = await LogBookInventory.create({
         date_of_acquisition,
         quantity_acquired,
@@ -189,7 +203,9 @@ module.exports = {
       const logbook = await LogBookInventory.findByPk(id);
 
       if (!logbook)
-        return res.status(404).send({ error: "Logbook requisitado não existe" });
+        return res
+          .status(404)
+          .send({ error: "Logbook requisitado não existe" });
 
       if (date_of_acquisition)
         logbook.date_of_acquisition = date_of_acquisition;
