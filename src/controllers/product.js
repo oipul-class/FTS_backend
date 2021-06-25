@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const auth = require("../config/auth");
 const LogBookInventory = require("../models/LogBookInventory");
+const Lot = require("../models/Lot");
 
 module.exports = {
   async index(req, res) {
