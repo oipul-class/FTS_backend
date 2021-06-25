@@ -5,19 +5,23 @@ const Company = require("../models/Company");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const auth = require("../config/auth");
+const LogBookInventory = require("../models/LogBookInventory");
 
 module.exports = {
   async index(req, res) {
     try {
       const { company_id, bar_code } = req.params;
-      let { product_name } = req.query;
+      let { product_name, product_type } = req.query;
 
       if (product_name)
         product_name = product_name.replace('"', "").replace('"', "");
 
+      if (product_type)
+        product_type = product_type.replace('"', "").replace('"', "");
+
       let products;
 
-      if (company_id && product_name) {
+      if ((company_id && product_name) || product_type) {
         const token = req.headers.authorization;
         const [Bearer, retriviedToken] = token.split(" ");
 
@@ -25,7 +29,12 @@ module.exports = {
 
         if (payload.user_cpf && payload.user_rg) {
           products = await Product.findAll({
-            where: { product_name: { [Op.substring]: product_name } },
+            where: {
+              product_name: {
+                [Op.substring]: product_name ? product_name : "",
+              },
+              company_id,
+            },
             attributes: [
               "id",
               "product_name",
@@ -37,23 +46,29 @@ module.exports = {
               "company_id",
               "created_at",
             ],
-            include: {
-              model: ProductType,
-              attributes: ["type"],
-            },
-            include: {
-              model: Logbook,
-              required: true,
-              attributes: ["id"],
-              where: {
-                branch_id: payload.branch.id,
+            include: [
+              {
+                model: ProductType,
+                attributes: ["type"],
+                where: {
+                  type: { [Op.substring]: product_type ? product_type : "" },
+                },
               },
-            },
+              {
+                model: LogBookInventory,
+                attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+                where: {
+                  branch_id: payload.user_branch_id,
+                },
+              },
+            ],
           });
         } else if (payload.cnpj) {
           products = await Product.findAll({
             where: {
-              product_name: { [Op.substring]: product_name },
+              product_name: {
+                [Op.substring]: product_name ? product_name : "",
+              },
               company_id: payload.id,
             },
             attributes: [
@@ -67,10 +82,19 @@ module.exports = {
               "company_id",
               "created_at",
             ],
-            include: {
-              model: ProductType,
-              attributes: ["type"],
-            },
+            include: [
+              {
+                model: ProductType,
+                attributes: ["type"],
+                where: {
+                  type: { [Op.substring]: product_type ? product_type : "" },
+                },
+              },
+              {
+                model: LogBookInventory,
+                attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+              },
+            ],
           });
         }
       } else if (company_id && !product_name)
@@ -87,10 +111,16 @@ module.exports = {
             "company_id",
             "created_at",
           ],
-          include: {
-            model: ProductType,
-            attributes: ["type"],
-          },
+          include: [
+            {
+              model: ProductType,
+              attributes: ["type"],
+            },
+            {
+              model: LogBookInventory,
+              attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+            },
+          ],
         });
       else if (bar_code)
         products = await Product.findOne({
@@ -106,10 +136,16 @@ module.exports = {
             "company_id",
             "created_at",
           ],
-          include: {
-            model: ProductType,
-            attributes: ["type"],
-          },
+          include: [
+            {
+              model: ProductType,
+              attributes: ["type"],
+            },
+            {
+              model: LogBookInventory,
+              attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+            },
+          ],
         });
       else
         products = await Product.findAll({
@@ -124,10 +160,16 @@ module.exports = {
             "company_id",
             "created_at",
           ],
-          include: {
-            model: ProductType,
-            attributes: ["type"],
-          },
+          include: [
+            {
+              model: ProductType,
+              attributes: ["type"],
+            },
+            {
+              model: LogBookInventory,
+              attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+            },
+          ],
         });
 
       res.send(products);
