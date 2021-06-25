@@ -25,6 +25,7 @@ const billToReceiveController = require("./controllers/billToReceive");
 const billToPayController = require("./controllers/billToPay");
 const addressController = require("./controllers/address");
 const inventoryReportController = require("./controllers/inventoryReport");
+const financialReportController = require("./controllers/financialReport");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -247,7 +248,7 @@ routes.get("/sale/find/:id", saleController.find);
 routes.post(
   "/sale",
   itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
- saleSecurityFunctionsMiddleware.userStoreCheck,
+  saleSecurityFunctionsMiddleware.userStoreCheck,
   saleMiddleware.create,
   saleController.store
 );
@@ -274,7 +275,7 @@ routes.get("/branch/:branch_id/billToReceive", billToReceiveController.index);
 routes.get("/billToReceive/find/:id", billToReceiveController.find);
 routes.put(
   "/billToReceive/:id",
-   billToReceiveSecurityFunctionsMiddleware.userUpdateCheck,
+  billToReceiveSecurityFunctionsMiddleware.userUpdateCheck,
   billToReceiveMiddleware.update,
   billToReceiveController.update
 );
@@ -298,6 +299,11 @@ routes.put(
 routes.get(
   "/branch/:branch_id/inventory/report",
   inventoryReportController.index
+);
+
+routes.get(
+  "/branch/:branch_id/financial/report",
+  financialReportController.index
 );
 
 module.exports = routes;
