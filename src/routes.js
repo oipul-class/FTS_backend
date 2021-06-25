@@ -81,31 +81,31 @@ routes.use(tokenAuthMiddleware);
 
 routes.put(
   "/company/:id",
-  //companySecurityFunctionsMiddleware.CompanyUpdateCheck,
+  companySecurityFunctionsMiddleware.CompanyUpdateCheck,
   companyMiddleware.update,
   companyController.update
 );
 routes.delete(
   "/company/:id",
-  //companySecurityFunctionsMiddleware.CompanyUpdateCheck,
+  companySecurityFunctionsMiddleware.CompanyUpdateCheck,
   companyController.delete
 );
 
 routes.post(
   "/branch",
-  //planUsageSecurityFunctions.planBranchLimitCheck,
+  planUsageSecurityFunctions.planBranchLimitCheck,
   branchMiddleware.create,
   branchController.store
 );
 routes.put(
   "/branch/:id",
-  //branchSecurityFunctionsMiddleware.BranchUpdateCheck,
+  branchSecurityFunctionsMiddleware.BranchUpdateCheck,
   branchMiddleware.update,
   branchController.update
 );
 routes.delete(
   "/branch/:id",
-  //branchSecurityFunctionsMiddleware.BranchUpdateCheck,
+  branchSecurityFunctionsMiddleware.BranchUpdateCheck,
   branchController.delete
 );
 
@@ -120,19 +120,19 @@ routes.get("/user/find/:id", userController.find);
 routes.post(
   "/user",
   planUsageSecurityFunctions.planUserPerBranchLimit,
-  //userSecurityFunctionsMiddleware.userStoreCheck,
+  userSecurityFunctionsMiddleware.userStoreCheck,
   userMiddleware.create,
   userController.store
 );
 routes.put(
   "/user/:id",
-  //userSecurityFunctionsMiddleware.userUpdateCheck,
+  userSecurityFunctionsMiddleware.userUpdateCheck,
   userMiddleware.update,
   userController.update
 );
 routes.delete(
   "/user/:id",
-  //userSecurityFunctionsMiddleware.userUpdateCheck,
+  userSecurityFunctionsMiddleware.userUpdateCheck,
   userController.delete
 );
 
@@ -147,19 +147,19 @@ routes.get("/product/barCode/:bar_code", productController.index);
 routes.get("/product/find/:id", productController.find);
 routes.post(
   "/product",
-  //productSecurityFunctionsMiddleware.productStoreCheck,
+  productSecurityFunctionsMiddleware.productStoreCheck,
   productMiddleware.create,
   productController.store
 );
 routes.put(
   "/product/:id",
-  //productSecurityFunctionsMiddleware.productUpdateCheck,
+  productSecurityFunctionsMiddleware.productUpdateCheck,
   productMiddleware.update,
   productController.update
 );
 routes.delete(
   "/product/:id",
-  //productSecurityFunctionsMiddleware.productUpdateCheck,
+  productSecurityFunctionsMiddleware.productUpdateCheck,
   productController.delete
 );
 
@@ -168,13 +168,13 @@ routes.get("/branch/:branch_id/logbook", logbookController.index);
 routes.get("/logbook/find/:id", logbookController.find);
 routes.post(
   "/logbook",
-  //logbookSecurityFunctionsMiddleware.logbookStoreCheck,
+  logbookSecurityFunctionsMiddleware.logbookStoreCheck,
   logBookInventoryMiddleware.create,
   logbookController.store
 );
 routes.put(
   "/logbook/:id",
-  //logbookSecurityFunctionsMiddleware.logbookUpdateCheck,
+  logbookSecurityFunctionsMiddleware.logbookUpdateCheck,
   logBookInventoryMiddleware.update,
   logbookController.update
 );
@@ -184,7 +184,7 @@ routes.get("/logbook/:logbook_id/lot", lotController.index);
 routes.get("/lot/find/:id", lotController.find);
 routes.put(
   "/lot/:id",
-  //lotSecurityFunctionsMiddleware.lotUpdateCheck,
+  lotSecurityFunctionsMiddleware.lotUpdateCheck,
   lotMiddleware.update,
   lotController.update
 );
@@ -194,7 +194,7 @@ routes.get("/costumer/cpf/:cpf", costumerController.index);
 routes.get("/costumer/:id", costumerController.find);
 routes.post(
   "/costumer",
-  //costumerSecurityFunctionsMiddleware.costumerStoreCheck,
+  costumerSecurityFunctionsMiddleware.costumerStoreCheck,
   costumerMiddleware.create,
   costumerController.store
 );
@@ -214,19 +214,19 @@ routes.get("/purchase/find/:id", purchaseController.find);
 routes.post(
   "/purchase",
   itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
-  //purchaseSecurityFunctionsMiddleware.userStoreCheck,
+  purchaseSecurityFunctionsMiddleware.userStoreCheck,
   purchaseMiddleware.create,
   purchaseController.store
 );
 routes.put(
   "/purchase/:id",
-  //purchaseSecurityFunctionsMiddleware.userUpdateCheck,
+  purchaseSecurityFunctionsMiddleware.userUpdateCheck,
   purchaseMiddleware.update,
   purchaseController.update
 );
 routes.delete(
   "/purchase/:id",
-  //purchaseSecurityFunctionsMiddleware.userUpdateCheck,
+  purchaseSecurityFunctionsMiddleware.userUpdateCheck,
   purchaseController.delete
 );
 
@@ -247,13 +247,13 @@ routes.get("/sale/find/:id", saleController.find);
 routes.post(
   "/sale",
   itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
- //saleSecurityFunctionsMiddleware.userStoreCheck,
+ saleSecurityFunctionsMiddleware.userStoreCheck,
   saleMiddleware.create,
   saleController.store
 );
 routes.put(
   "/sale/:id",
-  //saleSecurityFunctionsMiddleware.userUpdateCheck,
+  saleSecurityFunctionsMiddleware.userUpdateCheck,
   saleMiddleware.update,
   saleController.update
 );
@@ -274,7 +274,7 @@ routes.get("/branch/:branch_id/billToReceive", billToReceiveController.index);
 routes.get("/billToReceive/find/:id", billToReceiveController.find);
 routes.put(
   "/billToReceive/:id",
-  // billToReceiveSecurityFunctionsMiddleware.userUpdateCheck,
+   billToReceiveSecurityFunctionsMiddleware.userUpdateCheck,
   billToReceiveMiddleware.update,
   billToReceiveController.update
 );
@@ -283,14 +283,14 @@ routes.get("/branch/:branch_id/billToPay", billToPayController.index);
 routes.get("/billToPay/find/:id", billToPayController.find);
 routes.put(
   "/billToPay/:id",
-  //billToPaySecurityFunctionsMiddleware.userUpdateCheck,
+  billToPaySecurityFunctionsMiddleware.userUpdateCheck,
   billToPayMiddleware.update,
   billToPayController.update
 );
 
 routes.put(
   "/address/:id",
-  //addressSecurityFunctionsMiddleware.addressUpdateCheck,
+  addressSecurityFunctionsMiddleware.addressUpdateCheck,
   addressMiddleware.update,
   addressController.update
 );
