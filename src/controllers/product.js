@@ -60,6 +60,15 @@ module.exports = {
                 where: {
                   branch_id: payload.user_branch_id,
                 },
+                include: {
+                  model: Lot,
+                  attributes: [
+                    "id",
+                    "lot_number",
+                    "manufacture_date",
+                    "expiration_date",
+                  ],
+                },
               },
             ],
           });
@@ -93,6 +102,15 @@ module.exports = {
               {
                 model: LogBookInventory,
                 attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+                include: {
+                  model: Lot,
+                  attributes: [
+                    "id",
+                    "lot_number",
+                    "manufacture_date",
+                    "expiration_date",
+                  ],
+                },
               },
             ],
           });
@@ -119,6 +137,15 @@ module.exports = {
             {
               model: LogBookInventory,
               attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+              include: {
+                model: Lot,
+                attributes: [
+                  "id",
+                  "lot_number",
+                  "manufacture_date",
+                  "expiration_date",
+                ],
+              },
             },
           ],
         });
@@ -144,6 +171,15 @@ module.exports = {
             {
               model: LogBookInventory,
               attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+              include: {
+                model: Lot,
+                attributes: [
+                  "id",
+                  "lot_number",
+                  "manufacture_date",
+                  "expiration_date",
+                ],
+              },
             },
           ],
         });
@@ -168,6 +204,15 @@ module.exports = {
             {
               model: LogBookInventory,
               attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+              include: {
+                model: Lot,
+                attributes: [
+                  "id",
+                  "lot_number",
+                  "manufacture_date",
+                  "expiration_date",
+                ],
+              },
             },
           ],
         });
@@ -195,10 +240,25 @@ module.exports = {
           "company_id",
           "created_at",
         ],
-        include: {
-          model: ProductType,
-          attributes: ["type"],
-        },
+        include: [
+          {
+            model: ProductType,
+            attributes: ["type"],
+          },
+          {
+            model: LogBookInventory,
+            attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+            include: {
+              model: Lot,
+              attributes: [
+                "id",
+                "lot_number",
+                "manufacture_date",
+                "expiration_date",
+              ],
+            },
+          },
+        ],
       });
 
       res.send(product);
