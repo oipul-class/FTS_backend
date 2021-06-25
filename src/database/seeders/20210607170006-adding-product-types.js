@@ -41,11 +41,6 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          type: "Bebidas Alcoólicas",
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-        {
           type: "Descartáveis",
           created_at: new Date(),
           updated_at: new Date(),
