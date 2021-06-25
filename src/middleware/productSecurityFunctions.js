@@ -29,7 +29,7 @@ module.exports = {
                 model: Screen,
                 required: true,
                 where: {
-                  id: 2,
+                  route: "/productsRegister",
                 },
               },
             },
@@ -86,7 +86,6 @@ module.exports = {
             },
           ],
         });
-
 
         if (!user.Permissions[0] || !user.Permissions[0].Screens[0])
           return res.status(400).send({

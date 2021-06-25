@@ -29,7 +29,7 @@ module.exports = {
                 model: Screen,
                 require: true,
                 where: {
-                  id: 3,
+                  route: "/inventory",
                 },
               },
             },
@@ -161,7 +161,7 @@ module.exports = {
         const user = await User.findOne({
           where: {
             id: payload.id,
-            cpf: payload.user_cpf
+            cpf: payload.user_cpf,
           },
           include: [
             {
@@ -222,12 +222,15 @@ module.exports = {
           },
         });
 
-        if (!logbook) return res.status(404).send({ error: "Item no inventario não existe"})
+        if (!logbook)
+          return res
+            .status(404)
+            .send({ error: "Item no inventario não existe" });
 
         const user = await Company.findOne({
           where: {
             id: payload.id,
-            cnpj: payload.cnpj
+            cnpj: payload.cnpj,
           },
           include: [
             {
@@ -245,15 +248,16 @@ module.exports = {
               attributes: ["id"],
               required: true,
               where: {
-                id: logbook.Branch.id
-              }
+                id: logbook.Branch.id,
+              },
             },
           ],
         });
 
         if (!user.Permissions[0] || !user.Permissions[0].Screens[0])
           return res.status(400).send({
-            error: "Comapnhia não tem permissão para cadastrar um produto no inventario",
+            error:
+              "Comapnhia não tem permissão para cadastrar um produto no inventario",
           });
 
         if (!user.Branches[0])
