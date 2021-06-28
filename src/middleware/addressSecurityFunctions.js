@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const auth = require("../config/auth");
 const Address = require("../models/Address");
 const Company = require("../models/Company");
+const Branch = require("../models/Branch");
 
 module.exports = {
   addressUpdateCheck: async (req, res, next) => {
@@ -18,7 +19,7 @@ module.exports = {
           .status(404)
           .send({ error: "Usuário logado não é uma companhia" });
 
-      const address = await Address.findByPk(id, {
+      const addressCompany = await Address.findByPk(id, {
         include: {
           require: true,
           model: Company,
@@ -30,7 +31,22 @@ module.exports = {
         }
       });
 
-      if(!address.Branch) return res.status(400).send({ error: "Endereço não é da companhia logada"})
+      const addressBranch = await Address.findByPk(id, {
+        include: {
+          require: true,
+          model: Branch,
+          attributes: ["id"],
+          include: {
+            model: Company,
+            where: {
+              id: payload.id,
+              cnpj: payload.cnpj
+            }
+          }
+        }
+      });
+
+      if(!addressCompany.Company && !addressBranch.Branch.Company) return res.status(400).send({ error: "Endereço não é da companhia logada"})
 
       next();
     } catch (error) {
