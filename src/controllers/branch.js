@@ -20,7 +20,6 @@ module.exports = {
             "branch_name",
             "branch_email",
             "place_number",
-            "company_id",
           ],
           include: [
             {
@@ -56,7 +55,6 @@ module.exports = {
             "branch_name",
             "branch_email",
             "place_number",
-            "company_id",
           ],
           include: [
             {
@@ -103,7 +101,6 @@ module.exports = {
           "branch_name",
           "branch_email",
           "place_number",
-          "company_id",
         ],
         include: [
           {
@@ -143,8 +140,13 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { branch_name, branch_email, place_number, company_id, address } =
-        req.body;
+      const {
+        branch_name,
+        branch_email,
+        place_number,
+        company_id,
+        address,
+      } = req.body;
 
       const company = await Company.findByPk(company_id);
 
@@ -167,47 +169,21 @@ module.exports = {
 
         branchAddress = newAddress;
       }
-      const branch = await Branch.create(
-        {
-          branch_name,
-          branch_email,
-          place_number,
-          company_id,
-          address_id: branchAddress.id,
-        },
-        {
-          include: [
-            {
-              model: Address,
-              attributes: [
-                "id",
-                "cep",
-                "street",
-                "complement",
-                "district",
-                "city",
-                "uf",
-              ],
-            },
-            {
-              model: Company,
-              attributes: [
-                "id",
-                "cnpj",
-                "fantasy_name",
-                "social_reason",
-                "place_number",
-                "cep",
-                "state",
-                "nature_of_the_business",
-                "commercial_email",
-              ],
-            },
-          ],
-        }
-      );
+      const branch = await Branch.create({
+        branch_name,
+        branch_email,
+        place_number,
+        company_id,
+        address_id: branchAddress.id,
+      });
 
-      res.status(201).send(branch);
+      res.status(201).send({
+        id: branch.id,
+        branch_name: branch.branch_name,
+        place_number: branch.place_number,
+        company: company,
+        address: branchAddress,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -224,24 +200,36 @@ module.exports = {
         attributes: [
           "id",
           "branch_name",
-          "cep",
           "branch_email",
           "place_number",
         ],
-        include: {
-          model: Company,
-          attributes: [
-            "id",
-            "cnpj",
-            "fantasy_name",
-            "social_reason",
-            "place_number",
-            "cep",
-            "state",
-            "nature_of_the_business",
-            "commercial_email",
-          ],
-        },
+        include: [
+          {
+            model: Address,
+            attributes: [
+              "id",
+              "cep",
+              "street",
+              "complement",
+              "district",
+              "city",
+              "uf",
+            ],
+          },
+          {
+            model: Company,
+            attributes: [
+              "id",
+              "cnpj",
+              "fantasy_name",
+              "social_reason",
+              "place_number",
+              "state",
+              "nature_of_the_business",
+              "commercial_email",
+            ],
+          },
+        ],
       });
 
       if (!branch) return res.status(404).send({ error: "afilial não existe" });
@@ -249,7 +237,6 @@ module.exports = {
       if (branch_name) branch.branch_name = branch_name;
       if (place_number) branch.place_number = place_number;
       if (branch_email) branch.branch_email = branch_email;
-      if (cep) branch.cep = cep;
 
       await branch.save();
 
