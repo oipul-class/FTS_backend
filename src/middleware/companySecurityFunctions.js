@@ -12,16 +12,12 @@ module.exports = {
 
       const payload = jwt.verify(retriviedToken, auth.secret);
 
-      const companyFromPayload = await Company.findOne({
-        where: {
-          id: payload.id,
-          cnpj: payload.cnpj,
-        },
-      });
+      const companyFromPayload = await Company.findByPk(id);
 
       const companyFromParams = await Company.findByPk(id);
 
-      if (!companyFromPayload)
+
+      if (!companyFromParams)
         return res
           .status(404)
           .send({ error: "Companhia que fez a requesição não existe" });
@@ -33,7 +29,7 @@ module.exports = {
 
       if (
         companyFromPayload.id != companyFromParams.id ||
-        companyFromPayload.cpf != companyFromParams.cpf
+        companyFromPayload.cnpj != companyFromParams.cnpj
       )
         return res.status(400).send({
           error:
