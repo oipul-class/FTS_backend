@@ -5,6 +5,8 @@ const cors = require("cors");
 const routes = require("./routes");
 const { errors } = require("celebrate")
 
+require("dotenv").config()
+
 require("./database");
 
 const app = express();
