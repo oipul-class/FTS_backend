@@ -3,6 +3,8 @@ node_modules
 local.session.sql
 root.session.sql
 
+yarn.lock
+
 settings.json
 
 .env
