@@ -37,6 +37,7 @@ module.exports = {
           model: Branch,
           attributes: ["id"],
           include: {
+            require: true,
             model: Company,
             where: {
               id: payload.id,
@@ -46,7 +47,7 @@ module.exports = {
         }
       });
 
-      if(!addressCompany.Company && !addressBranch.Branch.Company) return res.status(400).send({ error: "Endereço não é da companhia logada"})
+      if(!addressCompany&& !addressBranch) return res.status(400).send({ error: "Endereço não é da companhia logada"})
 
       next();
     } catch (error) {
