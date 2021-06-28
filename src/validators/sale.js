@@ -6,6 +6,7 @@ module.exports = {
       payment_method_id: Joi.number().integer().required(),
       costumer_id: Joi.number().integer(),
       branch_id: Joi.number().integer().required(),
+      discount: Joi.number().integer(),
       items: Joi.array(),
     }),
   }),

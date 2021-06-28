@@ -58,7 +58,7 @@ module.exports = {
         });
 
         if (!user || !bcryptjs.compareSync(password, user.user_password))
-          return res.status(404).send({ erro: "Usuário/senha incorretos" });
+          return res.status(404).send({ error: "Usuário/senha incorretos" });
         else {
           const token = generateToken({
             id: user.id,
@@ -86,6 +86,7 @@ module.exports = {
       } else {
         const token = generateToken({
           id: company.id,
+          cnpj: company.cnpj,
           fantasy_name: company.fantasy_name,
         });
 
@@ -93,14 +94,14 @@ module.exports = {
           user: {
             id: company.id,
             fantasy_name: company.fantasy_name,
-            branches: company.Branches,
+            branch: company.Branches,
             permissions: company.Permissions,
           },
           token: token,
         });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send(error);
     }
   },

@@ -4,8 +4,8 @@ class User extends Model {
   static init(sequelize) {
     super.init(
       {
-        cpf: DataTypes.STRING,
-        rg: DataTypes.STRING,
+        cpf: DataTypes.STRING(11),
+        rg: DataTypes.STRING(10),
         user_password: DataTypes.STRING,
         user_name: DataTypes.STRING,
         branch_id: DataTypes.INTEGER,
@@ -13,6 +13,11 @@ class User extends Model {
       },
       {
         sequelize,
+        hooks: {
+          beforeDestroy: async (user) => {
+            await user.removePermissions();
+          },
+        },
       }
     );
   }

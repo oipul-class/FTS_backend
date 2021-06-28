@@ -10,7 +10,7 @@ module.exports = {
       },
 
       date_of_acquisition: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false,
       },
 

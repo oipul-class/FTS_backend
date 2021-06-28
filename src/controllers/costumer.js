@@ -3,7 +3,16 @@ const Costumer = require("../models/Costumer");
 module.exports = {
   async index(req, res) {
     try {
-      const costumers = await Costumer.findAll();
+      const { cpf } = req.params;
+
+      let costumers;
+
+      if (cpf) {
+        costumers = await Costumer.findAll({ where: { cpf } });
+
+        if (costumers == "")
+          res.status(400).send({ error: "Cliente não cadastrado" });
+      } else costumers = await Costumer.findAll();
 
       res.send(costumers);
     } catch (error) {
@@ -34,7 +43,7 @@ module.exports = {
         cpf,
       });
 
-      res.status(404).send(costumer);
+      res.status(201).send(costumer);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -43,14 +52,14 @@ module.exports = {
 
   async update(req, res) {
     try {
-      
       const { id } = req.params;
 
       const { costumer_name, cpf } = req.body;
 
       const costumer = await Costumer.findByPk(id);
 
-      if (!costumer) return res.status(404).send({ erro: "Cliente não existe"});
+      if (!costumer)
+        return res.status(404).send({ error: "Cliente requesitado não existe" });
 
       if (costumer_name) costumer.costumer_name = costumer_name;
       if (cpf) costumer.cpf = cpf;
@@ -58,7 +67,6 @@ module.exports = {
       await costumer.save;
 
       res.send(costumer);
-
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -67,12 +75,12 @@ module.exports = {
 
   async delete(req, res) {
     try {
-      
       const { id } = req.params;
 
       const costumer = await Costumer.findByPk(id);
 
-      if (!costumer) return res.status(404).send({ erro: "Cliente não existe"});
+      if (!costumer)
+        return res.status(404).send({ error: "Cliente requesitado não existe" });
 
       await costumer.destroy();
 
@@ -81,7 +89,5 @@ module.exports = {
       console.error(error);
       res.status(500).send(error);
     }
-  }
-  
-  
+  },
 };

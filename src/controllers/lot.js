@@ -3,7 +3,37 @@ const Lot = require("../models/Lot");
 module.exports = {
   async index(req, res) {
     try {
-      const lots = await Lot.findAll();
+      const { logbook_id } = req.params;
+
+      let lots;
+
+      if (logbook_id)
+        lots = await Lot.findOne({
+          attributes: [
+            "id",
+            "lot_number",
+            "manufacture_date",
+            "expiration_date",
+          ],
+          include: {
+            association: "logbook_inventories",
+            where: {
+              id: logbook_id,
+            },
+          },
+        });
+      else
+        lots = await Lot.findAll({
+          attributes: [
+            "id",
+            "lot_number",
+            "manufacture_date",
+            "expiration_date",
+          ],
+          include: {
+            association: "logbook_inventories",
+          },
+        });
 
       res.send(lots);
     } catch (error) {
@@ -16,7 +46,9 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const lot = await Lot.findByPk(id);
+      const lot = await Lot.findByPk(id, {
+        attributes: ["id", "lot_number", "manufacture_date", "expiration_date"],
+      });
 
       res.send(lot);
     } catch (error) {
@@ -33,7 +65,7 @@ module.exports = {
 
       const lot = await Lot.findByPk(id);
 
-      if (!lot) return res.send({ erro: "Lot não existe" });
+      if (!lot) return res.send({ error: "Lot requesitado não existe" });
 
       if (lot_number) lot.lot_number = lot_number;
       if (manufacture_date) lot.manufacture_date = manufacture_date;

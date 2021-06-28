@@ -5,10 +5,10 @@ class Branch extends Model {
     super.init(
       {
         branch_name: DataTypes.STRING,
-        cep: DataTypes.STRING(10),
         branch_email: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
+        address_id: DataTypes.INTEGER
       },
       {
         sequelize,
@@ -23,6 +23,7 @@ class Branch extends Model {
     this.hasMany(models.LogBookInventory);
     this.hasMany(models.Purchase);
     this.hasMany(models.Sale);
+    this.belongsTo(models.Address);
   }
 }
 

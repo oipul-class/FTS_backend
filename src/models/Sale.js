@@ -6,6 +6,8 @@ class Sale extends Model {
       {
         payment_method_id: DataTypes.INTEGER,
         costumer_id: DataTypes.INTEGER,
+        total_value: DataTypes.DECIMAL(15, 2),
+        discount: DataTypes.INTEGER,
       },
       {
         sequelize,

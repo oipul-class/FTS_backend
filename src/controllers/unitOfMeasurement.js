@@ -1,9 +1,20 @@
 const UnitOfMeasurement = require("../models/UnitOfMeasurement");
+const { Op } = require("sequelize");
 
 module.exports = {
   async index(req, res) {
     try {
-      const units = await UnitOfMeasurement.findAll();
+      const { unit_name } = req.body;
+
+      let units;
+
+      if (unit_name)
+        units = await UnitOfMeasurement.findAll({
+          where: {
+            unit_name: { [Op.substring]: unit_name },
+          },
+        });
+      else units = await UnitOfMeasurement.findAll();
 
       res.send(units);
     } catch (error) {

@@ -6,8 +6,6 @@ class ItemSale extends Model {
       {
         cost_per_item: DataTypes.DECIMAL(15, 2),
         quantity: DataTypes.INTEGER,
-        total_value: DataTypes.DECIMAL(15, 2),
-        discount: DataTypes.INTEGER,
         logbook_inventory_id: DataTypes.INTEGER,
         product_id: DataTypes.INTEGER,
       },
@@ -23,6 +21,18 @@ class ItemSale extends Model {
                 logbook.quantity_acquired - itemSale.quantity;
 
               await logbook.save();
+
+              const sale = await itemSale.getSale();
+
+              sale.total_value =
+                parseFloat(sale.total_value) +
+                itemSale.cost_per_item * itemSale.quantity;
+
+              if (sale.discount || sale.discount > 0)
+                sale.total_value =
+                  sale_total_value - (sale_total_value * discount) / 100;
+
+              await sale.save();
             } catch (error) {
               console.error(error);
             }
@@ -34,7 +44,19 @@ class ItemSale extends Model {
               logbook.quantity_acquired =
                 logbook.quantity_acquired + itemSale.quantity;
 
+              const sale = await itemSale.getSale();
+
+              sale.total_value =
+                parseFloat(sale.total_value) -
+                itemSale.cost_per_item * itemSale.quantity;
+
+              if (sale.discount || sale.discount > 0)
+                sale.total_value =
+                  sale_total_value - (sale_total_value * discount) / 100;
+
               await logbook.save();
+
+              await sale.save();
             } catch (error) {
               console.error(error);
             }

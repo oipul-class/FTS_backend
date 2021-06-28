@@ -14,11 +14,6 @@ module.exports = {
         allowNull: false,
       },
 
-      cep: {
-        type: Sequelize.STRING(10),
-        allowNull: false,
-      },
-
       branch_email: {
         type: Sequelize.STRING,
       },

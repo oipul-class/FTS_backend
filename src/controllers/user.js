@@ -1,19 +1,20 @@
 const User = require("../models/User");
 const Branch = require("../models/Branch");
 const Role = require("../models/Role");
+const Address = require("../models/Address");
 const { Op } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 
 module.exports = {
   async index(req, res) {
     try {
-      const { branch_id, cpf } = req.params;
+      const { company_id, branch_id, cpf } = req.params;
 
       let users;
 
       if (branch_id)
         users = await User.findAll({
-          attributes: ["cpf", "rg", "user_name"],
+          attributes: ["id", "user_name", "cpf", "rg"],
           where: {
             branch_id,
           },
@@ -23,11 +24,62 @@ module.exports = {
               attributes: [
                 "id",
                 "branch_name",
-                "cep",
                 "branch_email",
                 "place_number",
                 "company_id",
               ],
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
+            },
+            {
+              association: "Role",
+              attributes: ["id", "role_name"],
+            },
+            {
+              association: "Permissions",
+              attributes: ["id", "permission_name"],
+            },
+          ],
+        });
+      else if (company_id)
+        users = await User.findAll({
+          attributes: ["id", "user_name", "cpf", "rg"],
+          include: [
+            {
+              association: "Branch",
+              required: true,
+              attributes: [
+                "id",
+                "branch_name",
+                "branch_email",
+                "place_number",
+                "company_id",
+              ],
+              where: {
+                company_id,
+              },
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
             },
             {
               association: "Role",
@@ -41,10 +93,10 @@ module.exports = {
         });
       else if (cpf)
         users = await User.findAll({
-          attributes: ["cpf", "rg", "user_name"],
+          attributes: ["id", "user_name", "cpf", "rg"],
           where: {
-            [Op.substring]: {
-              cpf,
+            cpf: {
+              [Op.substring]: cpf,
             },
           },
           include: [
@@ -53,11 +105,22 @@ module.exports = {
               attributes: [
                 "id",
                 "branch_name",
-                "cep",
                 "branch_email",
                 "place_number",
                 "company_id",
               ],
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
             },
             {
               association: "Role",
@@ -71,18 +134,29 @@ module.exports = {
         });
       else
         users = await User.findAll({
-          attributes: ["cpf", "rg", "user_name"],
+          attributes: ["id", "user_name", "cpf", "rg"],
           include: [
             {
               association: "Branch",
               attributes: [
                 "id",
                 "branch_name",
-                "cep",
                 "branch_email",
                 "place_number",
                 "company_id",
               ],
+              include: {
+                association: "Address",
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
             },
             {
               association: "Role",
@@ -107,20 +181,29 @@ module.exports = {
       const { id } = req.params;
 
       const user = await User.findByPk(id, {
-        attributes: ["user_name", "cpf", "rg"],
-
-        attributes: ["cpf", "rg", "user_name"],
+        attributes: ["id", "user_name", "cpf", "rg"],
         include: [
           {
             association: "Branch",
             attributes: [
               "id",
               "branch_name",
-              "cep",
               "branch_email",
               "place_number",
               "company_id",
             ],
+            include: {
+              association: "Address",
+              attributes: [
+                "id",
+                "cep",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
+              ],
+            },
           },
           {
             association: "Role",
@@ -155,12 +238,12 @@ module.exports = {
       const branch = await Branch.findByPk(branch_id);
 
       if (!branch)
-        return res.status(404).send({ erro: "Filial requesitada não existe" });
+        return res.status(404).send({ error: "Filial requesitada não existe" });
 
       const role = await Role.findByPk(role_id);
 
       if (!role)
-        return res.status(404).send({ erro: "Cargo requesitado não existe" });
+        return res.status(404).send({ error: "Cargo requesitado não existe" });
 
       const user = await User.create({
         cpf,
@@ -175,7 +258,14 @@ module.exports = {
 
       await user.addPermissions(permissionsArray);
 
-      res.status(201).send(user);
+      res.status(201).send({
+        id: user.id,
+        cpf: user.cpf,
+        rg: user.rg,
+        user_name: user.user_name,
+        branch_id: user.branch_id,
+        role_id: user.role_id,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -186,35 +276,44 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const { user_name, cpf, rg, user_password, branch_id, role_id } =
-        req.body;
+      const { user_name, cpf, rg, user_password, role_id } = req.body;
 
       const user = await User.findByPk(id, {
         attributes: ["id", "cpf", "rg", "user_password", "user_name"],
-        include: {
-          association: "Branch",
-          include: [
-            {
-              association: "Branch",
+        include: [
+          {
+            association: "Branch",
+            attributes: [
+              "id",
+              "branch_name",
+              "branch_email",
+              "place_number",
+              "company_id",
+            ],
+            include: {
+              association: "Address",
               attributes: [
                 "id",
-                "branch_name",
                 "cep",
-                "branch_email",
-                "place_number",
-                "company_id",
+                "street",
+                "complement",
+                "district",
+                "city",
+                "uf",
               ],
             },
-            {
-              association: "Roles",
-              attributes: ["id", "role_name"],
-            },
-          ],
-        },
+          },
+          {
+            association: "Role",
+            attributes: ["id", "role_name"],
+          },
+        ],
       });
 
       if (!user)
-        return res.status(404).send({ erro: "Usuário requisitado não existe" });
+        return res
+          .status(404)
+          .send({ error: "Usuário requisitado não existe" });
 
       if (user_name) user.user_name = user_name;
       if (cpf) user.cpf = cpf;
@@ -224,16 +323,6 @@ module.exports = {
 
         user.user_password = cryptPassword;
       }
-      if (branch_id) {
-        const branch = await Branch.findByPk(branch_id);
-
-        if (!branch)
-          return res
-            .status(404)
-            .send({ erro: "Filial requisitada não existe" });
-
-        user.branch_id = branch_id;
-      }
 
       if (role_id) {
         const role = await Role.findByPk(role_id);
@@ -241,7 +330,7 @@ module.exports = {
         if (!role)
           return res
             .status(404)
-            .send({ erro: "Cargo requisitaado não existe" });
+            .send({ error: "Cargo requisitaado não existe" });
 
         user.role_id = role_id;
       }
@@ -261,7 +350,10 @@ module.exports = {
 
       const user = await User.findByPk(id);
 
-      if (!user) return res.status(404).send({ erro: "Usuário requesitado não existe" });
+      if (!user)
+        return res
+          .status(404)
+          .send({ error: "Usuário requesitado não existe" });
 
       await user.destroy();
 

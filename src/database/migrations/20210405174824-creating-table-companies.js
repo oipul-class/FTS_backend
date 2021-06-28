@@ -10,7 +10,7 @@ module.exports = {
       },
 
       cnpj: {
-        type: Sequelize.STRING(18),
+        type: Sequelize.STRING(14),
         unique: true,
         allowNull: false,
       },
@@ -31,16 +31,6 @@ module.exports = {
       },
 
       companie_password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-
-      cep: {
-        type: Sequelize.STRING(10),
-        allowNull: false,
-      },
-
-      state: {
         type: Sequelize.STRING,
         allowNull: false,
       },

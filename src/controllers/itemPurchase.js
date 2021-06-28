@@ -6,16 +6,69 @@ const Purchase = require("../models/Purchase");
 module.exports = {
   async index(req, res) {
     try {
-      const itemPurchases = await ItemPurchase.findAll({
+
+      const { purchase_id } = req.params;
+
+      let itemPurchases;
+
+      if (purchase_id) itemPurchases = await ItemPurchase.findAll({
+        where: {
+          product_id
+        },
+        attributes: [
+          "id",
+          "cost_per_item",
+          "quantity",
+          "total_value",
+          "discount",
+        ],
         include: [
           {
             model: LogBookInventory,
+            attributes: ["id", "date_of_acquisition", "quantity_acquired"],
           },
           {
             model: Product,
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+            ],
           },
           {
             model: Purchase,
+            attributes: ["id"],
+          },
+        ],
+      });
+      else itemPurchases = await ItemPurchase.findAll({
+        attributes: [
+          "id",
+          "cost_per_item",
+          "quantity",
+          "total_value",
+          "discount",
+        ],
+        include: [
+          {
+            model: LogBookInventory,
+            attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+          },
+          {
+            model: Product,
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+            ],
+          },
+          {
+            model: Purchase,
+            attributes: ["id"],
           },
         ],
       });
@@ -32,15 +85,31 @@ module.exports = {
       const { id } = req.params;
 
       const itemPurchase = await ItemPurchase.findByPk(id, {
+        attributes: [
+          "id",
+          "cost_per_item",
+          "quantity",
+          "total_value",
+          "discount",
+        ],
         include: [
           {
             model: LogBookInventory,
+            attributes: ["id", "date_of_acquisition", "quantity_acquired"],
           },
           {
             model: Product,
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+            ],
           },
           {
             model: Purchase,
+            attributes: ["id"],
           },
         ],
       });
@@ -60,11 +129,11 @@ module.exports = {
       const purchase = await Purchase.findByPk(purchase_id);
 
       if (!product || !purchase)
-        return res.status(404).send({ erro: "compra ou produto não existe" });
+        return res.status(404).send({ error: "Compra ou Produto requesitado não existe" });
 
       const logbook = await product.getLogBookInventory();
 
-      if (!logbook) return res.status(404).send({ erro: "logbook não existe" });
+      if (!logbook) return res.status(404).send({ error: "Logbook requesitado não existe" });
 
       let total_value;
 
@@ -98,7 +167,7 @@ module.exports = {
       const itemPurchase = await ItemPurchase.findByPk(id);
 
       if (!itemPurchase)
-        return res.status(404).send({ erro: "item no carrinho não existe" });
+        return res.status(404).send({ error: "Item no carrinho requesitado não existe" });
 
       await itemPurchase.destroy();
 

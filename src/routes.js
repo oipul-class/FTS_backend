@@ -2,6 +2,7 @@ const express = require("express");
 
 const routes = express.Router();
 
+const planController = require("./controllers/plan");
 const screenController = require("./controllers/screen");
 const permissionController = require("./controllers/permission");
 const companyController = require("./controllers/company");
@@ -20,14 +21,15 @@ const purchaseController = require("./controllers/purchase");
 const itemPurchaseController = require("./controllers/itemPurchase");
 const saleController = require("./controllers/sale");
 const itemSaleController = require("./controllers/itemSale");
-const billToReceiveController = require("./controllers/BillToReceive");
+const billToReceiveController = require("./controllers/billToReceive");
 const billToPayController = require("./controllers/billToPay");
+const addressController = require("./controllers/address");
+const inventoryReportController = require("./controllers/inventoryReport");
+const financialReportController = require("./controllers/financialReport");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
 const userMiddleware = require("./validators/user");
-const roleMiddleware = require("./validators/role");
-const productTypeMiddleware = require("./validators/productType");
 const productMiddleware = require("./validators/product");
 const logBookInventoryMiddleware = require("./validators/logbookInventory");
 const lotMiddleware = require("./validators/lot");
@@ -38,8 +40,24 @@ const saleMiddleware = require("./validators/sale");
 const itemSaleMiddleware = require("./validators/itemSale");
 const billToReceiveMiddleware = require("./validators/billToReceive");
 const billToPayMiddleware = require("./validators/billToPay");
+const addressMiddleware = require("./validators/address");
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
+
+const companySecurityFunctionsMiddleware = require("./middleware/companySecurityFunctions");
+const branchSecurityFunctionsMiddleware = require("./middleware/branchSecurityFunctions");
+const userSecurityFunctionsMiddleware = require("./middleware/userSecurityFunctions");
+const planUsageSecurityFunctions = require("./middleware/planUsageFunctions");
+const itemCartSecurityFunctionsMiddleware = require("./middleware/ItemCartSecurityFunctions");
+const productSecurityFunctionsMiddleware = require("./middleware/productSecurityFunctions");
+const logbookSecurityFunctionsMiddleware = require("./middleware/logbookSecurityFunctions");
+const lotSecurityFunctionsMiddleware = require("./middleware/lotSecurityFunctions");
+const costumerSecurityFunctionsMiddleware = require("./middleware/costumerSecurityFunctions");
+const addressSecurityFunctionsMiddleware = require("./middleware/addressSecurityFunctions");
+const purchaseSecurityFunctionsMiddleware = require("./middleware/purchaseSecurityFunctions");
+const saleSecurityFunctionsMiddleware = require("./middleware/saleSecurityFunctions");
+const billToReceiveSecurityFunctionsMiddleware = require("./middleware/billToReceiveSecurityFunctions");
+const billToPaySecurityFunctionsMiddleware = require("./middleware/billToPaySecurityFunctions");
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -53,81 +71,134 @@ routes.post("/company", companyMiddleware.create, companyController.store);
 routes.get("/company", companyController.index);
 routes.get("/company/find/:id", companyController.find);
 
-routes.use(tokenAuthMiddleware);
-
-routes.put("/company/:id", companyMiddleware.update, companyController.update);
-routes.delete("/company/:id", companyController.delete);
-
 routes.get("/branch", branchController.index);
 routes.get("/company/:id/branch", branchController.index);
 routes.get("/branch/find/:id", branchController.find);
-routes.post("/branch", branchMiddleware.create, branchController.store);
-routes.put("/branch/:id", branchMiddleware.update, branchController.update);
-routes.delete("/branch/:id", branchController.delete);
+
+routes.get("/plan", planController.index);
+routes.get("/plan/find/:id", planController.find);
+
+routes.use(tokenAuthMiddleware);
+
+routes.put(
+  "/company/:id",
+  companySecurityFunctionsMiddleware.CompanyUpdateCheck,
+  companyMiddleware.update,
+  companyController.update
+);
+routes.delete(
+  "/company/:id",
+  companySecurityFunctionsMiddleware.CompanyUpdateCheck,
+  companyController.delete
+);
+
+routes.post(
+  "/branch",
+  planUsageSecurityFunctions.planBranchLimitCheck,
+  branchMiddleware.create,
+  branchController.store
+);
+routes.put(
+  "/branch/:id",
+  branchSecurityFunctionsMiddleware.BranchUpdateCheck,
+  branchMiddleware.update,
+  branchController.update
+);
+routes.delete(
+  "/branch/:id",
+  branchSecurityFunctionsMiddleware.BranchUpdateCheck,
+  branchController.delete
+);
 
 routes.get("/role", roleController.index);
 routes.get("/role/find/:id", roleController.find);
-routes.post("/role", roleMiddleware.create, roleController.store);
-routes.put("/role/:id", roleMiddleware.create, roleController.update);
-routes.delete("/role/:id", roleController.delete);
 
-routes.get("/branch/:branch_id/user", userController.index);
-routes.get("/user/cpf/:cpf", userController.index);
 routes.get("/user", userController.index);
+routes.get("/branch/:branch_id/user", userController.index);
+routes.get("/company/:company_id/user", userController.index);
+routes.get("/user/cpf/:cpf", userController.index);
 routes.get("/user/find/:id", userController.find);
-routes.post("/user", userMiddleware.create, userController.store);
-routes.put("/user/:id", userMiddleware.update, userController.update);
-routes.delete("/user/:id", userController.delete);
-
-routes.get("/productType", productTypeController.index);
-routes.get("/productType/:id", productTypeController.find);
 routes.post(
-  "/productType",
-  productTypeMiddleware.create,
-  productTypeController.store
+  "/user",
+  planUsageSecurityFunctions.planUserPerBranchLimit,
+  userSecurityFunctionsMiddleware.userStoreCheck,
+  userMiddleware.create,
+  userController.store
 );
 routes.put(
-  "/productType/:id",
-  productTypeMiddleware.update,
-  productTypeController.update
+  "/user/:id",
+  userSecurityFunctionsMiddleware.userUpdateCheck,
+  userMiddleware.update,
+  userController.update
 );
-routes.delete("/productType/:id", productTypeController.delete);
+routes.delete(
+  "/user/:id",
+  userSecurityFunctionsMiddleware.userUpdateCheck,
+  userController.delete
+);
+
+routes.get("/productType", productTypeController.index);
+routes.get("/productType/find/:id", productTypeController.find);
 
 routes.get("/unit", unitOfMeasurementController.index);
-routes.get("/unit/:id", unitOfMeasurementController.find);
+routes.get("/unit/find/:id", unitOfMeasurementController.find);
 
 routes.get("/company/:company_id/product", productController.index);
 routes.get("/product/barCode/:bar_code", productController.index);
 routes.get("/product/find/:id", productController.find);
-routes.post("/product", productMiddleware.create, productController.store);
-routes.put("/product/:id", productMiddleware.update, productController.update);
-routes.delete("/product/:id", productController.delete);
+routes.post(
+  "/product",
+  productSecurityFunctionsMiddleware.productStoreCheck,
+  productMiddleware.create,
+  productController.store
+);
+routes.put(
+  "/product/:id",
+  productSecurityFunctionsMiddleware.productUpdateCheck,
+  productMiddleware.update,
+  productController.update
+);
+routes.delete(
+  "/product/:id",
+  productSecurityFunctionsMiddleware.productUpdateCheck,
+  productController.delete
+);
 
 routes.get("/logbook", logbookController.index);
-routes.get("/logbook/:id", logbookController.index);
-routes.get(
-  "/logbook/find/:id",
-
-  logbookController.find
-);
+routes.get("/branch/:branch_id/logbook", logbookController.index);
+routes.get("/logbook/find/:id", logbookController.find);
 routes.post(
   "/logbook",
+  logbookSecurityFunctionsMiddleware.logbookStoreCheck,
   logBookInventoryMiddleware.create,
   logbookController.store
 );
 routes.put(
   "/logbook/:id",
+  logbookSecurityFunctionsMiddleware.logbookUpdateCheck,
   logBookInventoryMiddleware.update,
   logbookController.update
 );
 
 routes.get("/lot", lotController.index);
-routes.get("/lot/:id", lotController.find);
-routes.put("/lot/:id", lotMiddleware.update, lotController.update);
+routes.get("/logbook/:logbook_id/lot", lotController.index);
+routes.get("/lot/find/:id", lotController.find);
+routes.put(
+  "/lot/:id",
+  lotSecurityFunctionsMiddleware.lotUpdateCheck,
+  lotMiddleware.update,
+  lotController.update
+);
 
 routes.get("/costumer", costumerController.index);
+routes.get("/costumer/cpf/:cpf", costumerController.index);
 routes.get("/costumer/:id", costumerController.find);
-routes.post("/costumer", costumerMiddleware.create, costumerController.store);
+routes.post(
+  "/costumer",
+  costumerSecurityFunctionsMiddleware.costumerStoreCheck,
+  costumerMiddleware.create,
+  costumerController.store
+);
 routes.put(
   "/costumer/:id",
   costumerMiddleware.update,
@@ -136,52 +207,103 @@ routes.put(
 routes.delete("/costumer/:id", costumerController.delete);
 
 routes.get("/paymentMethod", paymentMethodController.index);
-routes.get("/paymentMethod/:id", paymentMethodController.find);
+routes.get("/paymentMethod/find/:id", paymentMethodController.find);
 
 routes.get("/purchase", purchaseController.index);
-routes.get("/purchase/:id", purchaseController.find);
-routes.post("/purchase", purchaseMiddleware.create, purchaseController.store);
+routes.get("/branch/:branch_id/purchase", purchaseController.index);
+routes.get("/purchase/find/:id", purchaseController.find);
+routes.post(
+  "/purchase",
+  itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
+  purchaseSecurityFunctionsMiddleware.userStoreCheck,
+  purchaseMiddleware.create,
+  purchaseController.store
+);
 routes.put(
   "/purchase/:id",
+  purchaseSecurityFunctionsMiddleware.userUpdateCheck,
   purchaseMiddleware.update,
   purchaseController.update
 );
-routes.delete("/purchase/:id", purchaseController.delete);
+routes.delete(
+  "/purchase/:id",
+  purchaseSecurityFunctionsMiddleware.userUpdateCheck,
+  purchaseController.delete
+);
 
 routes.get("/itemPurchase", itemPurchaseController.index);
+routes.get("/purchase/:purhcase_id/itemPurchase", itemPurchaseController.index);
 routes.get("/itemPurchase/:id", itemPurchaseController.find);
 routes.post(
   "/itemPurchase",
+  itemCartSecurityFunctionsMiddleware.verfityItem,
   itemPurchaseMiddle.create,
   itemPurchaseController.store
 );
 routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 
 routes.get("/sale", saleController.index);
-routes.get("/sale/:id", saleController.find);
-routes.post("/sale", saleMiddleware.create, saleController.store);
-routes.put("/sale/:id", saleMiddleware.update, saleController.update);
+routes.get("/branch/:branch_id/sale", saleController.index);
+routes.get("/sale/find/:id", saleController.find);
+routes.post(
+  "/sale",
+  itemCartSecurityFunctionsMiddleware.verfityArrayOfItems,
+  saleSecurityFunctionsMiddleware.userStoreCheck,
+  saleMiddleware.create,
+  saleController.store
+);
+routes.put(
+  "/sale/:id",
+  saleSecurityFunctionsMiddleware.userUpdateCheck,
+  saleMiddleware.update,
+  saleController.update
+);
 routes.delete("/sale/:id", saleController.delete);
 
 routes.get("/itemSale", itemSaleController.index);
+routes.get("/sale/:sale_id/itemSale", itemSaleController.index);
 routes.get("/itemSale/:id", itemSaleController.find);
-routes.post("/itemSale", itemSaleMiddleware.create, itemSaleController.store);
+routes.post(
+  "/itemSale",
+  itemCartSecurityFunctionsMiddleware.verfityItem,
+  itemSaleMiddleware.create,
+  itemSaleController.store
+);
 routes.delete("/itemSale/:id", itemSaleController.delete);
 
-routes.get("/billToReceive/:branch_id", billToReceiveController.index);
+routes.get("/branch/:branch_id/billToReceive", billToReceiveController.index);
 routes.get("/billToReceive/find/:id", billToReceiveController.find);
 routes.put(
   "/billToReceive/:id",
+  billToReceiveSecurityFunctionsMiddleware.userUpdateCheck,
   billToReceiveMiddleware.update,
   billToReceiveController.update
 );
 
-routes.get("/billToPay/:branch_id", billToPayController.index);
+routes.get("/branch/:branch_id/billToPay", billToPayController.index);
 routes.get("/billToPay/find/:id", billToPayController.find);
 routes.put(
   "/billToPay/:id",
+  billToPaySecurityFunctionsMiddleware.userUpdateCheck,
   billToPayMiddleware.update,
   billToPayController.update
+);
+
+routes.put(
+  "/address/:id",
+  addressSecurityFunctionsMiddleware.addressUpdateCheck,
+  addressMiddleware.update,
+  addressController.update
+);
+
+routes.get(
+  "/branch/:branch_id/inventory/report",
+  inventoryReportController.index
+);
+
+routes.get(
+  "/branch/:branch_id/financial/report",
+  financialReportController.index
 );
 
 module.exports = routes;

@@ -10,7 +10,7 @@ module.exports = {
       },
 
       type: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.STRING(55),
         allowNull: false,
       },
 
@@ -30,3 +30,4 @@ module.exports = {
     await queryInterface.dropTable("product_types");
   },
 };
+ 

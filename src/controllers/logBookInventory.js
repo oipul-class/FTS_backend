@@ -2,24 +2,88 @@ const Branch = require("../models/Branch");
 const LogBookInventory = require("../models/LogBookInventory");
 const Lot = require("../models/Lot");
 const Product = require("../models/Product");
+const UnitOfMeasurement = require("../models/UnitOfMeasurement");
+const ProductType = require("../models/ProductType");
 
 module.exports = {
   async index(req, res) {
     try {
-      const { id } = req.params;
+      const { branch_id } = req.params;
 
       let logbooks;
 
-      if (!id)
+      if (branch_id)
         logbooks = await LogBookInventory.findAll({
-          include: Lot,
+          attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+          where: {
+            branch_id,
+          },
+          include: [
+            {
+              model: Product,
+              attributes: [
+                "id",
+                "product_name",
+                "description",
+                "bar_code",
+                "cost_per_item",
+              ],
+              include: [
+                {
+                  model: UnitOfMeasurement,
+                  attributes: ["id", "unit_name"],
+                },
+                {
+                  model: ProductType,
+                  attributes: ["id", "type"],
+                },
+              ],
+            },
+            {
+              model: Lot,
+              attributes: [
+                "id",
+                "lot_number",
+                "manufacture_date",
+                "expiration_date",
+              ],
+            },
+          ],
         });
       else
         logbooks = await LogBookInventory.findAll({
-          where: {
-            branch_id: id,
-          },
-          include: Lot,
+          attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+          include: [
+            {
+              model: Product,
+              attributes: [
+                "id",
+                "product_name",
+                "description",
+                "bar_code",
+                "cost_per_item",
+              ],
+              include: [
+                {
+                  model: UnitOfMeasurement,
+                  attributes: ["id", "unit_name"],
+                },
+                {
+                  model: ProductType,
+                  attributes: ["id", "type"],
+                },
+              ],
+            },
+            {
+              model: Lot,
+              attributes: [
+                "id",
+                "lot_number",
+                "manufacture_date",
+                "expiration_date",
+              ],
+            },
+          ],
         });
 
       res.send(logbooks);
@@ -34,9 +98,38 @@ module.exports = {
       const { id } = req.params;
 
       const logbook = await LogBookInventory.findByPk(id, {
-        include: {
-          model: Lot,
-        },
+        attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+        include: [
+          {
+            model: Product,
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+            ],
+            include: [
+              {
+                model: UnitOfMeasurement,
+                attributes: ["id", "unit_name"],
+              },
+              {
+                model: ProductType,
+                attributes: ["id", "type"],
+              },
+            ],
+          },
+          {
+            model: Lot,
+            attributes: [
+              "id",
+              "lot_number",
+              "manufacture_date",
+              "expiration_date",
+            ],
+          },
+        ],
       });
 
       res.send(logbook);
@@ -57,12 +150,29 @@ module.exports = {
       } = req.body;
 
       const lotInfo = await Lot.create(lot);
-      
+
       const product = await Product.findByPk(product_id);
 
-      const branch = await Branch.findByPk(branch_id)
+      const branch = await Branch.findByPk(branch_id);
 
-      if (!product || !branch) return res.status(404).send({ erro: "produto ou filial não existe"})
+      if (!product || !branch)
+        return res
+          .status(404)
+          .send({ error: "Produto ou filial requisitada não existe" });
+
+      const existingLogbook = await LogBookInventory.findOne({
+        where: {
+          product_id,
+          branch_id,
+        },
+      });
+
+      if (existingLogbook)
+        return res
+          .status(400)
+          .send({
+            error: "Já existe o produto requesitado no inventario da filial",
+          });
 
       const logbook = await LogBookInventory.create({
         date_of_acquisition,
@@ -72,7 +182,7 @@ module.exports = {
         lot_id: lotInfo.id,
       });
 
-      res.status(404).send(logbook);
+      res.status(201).send(logbook);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -93,7 +203,9 @@ module.exports = {
       const logbook = await LogBookInventory.findByPk(id);
 
       if (!logbook)
-        return res.status(404).send({ erro: "log book não existe" });
+        return res
+          .status(404)
+          .send({ error: "Logbook requisitado não existe" });
 
       if (date_of_acquisition)
         logbook.date_of_acquisition = date_of_acquisition;
@@ -103,7 +215,9 @@ module.exports = {
         const product = await Product.findByPk(product_id);
 
         if (!product)
-          return res.status(404).send({ erro: "produto não existe" });
+          return res
+            .status(404)
+            .send({ error: "Produto requisitado não existe" });
 
         logbook.product_id = product_id;
       }

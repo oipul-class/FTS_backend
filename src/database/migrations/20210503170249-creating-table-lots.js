@@ -16,12 +16,10 @@ module.exports = {
 
       manufacture_date: {
         type: Sequelize.DATEONLY,
-        allowNull: false,
       },
 
       expiration_date: {
         type: Sequelize.DATEONLY,
-        allowNull: false,
       },
 
       created_at: {
