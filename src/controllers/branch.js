@@ -15,12 +15,7 @@ module.exports = {
           where: {
             company_id: id,
           },
-          attributes: [
-            "id",
-            "branch_name",
-            "branch_email",
-            "place_number",
-          ],
+          attributes: ["id", "branch_name", "branch_email", "place_number"],
           include: [
             {
               model: Address,
@@ -50,12 +45,7 @@ module.exports = {
         });
       else
         branches = await Branch.findAll({
-          attributes: [
-            "id",
-            "branch_name",
-            "branch_email",
-            "place_number",
-          ],
+          attributes: ["id", "branch_name", "branch_email", "place_number"],
           include: [
             {
               model: Address,
@@ -96,12 +86,7 @@ module.exports = {
       const { id } = req.params;
 
       const branches = await Branch.findByPk(id, {
-        attributes: [
-          "id",
-          "branch_name",
-          "branch_email",
-          "place_number",
-        ],
+        attributes: ["id", "branch_name", "branch_email", "place_number"],
         include: [
           {
             model: Address,
@@ -147,7 +132,17 @@ module.exports = {
         address,
       } = req.body;
 
-      const company = await Company.findByPk(company_id);
+      const company = await Company.findByPk(company_id, {
+        attributes: [
+          "id",
+          "cnpj",
+          "fantasy_name",
+          "social_reason",
+          "place_number",
+          "nature_of_the_business",
+          "commercial_email",
+        ],
+      });
 
       if (!company)
         return res
@@ -196,12 +191,7 @@ module.exports = {
       const { branch_name, cep, branch_email, place_number } = req.body;
 
       const branch = await Branch.findByPk(id, {
-        attributes: [
-          "id",
-          "branch_name",
-          "branch_email",
-          "place_number",
-        ],
+        attributes: ["id", "branch_name", "branch_email", "place_number"],
         include: [
           {
             model: Address,
