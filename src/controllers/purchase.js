@@ -3,7 +3,7 @@ const PaymentMethod = require("../models/PaymentMethod");
 const ItemPurchase = require("../models/ItemPurchase");
 const Branch = require("../models/Branch");
 const Product = require("../models/Product");
-const Address = require("../models/address");
+const Address = require("../models/Address");
 
 module.exports = {
   async index(req, res) {

@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Branch = require("../models/Branch");
 const Role = require("../models/Role");
-const Address = require("../models/address");
+const Address = require("../models/Address");
 const { Op } = require("sequelize");
 const bcryptjs = require("bcryptjs");
 
