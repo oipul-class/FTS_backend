@@ -15,6 +15,8 @@ module.exports = {
         return res
           .status(400)
           .send({ error: "O produto enviado não tem inventario na filial" });
+
+      next()
     } catch (error) {
       console.error(error);
       res.status(500);
