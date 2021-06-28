@@ -1,7 +1,5 @@
 node_modules
 
-src/config/auth.js
-
 local.session.sql
 root.session.sql
 
