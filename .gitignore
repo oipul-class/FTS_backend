@@ -6,3 +6,5 @@ local.session.sql
 root.session.sql
 
 settings.json
+
+.env
