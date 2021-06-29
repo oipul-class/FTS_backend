@@ -85,13 +85,14 @@ module.exports = {
           ],
         });
 
+
         if (!user.Permissions[0] || !user.Permissions[0].Screens)
           return res.status(400).send({
             error:
               "Companhia logada não tem permissão para cadastrar uma compra",
           });
 
-        if (!user.Branch[0])
+        if (!user.Branches[0])
           return res.status(400).send({
             error:
               "Filial relacionada a compra não pertence a companhia logada",
