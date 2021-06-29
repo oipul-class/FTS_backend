@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require("sequelize/types");
+const { Model, DataTypes } = require("sequelize");
 
 class Role extends Model {
   static init(sequelize) {
@@ -13,7 +13,7 @@ class Role extends Model {
   }
 
   static associate(models) {
-    this.belongsToMany(models.Manager);
+    this.hasMany(models.User);
   }
 }
 

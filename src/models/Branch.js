@@ -1,23 +1,29 @@
-const { Model, DataTypes } = require("sequelize/types");
+const { Model, DataTypes } = require("sequelize");
 
 class Branch extends Model {
   static init(sequelize) {
     super.init(
       {
         branch_name: DataTypes.STRING,
-        cep: DataTypes.INTEGER,
+        branch_email: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
+        address_id: DataTypes.INTEGER
       },
       {
         sequelize,
+        paranoid: true,
       }
     );
   }
 
   static associate(models) {
     this.belongsTo(models.Company);
-    this.hasOne(models.Managers);
+    this.hasMany(models.User);
+    this.hasMany(models.LogBookInventory);
+    this.hasMany(models.Purchase);
+    this.hasMany(models.Sale);
+    this.belongsTo(models.Address);
   }
 }
 
