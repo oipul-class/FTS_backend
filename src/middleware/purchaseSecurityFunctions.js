@@ -91,7 +91,7 @@ module.exports = {
               "Companhia logada não tem permissão para cadastrar uma compra",
           });
 
-        if (!user.Branch)
+        if (!user.Branch[0])
           return res.status(400).send({
             error:
               "Filial relacionada a compra não pertence a companhia logada",
