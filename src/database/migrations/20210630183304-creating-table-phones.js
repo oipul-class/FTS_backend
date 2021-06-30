@@ -10,18 +10,10 @@ module.exports = {
       },
 
       phone: {
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.STRING(12),
         allowNull: false,
       },
 
-      branch_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "branches",
-          key: "id",
-        },
-      },
     });
   },
 
