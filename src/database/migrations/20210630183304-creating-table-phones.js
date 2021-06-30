@@ -12,6 +12,7 @@ module.exports = {
       phone: {
         type: Sequelize.STRING(12),
         allowNull: false,
+        unique: true,
       },
 
     });
