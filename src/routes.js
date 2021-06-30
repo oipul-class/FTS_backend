@@ -2,8 +2,6 @@ const express = require("express");
 
 const routes = express.Router();
 
-const multer = require("multer");
-
 const planController = require("./controllers/plan");
 const screenController = require("./controllers/screen");
 const permissionController = require("./controllers/permission");
@@ -62,6 +60,11 @@ const saleSecurityFunctionsMiddleware = require("./middleware/saleSecurityFuncti
 const billToReceiveSecurityFunctionsMiddleware = require("./middleware/billToReceiveSecurityFunctions");
 const billToPaySecurityFunctionsMiddleware = require("./middleware/billToPaySecurityFunctions");
 
+const { useMulter } = require("./utils");
+
+const firebaseImageUploadService = require("./services/firebase");
+const multerInstance = useMulter()
+
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
 
@@ -81,14 +84,10 @@ routes.get("/branch/find/:id", branchController.find);
 routes.get("/plan", planController.index);
 routes.get("/plan/find/:id", planController.find);
 
-const Multer = multer({
-  storage: multer.memoryStorage(),
-  limits: 1024 * 1024,
-});
-
 routes.post(
   "/site/company/:company_id",
-  Multer.single("image"),
+  multerInstance.single("image"),
+  firebaseImageUploadService.uploadImage,
   companySiteController.store
 );
 
