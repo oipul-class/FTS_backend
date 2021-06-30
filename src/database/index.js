@@ -76,10 +76,3 @@ Website.associate(connection.models);
 Phone.associate(connection.models);
 
 module.exports = connection;
-
-
-for (let assoc of Object.keys(Branch.associations)) {
-     for (let accessor of Object.keys(Branch.associations[assoc].accessors)) {
-         console.log(Branch.name + '.' + Branch.associations[assoc].accessors[accessor] + '()');
-     }
-}
