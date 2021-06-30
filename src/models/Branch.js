@@ -24,6 +24,7 @@ class Branch extends Model {
     this.hasMany(models.Purchase);
     this.hasMany(models.Sale);
     this.belongsTo(models.Address);
+    this.belongsTo(models.Phone);
   }
 }
 
