@@ -106,6 +106,7 @@ module.exports = {
         fantasy_name,
         social_reason,
         place_number,
+        phone,
         companie_password,
         nature_of_the_business,
         commercial_email,
@@ -153,13 +154,17 @@ module.exports = {
 
       await company.addPermission(1);
 
-      await Branch.create({
+      const companyBranch = await Branch.create({
         branch_name: company.fantasy_name,
         branch_email: null,
         place_number: company.place_number,
         company_id: company.id,
         address_id: company.address_id,
       });
+
+      await companyBranch.createPhone({
+        phone
+      })
 
       res.status(201).send({
         id: company.id,
