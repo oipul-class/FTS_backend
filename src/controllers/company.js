@@ -163,8 +163,8 @@ module.exports = {
       });
 
       await companyBranch.createPhone({
-        phone
-      })
+        phone,
+      });
 
       res.status(201).send({
         id: company.id,
