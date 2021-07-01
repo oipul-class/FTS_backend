@@ -9,44 +9,90 @@ admin.initializeApp({
   storageBucket: firebaseBucket,
 });
 
-const uploadImage = (req, res, next) => {
-  if (!req.file) return next();
+let logoUrl;
+let bannerUrl;
 
-  const bucketInstance = admin.storage().bucket();
+const uploadImages = async (req, res, next) => {
+  if (!req.files.logo || !req.files.banner)
+    return res.status(404).send({ error: "Imagens não enviadas" });
 
-  const image = req.file;
-  const imageName = Date.now() + "." + image.originalname.split(".").pop();
+  await Promise.all(
+    req.files.logo.map((imageOnFile) => {
+      const bucketInstance = admin.storage().bucket();
 
-  const imageFile = bucketInstance.file(imageName);
+      const image = imageOnFile;
 
-  const stream = imageFile.createWriteStream({
-    metadata: {
-      contentType: image.mimetype,
-    },
-  });
+      const imageName = Date.now() + "." + image.originalname.split(".").pop();
 
-  stream.on("error", (error) => {
-    console.error(error);
-    return res.status(500).send(error);
-  });
+      const imageFile = bucketInstance.file(imageName);
 
-  stream.on("finish", async () => {
-    try {
-      await imageFile.makePublic();
+      const stream = imageFile.createWriteStream({
+        metadata: {
+          contentType: image.mimetype,
+        },
+      });
 
-      req.file.firebase_url = `https://storage.googleapis.com/${firebaseBucket}/${imageName}`;
+      stream.on("error", (error) => {
+        console.error(error);
+        return res.status(500).send(error);
+      });
 
-      next();
-    } catch (error) {
-      console.log(error);
-      return res.status(500).sned(error);
-    }
-  });
+      stream.on("finish", async () => {
+        try {
+          await imageFile.makePublic();
+        } catch (error) {
+          console.log(error);
+          return res.status(500).sned(error);
+        }
+      });
 
-  stream.end(image.buffer);
+      stream.end(image.buffer);
+      logoUrl = `https://storage.googleapis.com/${firebaseBucket}/${imageName}`;
+    }),
+    req.files.banner.map((imageOnFile) => {
+      const bucketInstance = admin.storage().bucket();
+
+      const image = imageOnFile;
+
+      const imageName = Date.now() + "." + image.originalname.split(".").pop();
+
+      const imageFile = bucketInstance.file(imageName);
+
+      const stream = imageFile.createWriteStream({
+        metadata: {
+          contentType: image.mimetype,
+        },
+      });
+
+      stream.on("error", (error) => {
+        console.error(error);
+        return res.status(500).send(error);
+      });
+
+      stream.on("finish", async () => {
+        try {
+          await imageFile.makePublic();
+        } catch (error) {
+          console.log(error);
+          return res.status(500).sned(error);
+        }
+      });
+
+      stream.end(image.buffer);
+      bannerUrl = `https://storage.googleapis.com/${firebaseBucket}/${imageName}`;
+    })
+  );
+
+  if (!logoUrl || !bannerUrl)
+    return res
+      .status(500)
+      .send({ error: "Falha ao tentar fazer upload de uma das imagens" });
+
+  req.body.logo_firebase_url = logoUrl;
+  req.body.banner_firebase_url = bannerUrl;
+  next();
 };
 
-
 module.exports = {
-  uploadImage,
+  uploadImages,
 };
