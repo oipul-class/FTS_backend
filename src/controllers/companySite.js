@@ -5,8 +5,12 @@ module.exports = {
   async store(req, res) {
     try {
       const { company_id } = req.params;
-      const { website_slogan, website_customization } = req.body;
-      const { firebase_url } = req.file;
+      const {
+        website_slogan,
+        website_customization,
+        logo_firebase_url,
+        banner_firebase_url,
+      } = req.body;
 
       const company = await Company.findByPk(company_id);
 
@@ -15,14 +19,17 @@ module.exports = {
           error: "Comapnhia não existe",
         });
 
-      if (company.WebsiteId) return res.status(400).send({ error: "Companhia já possui o site"})
+      if (company.WebsiteId)
+        return res.status(400).send({ error: "Companhia já possui o site" });
       if (typeof website_customization == String)
         return res
           .status(400)
           .send({ error: "Configurações não estão no formato requestidao" });
 
       const website = await company.createWebsite({
-        website_logo: firebase_url,
+        website_logo: logo_firebase_url,
+        website_banner: banner_firebase_url,
+        website_slogan,
         website_customization,
       });
 
