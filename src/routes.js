@@ -63,7 +63,7 @@ const billToPaySecurityFunctionsMiddleware = require("./middleware/billToPaySecu
 const { useMulter } = require("./utils");
 
 const firebaseImageUploadService = require("./services/firebase");
-const multerInstance = useMulter()
+const multerInstance = useMulter();
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -86,8 +86,17 @@ routes.get("/plan/find/:id", planController.find);
 
 routes.post(
   "/site/company/:company_id",
-  multerInstance.single("image"),
-  firebaseImageUploadService.uploadImage,
+  multerInstance.fields([
+    {
+      name: "logo",
+      maxCount: 1,
+    },
+    {
+      name: "banner",
+      maxCount: 1,
+    },
+  ]),
+  firebaseImageUploadService.uploadImages,
   companySiteController.store
 );
 
