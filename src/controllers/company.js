@@ -127,6 +127,15 @@ module.exports = {
       if (!plan)
         return res.status(404).send({ error: "Plano requisitado não existe" });
 
+
+      const usedPhone = await Phone.findOne({
+        where: {
+          phone,
+        }
+      })
+
+      if (usedPhone) return res.status(400).send({ error: "Telefone recebido já cadastrado"})
+
       let companyAddress;
 
       const addressFind = await Address.findOne({
