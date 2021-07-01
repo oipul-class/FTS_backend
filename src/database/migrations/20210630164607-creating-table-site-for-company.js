@@ -14,10 +14,10 @@ module.exports = {
         allowNull: false,
       },
 
-      // website_banner: {
-      //   type: Sequelize.STRING,
-      //   allowNull: false,
-      // },
+      website_banner: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
 
       website_slogan: {
         type: Sequelize.STRING,
