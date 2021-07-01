@@ -5,6 +5,8 @@ class Website extends Model {
     super.init(
       {
         website_logo: DataTypes.STRING,
+        website_banner: DataTypes.STRING,
+        website_slogan: DataTypes.STRING,
         website_customization: DataTypes.TEXT,
       },
       {
@@ -16,7 +18,7 @@ class Website extends Model {
   }
 
   static associate(models) {
-    this.hasOne(models.Company)
+    this.hasOne(models.Company);
   }
 }
 
