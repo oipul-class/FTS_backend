@@ -2,6 +2,7 @@ const { Op } = require("sequelize");
 const Address = require("../models/Address");
 const Branch = require("../models/Branch");
 const Company = require("../models/Company");
+const Phone = require("../models/Phone");
 
 module.exports = {
   async index(req, res) {
@@ -28,6 +29,10 @@ module.exports = {
                 "city",
                 "uf",
               ],
+            },
+            {
+              model: Phone,
+              attributes: ["id", "phone"],
             },
             {
               model: Company,
@@ -58,6 +63,10 @@ module.exports = {
                 "city",
                 "uf",
               ],
+            },
+            {
+              model: Phone,
+              attributes: ["id", "phone"],
             },
             {
               model: Company,
@@ -101,6 +110,10 @@ module.exports = {
             ],
           },
           {
+            model: Phone,
+            attributes: ["id", "phone"],
+          },
+          {
             model: Company,
             attributes: [
               "id",
@@ -129,8 +142,24 @@ module.exports = {
         branch_email,
         place_number,
         company_id,
+        phone,
         address,
       } = req.body;
+
+      const usedPhone = await Phone.findOne({
+        where: {
+          phone,
+        },
+      });
+
+      if (usedPhone)
+        return res
+          .status(400)
+          .send({ error: "Telefone recebido já esta sendo usado" });
+
+      const branchPhone = await Phone.create({
+        phone,
+      });
 
       const company = await Company.findByPk(company_id, {
         attributes: [
@@ -163,12 +192,14 @@ module.exports = {
 
         branchAddress = newAddress;
       }
+
       const branch = await Branch.create({
         branch_name,
         branch_email,
         place_number,
         company_id,
         address_id: branchAddress.id,
+        phone_id: branchPhone.id,
       });
 
       res.status(201).send({
@@ -177,6 +208,10 @@ module.exports = {
         place_number: branch.place_number,
         company: company,
         address: branchAddress,
+        phone: {
+          id: branchPhone.id,
+          phone: branchPhone.phone,
+        },
       });
     } catch (error) {
       console.error(error);
