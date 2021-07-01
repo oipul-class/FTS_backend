@@ -8,7 +8,8 @@ class Branch extends Model {
         branch_email: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
-        address_id: DataTypes.INTEGER
+        address_id: DataTypes.INTEGER,
+        phone_id: DataTypes.INTEGER,
       },
       {
         sequelize,
