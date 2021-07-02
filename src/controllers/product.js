@@ -150,9 +150,9 @@ module.exports = {
             },
           ],
         });
-      else if (bar_code)
+      else if (bar_code && company_id)
         products = await Product.findOne({
-          where: { bar_code },
+          where: { bar_code, company_id },
           attributes: [
             "id",
             "product_name",

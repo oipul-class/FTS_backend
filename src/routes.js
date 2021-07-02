@@ -144,7 +144,7 @@ routes.get("/unit", unitOfMeasurementController.index);
 routes.get("/unit/find/:id", unitOfMeasurementController.find);
 
 routes.get("/company/:company_id/product", productController.index);
-routes.get("/product/barCode/:bar_code", productController.index);
+routes.get("/company/:company_id/product/barCode/:bar_code", productController.index);
 routes.get("/product/find/:id", productController.find);
 routes.post(
   "/product",
