@@ -116,41 +116,7 @@ module.exports = {
             ],
           });
         }
-      } else if (company_id && !product_name)
-        products = await Product.findAll({
-          where: { company_id },
-          attributes: [
-            "id",
-            "product_name",
-            "description",
-            "bar_code",
-            "cost_per_item",
-            "unit_of_measurement_id",
-            "product_type_id",
-            "company_id",
-            "created_at",
-          ],
-          include: [
-            {
-              model: ProductType,
-              attributes: ["type"],
-            },
-            {
-              model: LogBookInventory,
-              attributes: ["id", "date_of_acquisition", "quantity_acquired"],
-              include: {
-                model: Lot,
-                attributes: [
-                  "id",
-                  "lot_number",
-                  "manufacture_date",
-                  "expiration_date",
-                ],
-              },
-            },
-          ],
-        });
-      else if (bar_code && company_id)
+      } else if (bar_code && company_id)
         products = await Product.findOne({
           where: { bar_code, company_id },
           attributes: [
