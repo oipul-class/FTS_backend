@@ -9,9 +9,15 @@ module.exports = {
       const { branch_id } = req.params;
       let { start_date, end_date } = req.query;
 
+      const date = new Date();
+      const first_day = new Date(date.getFullYear(), date.getMonth(), 1);
+      const last_day = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
       if (start_date) start_date = start_date.replace('"', "").replace('"', "");
+      else start_date = first_day;
 
       if (end_date) end_date = end_date.replace('"', "").replace('"', "");
+      else end_date = last_day;
 
       let salesTotalValue = 0.0;
       let purchasesTotalValue = 0.0;
