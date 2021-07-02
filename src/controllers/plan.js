@@ -10,6 +10,7 @@ module.exports = {
           "branch_limit",
           "user_limit_per_branch",
           "use_phone_for_sale",
+          "access_website",
           "value",
         ],
       });
@@ -31,6 +32,7 @@ module.exports = {
           "branch_limit",
           "user_limit_per_branch",
           "use_phone_for_sale",
+          "access_website",
           "value",
         ],
       });
