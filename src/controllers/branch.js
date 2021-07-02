@@ -15,7 +15,7 @@ module.exports = {
           where: {
             company_id: id,
           },
-          attributes: ["id", "branch_name", "branch_email", "place_number"],
+          attributes: ["id", "branch_name", "branch_email", "place_number", "created_at"],
           include: [
             {
               model: Address,
@@ -45,7 +45,7 @@ module.exports = {
         });
       else
         branches = await Branch.findAll({
-          attributes: ["id", "branch_name", "branch_email", "place_number"],
+          attributes: ["id", "branch_name", "branch_email", "place_number", "created_at"],
           include: [
             {
               model: Address,
@@ -86,7 +86,7 @@ module.exports = {
       const { id } = req.params;
 
       const branches = await Branch.findByPk(id, {
-        attributes: ["id", "branch_name", "branch_email", "place_number"],
+        attributes: ["id", "branch_name", "branch_email", "place_number", "created_at"],
         include: [
           {
             model: Address,

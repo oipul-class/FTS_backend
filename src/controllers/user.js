@@ -14,7 +14,7 @@ module.exports = {
 
       if (branch_id)
         users = await User.findAll({
-          attributes: ["id", "user_name", "cpf", "rg"],
+          attributes: ["id", "user_name", "cpf", "rg", "created_at"],
           where: {
             branch_id,
           },
@@ -53,7 +53,7 @@ module.exports = {
         });
       else if (company_id)
         users = await User.findAll({
-          attributes: ["id", "user_name", "cpf", "rg"],
+          attributes: ["id", "user_name", "cpf", "rg", "created_at"],
           include: [
             {
               association: "Branch",
@@ -93,7 +93,7 @@ module.exports = {
         });
       else if (cpf)
         users = await User.findAll({
-          attributes: ["id", "user_name", "cpf", "rg"],
+          attributes: ["id", "user_name", "cpf", "rg", "created_at"],
           where: {
             cpf: {
               [Op.substring]: cpf,
@@ -134,7 +134,7 @@ module.exports = {
         });
       else
         users = await User.findAll({
-          attributes: ["id", "user_name", "cpf", "rg"],
+          attributes: ["id", "user_name", "cpf", "rg", "created_at"],
           include: [
             {
               association: "Branch",
@@ -181,7 +181,7 @@ module.exports = {
       const { id } = req.params;
 
       const user = await User.findByPk(id, {
-        attributes: ["id", "user_name", "cpf", "rg"],
+        attributes: ["id", "user_name", "cpf", "rg", "created_at"],
         include: [
           {
             association: "Branch",

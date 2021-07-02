@@ -14,7 +14,7 @@ module.exports = {
       let reports = [];
 
       const itemInventorys = await LogBookInventoryl.findAll({
-        attributes: ["id", "quantity_acquired"],
+        attributes: ["id", "quantity_acquired", "created_at"],
         where: {
           branch_id,
         },
@@ -25,6 +25,7 @@ module.exports = {
             "description",
             "bar_code",
             "cost_per_item",
+           "created_at"
           ],
           include: {
             model: UnitOfMeasurement,
