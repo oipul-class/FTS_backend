@@ -26,6 +26,8 @@ module.exports = {
               "branch_limit",
               "user_limit_per_branch",
               "use_phone_for_sale",
+              "access_website",
+
             ],
           },
           {
@@ -74,6 +76,7 @@ module.exports = {
               "branch_limit",
               "user_limit_per_branch",
               "use_phone_for_sale",
+              "access_website",
             ],
           },
           {
@@ -119,6 +122,7 @@ module.exports = {
           "branch_limit",
           "user_limit_per_branch",
           "use_phone_for_sale",
+          "access_website",
         ],
       });
       if (!plan)
@@ -211,6 +215,7 @@ module.exports = {
               "branch_limit",
               "user_limit_per_branch",
               "use_phone_for_sale",
+              "access_website",
             ],
           },
           {
