@@ -12,14 +12,17 @@ module.exports = {
 
       const payload = jwt.verify(retriviedToken, auth.secret);
 
+
       if (!payload.cnpj)
         return res
           .status(400)
           .send({ error: "Usuario logado não é uma companhia" });
 
       const companyFromPayload = await Company.findOne({
-        id: payload.id,
-        cnpj: payload.cnpj,
+        where: {
+          id: payload.id,
+          cnpj: payload.cnpj,
+        },
       });
 
       const companyFromParams = await Company.findByPk(id);
