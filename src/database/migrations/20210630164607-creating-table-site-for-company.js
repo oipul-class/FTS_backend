@@ -9,23 +9,33 @@ module.exports = {
         autoIncrement: true,
       },
 
-      website_logo: {
+      logo_img: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      website_banner: {
+      banner_img: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      website_slogan: {
+      slogan: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      website_customization: {
-        type: Sequelize.TEXT,
+      primary_color: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+
+      secondary_color: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+
+      light_color: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
