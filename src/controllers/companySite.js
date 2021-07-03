@@ -6,10 +6,12 @@ module.exports = {
     try {
       const { company_id } = req.params;
       const {
-        website_slogan,
-        website_customization,
         logo_firebase_url,
         banner_firebase_url,
+        slogan,
+        primary_color,
+        secondary_color,
+        light_color,
       } = req.body;
 
       const company = await Company.findByPk(company_id);
@@ -21,22 +23,24 @@ module.exports = {
 
       if (company.WebsiteId)
         return res.status(400).send({ error: "Companhia já possui o site" });
-      if (typeof website_customization == String)
-        return res
-          .status(400)
-          .send({ error: "Configurações não estão no formato requestidao" });
 
       const website = await company.createWebsite({
-        website_logo: logo_firebase_url,
-        website_banner: banner_firebase_url,
-        website_slogan,
-        website_customization,
+        logo_img: logo_firebase_url,
+        banner_img: banner_firebase_url,
+        slogan,
+        primary_color,
+        secondary_color,
+        light_color,
       });
 
       res.status(201).send({
         id: website.id,
-        website_logo: website.website_logo,
-        website_customization: website.website_customization,
+        logo_img: website.logo_img,
+        banner_img: website.banner_img,
+        slogan: website.slogan,
+        primary_color: website.primary_color,
+        secondary_color: website.secondary_color,
+        light_color: website.light_color,
       });
     } catch (error) {
       console.error(error);
