@@ -1,5 +1,4 @@
 const Company = require("../models/Company");
-const Website = require("../models/Website");
 
 module.exports = {
   async store(req, res) {
