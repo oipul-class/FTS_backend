@@ -42,6 +42,7 @@ const itemSaleMiddleware = require("./validators/itemSale");
 const billToReceiveMiddleware = require("./validators/billToReceive");
 const billToPayMiddleware = require("./validators/billToPay");
 const addressMiddleware = require("./validators/address");
+const websiteMiddleware = require("./validators/website");
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 
@@ -83,22 +84,6 @@ routes.get("/branch/find/:id", branchController.find);
 
 routes.get("/plan", planController.index);
 routes.get("/plan/find/:id", planController.find);
-
-routes.post(
-  "/site/company/:company_id",
-  multerInstance.fields([
-    {
-      name: "logo",
-      maxCount: 1,
-    },
-    {
-      name: "banner",
-      maxCount: 1,
-    },
-  ]),
-  firebaseImageUploadService.uploadImages,
-  companySiteController.store
-);
 
 routes.use(tokenAuthMiddleware);
 
@@ -326,6 +311,23 @@ routes.get(
 routes.get(
   "/branch/:branch_id/financial/report",
   financialReportController.index
+);
+
+routes.post(
+  "/site/company/:company_id",
+  multerInstance.fields([
+    {
+      name: "logo",
+      maxCount: 1,
+    },
+    {
+      name: "banner",
+      maxCount: 1,
+    },
+  ]),
+  firebaseImageUploadService.uploadImages,
+  websiteMiddleware.create,
+  companySiteController.store
 );
 
 module.exports = routes;
