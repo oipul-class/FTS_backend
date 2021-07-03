@@ -4,10 +4,12 @@ class Website extends Model {
   static init(sequelize) {
     super.init(
       {
-        website_logo: DataTypes.STRING,
-        website_banner: DataTypes.STRING,
-        website_slogan: DataTypes.STRING,
-        website_customization: DataTypes.TEXT,
+        logo_img: DataTypes.STRING,
+        banner_img: DataTypes.STRING,
+        slogan: DataTypes.STRING,
+        primary_color: DataTypes.STRING,
+        secondary_color: DataTypes.STRING,
+        light_color: DataTypes.STRING,
       },
       {
         sequelize,
