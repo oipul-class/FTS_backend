@@ -9,7 +9,6 @@ module.exports = {
   async index(req, res) {
     try {
       const { branch_id, company_id } = req.params;
-
       let purchases;
 
       if (branch_id)
@@ -50,9 +49,6 @@ module.exports = {
       else if (company_id)
         purchases = await Purchase.findAll({
           attributes: ["id"],
-          where: {
-            branch_id,
-          },
           include: [
             {
               model: ItemPurchase,
