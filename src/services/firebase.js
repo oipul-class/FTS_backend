@@ -25,7 +25,6 @@ const uploadImages = async (req, res, next) => {
       const imageName = Date.now() + "." + image.originalname.split(".").pop();
 
       const imageFile = bucketInstance.file(imageName);
-
       const stream = imageFile.createWriteStream({
         metadata: {
           contentType: image.mimetype,
@@ -93,6 +92,95 @@ const uploadImages = async (req, res, next) => {
   next();
 };
 
+const uploadImagesWithSkip = async (req, res, next) => {
+  try {
+    if (req.files) {
+      if (req.files.logo) {
+        await Promise.all(
+          req.files.logo.map((imageOnFile) => {
+            const bucketInstance = admin.storage().bucket();
+
+            const image = imageOnFile;
+
+            const imageName =
+              Date.now() + "." + image.originalname.split(".").pop();
+
+            const imageFile = bucketInstance.file(imageName);
+            const stream = imageFile.createWriteStream({
+              metadata: {
+                contentType: image.mimetype,
+              },
+            });
+
+            stream.on("error", (error) => {
+              console.error(error);
+              return res.status(500).send(error);
+            });
+
+            stream.on("finish", async () => {
+              try {
+                await imageFile.makePublic();
+              } catch (error) {
+                console.log(error);
+                return res.status(500).sned(error);
+              }
+            });
+
+            stream.end(image.buffer);
+            logoUrl = `https://storage.googleapis.com/${firebaseBucket}/${imageName}`;
+          })
+        );
+      }
+
+      if (req.files.banner) {
+        await Promise.all(
+          req.files.banner.map((imageOnFile) => {
+            const bucketInstance = admin.storage().bucket();
+
+            const image = imageOnFile;
+
+            const imageName =
+              Date.now() + "." + image.originalname.split(".").pop();
+
+            const imageFile = bucketInstance.file(imageName);
+
+            const stream = imageFile.createWriteStream({
+              metadata: {
+                contentType: image.mimetype,
+              },
+            });
+
+            stream.on("error", (error) => {
+              console.error(error);
+              return res.status(500).send(error);
+            });
+
+            stream.on("finish", async () => {
+              try {
+                await imageFile.makePublic();
+              } catch (error) {
+                console.log(error);
+                return res.status(500).sned(error);
+              }
+            });
+
+            stream.end(image.buffer);
+            bannerUrl = `https://storage.googleapis.com/${firebaseBucket}/${imageName}`;
+          })
+        );
+      }
+    }
+
+    req.body.logo_firebase_url = logoUrl;
+    req.body.banner_firebase_url = bannerUrl;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+};
+
 module.exports = {
   uploadImages,
+  uploadImagesWithSkip,
 };
