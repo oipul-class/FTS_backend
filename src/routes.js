@@ -313,6 +313,7 @@ routes.get(
   financialReportController.index
 );
 
+routes.get("/company/:company_id/site", companySiteController.index);
 routes.post(
   "/site/company/:company_id",
   multerInstance.fields([
