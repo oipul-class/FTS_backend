@@ -27,6 +27,7 @@ class Company extends Model {
     this.belongsToMany(models.Permission, { through: "companies_permissions" });
     this.hasMany(models.Product);
     this.belongsTo(models.Address);
+    this.belongsTo(models.Website);
   }
 }
 module.exports = Company;

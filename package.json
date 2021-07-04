@@ -7,6 +7,7 @@
     "dev": "nodemon src/server",
     "start": "node src/server",
     "test": "cross-env NODE_ENV=test jest",
+    "db-update": "sequelize db:migrate",
     "posttest": "cross-env NODE_ENV=test sequelize db:drop",
     "db-rebuild": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
     "test-db-rebuild": "cross-env NODE_ENV=test sequelize db:drop && cross-env NODE_ENV=test sequelize db:create && cross-env NODE_ENV=test sequelize db:migrate && cross-env NODE_ENV=test sequelize db:seed:all"
@@ -29,8 +30,10 @@
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "firebase-admin": "^9.10.0",
     "jest": "^26.6.3",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
     "mysql2": "^2.2.5",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",

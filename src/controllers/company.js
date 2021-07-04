@@ -4,6 +4,7 @@ const Plan = require("../models/Plan");
 const Address = require("../models/Address");
 const bcryptjs = require("bcryptjs");
 const Branch = require("../models/Branch");
+const Phone = require("../models/Phone");
 
 module.exports = {
   async index(req, res) {
@@ -106,6 +107,7 @@ module.exports = {
         fantasy_name,
         social_reason,
         place_number,
+        phone,
         companie_password,
         nature_of_the_business,
         commercial_email,
@@ -124,6 +126,15 @@ module.exports = {
       });
       if (!plan)
         return res.status(404).send({ error: "Plano requisitado não existe" });
+
+
+      const usedPhone = await Phone.findOne({
+        where: {
+          phone,
+        }
+      })
+
+      if (usedPhone) return res.status(400).send({ error: "Telefone recebido já cadastrado"})
 
       let companyAddress;
 
@@ -153,12 +164,19 @@ module.exports = {
 
       await company.addPermission(1);
 
-      await Branch.create({
+      const branchPhone = await Phone.create({
+        phone,
+      });
+
+      if (!branchPhone) return res.status(500).send({ error: "Falha ao cadastrar telefone para filial"})
+
+      Branch.create({
         branch_name: company.fantasy_name,
         branch_email: null,
         place_number: company.place_number,
         company_id: company.id,
         address_id: company.address_id,
+        phone_id: branchPhone.id,
       });
 
       res.status(201).send({

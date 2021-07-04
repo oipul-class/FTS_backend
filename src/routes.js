@@ -26,6 +26,7 @@ const billToPayController = require("./controllers/billToPay");
 const addressController = require("./controllers/address");
 const inventoryReportController = require("./controllers/inventoryReport");
 const financialReportController = require("./controllers/financialReport");
+const companySiteController = require("./controllers/companySite");
 
 const companyMiddleware = require("./validators/company");
 const branchMiddleware = require("./validators/branch");
@@ -41,6 +42,7 @@ const itemSaleMiddleware = require("./validators/itemSale");
 const billToReceiveMiddleware = require("./validators/billToReceive");
 const billToPayMiddleware = require("./validators/billToPay");
 const addressMiddleware = require("./validators/address");
+const websiteMiddleware = require("./validators/website");
 
 const tokenAuthMiddleware = require("./middleware/tokenAuthorization");
 
@@ -58,6 +60,12 @@ const purchaseSecurityFunctionsMiddleware = require("./middleware/purchaseSecuri
 const saleSecurityFunctionsMiddleware = require("./middleware/saleSecurityFunctions");
 const billToReceiveSecurityFunctionsMiddleware = require("./middleware/billToReceiveSecurityFunctions");
 const billToPaySecurityFunctionsMiddleware = require("./middleware/billToPaySecurityFunctions");
+const companySiteFunctionsMiddleware = require("./middleware/companySiteSecurityFunctions");
+
+const { useMulter } = require("./utils");
+
+const firebaseImageUploadService = require("./services/firebase");
+const multerInstance = useMulter();
 
 routes.get("/screen", screenController.index);
 routes.get("/screen/find/:id", screenController.find);
@@ -304,6 +312,43 @@ routes.get(
 routes.get(
   "/branch/:branch_id/financial/report",
   financialReportController.index
+);
+
+routes.get("/company/:company_id/site", companySiteController.index);
+routes.post(
+  "/site/company/:company_id",
+  planUsageSecurityFunctions.planWebsiteCreate,
+  companySiteFunctionsMiddleware.companySiteCheck,
+  multerInstance.fields([
+    {
+      name: "logo",
+      maxCount: 1,
+    },
+    {
+      name: "banner",
+      maxCount: 1,
+    },
+  ]),
+  firebaseImageUploadService.uploadImages,
+  websiteMiddleware.create,
+  companySiteController.store
+);
+routes.put(
+  "/site/company/:company_id",
+  companySiteFunctionsMiddleware.companySiteCheck,
+  multerInstance.fields([
+    {
+      name: "logo",
+      maxCount: 1,
+    },
+    {
+      name: "banner",
+      maxCount: 1,
+    },
+  ]),
+  firebaseImageUploadService.uploadImagesWithSkip,
+  websiteMiddleware.update,
+  companySiteController.update
 );
 
 module.exports = routes;
