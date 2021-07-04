@@ -86,6 +86,8 @@ routes.get("/branch/find/:id", branchController.find);
 routes.get("/plan", planController.index);
 routes.get("/plan/find/:id", planController.find);
 
+routes.get("/company/:company_id/site", companySiteController.index);
+
 routes.use(tokenAuthMiddleware);
 
 routes.put(
@@ -314,7 +316,6 @@ routes.get(
   financialReportController.index
 );
 
-routes.get("/company/:company_id/site", companySiteController.index);
 routes.post(
   "/site/company/:company_id",
   planUsageSecurityFunctions.planWebsiteCreate,
