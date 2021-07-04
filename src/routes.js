@@ -256,6 +256,7 @@ routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 
 routes.get("/sale", saleController.index);
 routes.get("/branch/:branch_id/sale", saleController.index);
+routes.get("/company/:company_id/sale", saleController.index);
 routes.get("/sale/find/:id", saleController.find);
 routes.post(
   "/sale",

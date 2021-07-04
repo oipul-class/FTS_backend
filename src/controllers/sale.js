@@ -9,7 +9,7 @@ const Address = require("../models/Address");
 module.exports = {
   async index(req, res) {
     try {
-      const { branch_id } = req.params;
+      const { branch_id, company_id } = req.params;
 
       let sales;
 
@@ -26,6 +26,40 @@ module.exports = {
             },
             {
               model: Branch,
+              attributes: ["id", "branch_name", "branch_email", "place_number"],
+              include: {
+                model: Address,
+                attributes: [
+                  "id",
+                  "cep",
+                  "street",
+                  "complement",
+                  "district",
+                  "city",
+                  "uf",
+                ],
+              },
+            },
+            {
+              model: Costumer,
+              attributes: ["id", "costumer_name", "cpf"],
+            },
+          ],
+        });
+      else if (company_id)
+        sales = await Sale.findAll({
+          attributes: ["id", "total_value", "discount"],
+          include: [
+            {
+              model: ItemSale,
+              attributes: ["id", "cost_per_item", "quantity"],
+            },
+            {
+              model: Branch,
+              required: true,
+              where: {
+                company_id,
+              },
               attributes: ["id", "branch_name", "branch_email", "place_number"],
               include: {
                 model: Address,
