@@ -6,75 +6,80 @@ const User = require("../models/User");
 
 module.exports = {
   planBranchLimitCheck: async (req, res, next) => {
-    const token = req.headers.authorization;
-    const [Bearer, retriviedToken] = token.split(" ");
+    try {
+      const token = req.headers.authorization;
+      const [Bearer, retriviedToken] = token.split(" ");
 
-    const payload = jwt.verify(retriviedToken, auth.secret);
+      const payload = jwt.verify(retriviedToken, auth.secret);
 
-    const company = await Company.findByPk(payload.id);
+      const company = await Company.findByPk(payload.id);
 
-    if (!company)
-      return res
-        .status(404)
-        .send({ error: "Companhia que fez a requesição não existe" });
-
-    const branchAmount = await Branch.count({
-      where: {
-        company_id: company.id,
-      },
-    });
-
-    const plan = await company.getPlan();
-
-    if (branchAmount >= plan.branch_limit)
-      return res
-        .status(400)
-        .send({
-          error: `Plano não permite mais que ${plan.branch_limit} filiais`,
-        });
-
-    next();
-  },
-
-  planUserPerBranchLimit: async (req, res, next) => {
-    const token = req.headers.authorization;
-    const [Bearer, retriviedToken] = token.split(" ");
-
-    const payload = jwt.verify(retriviedToken, auth.secret);
-
-    const company = await Company.findByPk(payload.id);
-
-    const user = await User.findByPk(payload.id);
-
-    if (!company && !user)
-      return res.status(404).send({ error: "Companhia ou Usuario não existe" });
-
-    const { branch_id } = req.body;
-
-    if (company) {
-      const branch = await Branch.findByPk(branch_id);
-
-      if (!branch)
+      if (!company)
         return res
           .status(404)
-          .send({ error: "Filial não existe ou não pertence a companhia" });
+          .send({ error: "Companhia que fez a requesição não existe" });
 
-      const usersCount = await User.count({
+      const branchAmount = await Branch.count({
         where: {
-          branch_id: branch.id,
+          company_id: company.id,
         },
       });
 
       const plan = await company.getPlan();
 
-      if (usersCount >= plan.user_limit_per_branch)
+      if (branchAmount >= plan.branch_limit)
+        return res.status(400).send({
+          error: `Plano não permite mais que ${plan.branch_limit} filiais`,
+        });
+
+      next();
+    } catch (error) {}
+  },
+
+  planUserPerBranchLimit: async (req, res, next) => {
+    try {
+      const token = req.headers.authorization;
+      const [Bearer, retriviedToken] = token.split(" ");
+
+      const payload = jwt.verify(retriviedToken, auth.secret);
+
+      const company = await Company.findByPk(payload.id);
+
+      const user = await User.findByPk(payload.id);
+
+      if (!company && !user)
         return res
-          .status(400)
-          .send({
+          .status(404)
+          .send({ error: "Companhia ou Usuario não existe" });
+
+      const { branch_id } = req.body;
+
+      if (company) {
+        const branch = await Branch.findByPk(branch_id);
+
+        if (!branch)
+          return res
+            .status(404)
+            .send({ error: "Filial não existe ou não pertence a companhia" });
+
+        const usersCount = await User.count({
+          where: {
+            branch_id: branch.id,
+          },
+        });
+
+        const plan = await company.getPlan();
+
+        if (usersCount >= plan.user_limit_per_branch)
+          return res.status(400).send({
             error: `plano não permite mais que ${plan.user_limit_per_branch} de usuarios por filial`,
           });
 
-      next();
+        next();
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
     }
   },
 };
