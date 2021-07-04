@@ -223,10 +223,10 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const { branch_name, cep, branch_email, place_number } = req.body;
+      const { branch_name, cep, branch_email, place_number, phone } = req.body;
 
       const branch = await Branch.findByPk(id, {
-        attributes: ["id", "branch_name", "branch_email", "place_number"],
+        attributes: ["id", "branch_name", "branch_email", "place_number", "phone_id"],
         include: [
           {
             model: Address,
@@ -260,6 +260,18 @@ module.exports = {
       if (branch_name) branch.branch_name = branch_name;
       if (place_number) branch.place_number = place_number;
       if (branch_email) branch.branch_email = branch_email;
+      if (phone) {
+        const branchPhone = await Phone.findByPk(branch.phone_id);
+
+
+        if (!branchPhone)
+          return res
+            .status(500)
+            .send({ error: "Telefone recebido não existe" });
+
+        branchPhone.phone = phone;
+        await branchPhone.save();
+      }
 
       await branch.save();
 
