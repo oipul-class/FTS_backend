@@ -1,4 +1,6 @@
 const Company = require("../models/Company");
+const jwt = require("jsonwebtoken");
+const auth = require("../config/auth");
 
 module.exports = {
   companySiteCheck: async (req, res, next) => {
