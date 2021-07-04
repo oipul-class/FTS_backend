@@ -176,6 +176,7 @@ routes.delete(
 
 routes.get("/logbook", logbookController.index);
 routes.get("/branch/:branch_id/logbook", logbookController.index);
+routes.get("/company/:company_id/logbook", logbookController.index);
 routes.get("/logbook/find/:id", logbookController.find);
 routes.post(
   "/logbook",
