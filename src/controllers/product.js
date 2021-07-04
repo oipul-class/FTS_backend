@@ -20,20 +20,14 @@ module.exports = {
       if (product_type)
         product_type = product_type.replace('"', "").replace('"', "");
 
+      console.log("names:", product_name);
+
       let products;
 
-      if ((company_id && product_name) || product_type) {
-        const token = req.headers.authorization;
-        const [Bearer, retriviedToken] = token.split(" ");
-
-        const payload = jwt.verify(retriviedToken, auth.secret);
-
-        if (payload.user_cpf && payload.user_rg) {
+      if (company_id) {
+        if (!bar_code && !product_type && !product_name)
           products = await Product.findAll({
             where: {
-              product_name: {
-                [Op.substring]: product_name ? product_name : "",
-              },
               company_id,
             },
             attributes: [
@@ -51,16 +45,10 @@ module.exports = {
               {
                 model: ProductType,
                 attributes: ["type"],
-                where: {
-                  type: { [Op.substring]: product_type ? product_type : "" },
-                },
               },
               {
                 model: LogBookInventory,
                 attributes: ["id", "date_of_acquisition", "quantity_acquired"],
-                where: {
-                  branch_id: payload.user_branch_id,
-                },
                 include: {
                   model: Lot,
                   attributes: [
@@ -73,13 +61,11 @@ module.exports = {
               },
             ],
           });
-        } else if (payload.cnpj) {
+        else if (bar_code)
           products = await Product.findAll({
             where: {
-              product_name: {
-                [Op.substring]: product_name ? product_name : "",
-              },
-              company_id: payload.id,
+              company_id,
+              bar_code: { [Op.substring]: bar_code },
             },
             attributes: [
               "id",
@@ -96,9 +82,6 @@ module.exports = {
               {
                 model: ProductType,
                 attributes: ["type"],
-                where: {
-                  type: { [Op.substring]: product_type ? product_type : "" },
-                },
               },
               {
                 model: LogBookInventory,
@@ -115,42 +98,50 @@ module.exports = {
               },
             ],
           });
-        }
-      } else if (bar_code && company_id)
-        products = await Product.findOne({
-          where: { bar_code, company_id },
-          attributes: [
-            "id",
-            "product_name",
-            "description",
-            "bar_code",
-            "cost_per_item",
-            "unit_of_measurement_id",
-            "product_type_id",
-            "company_id",
-            "created_at",
-          ],
-          include: [
-            {
-              model: ProductType,
-              attributes: ["type"],
-            },
-            {
-              model: LogBookInventory,
-              attributes: ["id", "date_of_acquisition", "quantity_acquired"],
-              include: {
-                model: Lot,
-                attributes: [
-                  "id",
-                  "lot_number",
-                  "manufacture_date",
-                  "expiration_date",
-                ],
+        else if (product_name || product_type)
+          products = await Product.findAll({
+            where: {
+              company_id,
+              product_name: {
+                [Op.substring]: product_name ? product_name : "",
               },
             },
-          ],
-        });
-      else
+            attributes: [
+              "id",
+              "product_name",
+              "description",
+              "bar_code",
+              "cost_per_item",
+              "unit_of_measurement_id",
+              "product_type_id",
+              "company_id",
+              "created_at",
+            ],
+            include: [
+              {
+                model: ProductType,
+                required: product_type ? true : false,
+                where: {
+                  type: { [Op.substring]: product_type ? product_type : "" },
+                },
+                attributes: ["type"],
+              },
+              {
+                model: LogBookInventory,
+                attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+                include: {
+                  model: Lot,
+                  attributes: [
+                    "id",
+                    "lot_number",
+                    "manufacture_date",
+                    "expiration_date",
+                  ],
+                },
+              },
+            ],
+          });
+      } else
         products = await Product.findAll({
           attributes: [
             "id",
