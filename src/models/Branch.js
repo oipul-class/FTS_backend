@@ -8,7 +8,8 @@ class Branch extends Model {
         branch_email: DataTypes.STRING,
         place_number: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
-        address_id: DataTypes.INTEGER
+        address_id: DataTypes.INTEGER,
+        phone_id: DataTypes.INTEGER,
       },
       {
         sequelize,
@@ -24,6 +25,7 @@ class Branch extends Model {
     this.hasMany(models.Purchase);
     this.hasMany(models.Sale);
     this.belongsTo(models.Address);
+    this.belongsTo(models.Phone);
   }
 }
 

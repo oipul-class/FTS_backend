@@ -2,46 +2,40 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("plans", {
+    await queryInterface.createTable("websites", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
 
-      plan_name: {
+      logo_img: {
         type: Sequelize.STRING,
         allowNull: false,
       },
 
-      branch_limit: {
-        type: Sequelize.INTEGER,
+      banner_img: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
-      user_limit_per_branch: {
-        type: Sequelize.INTEGER,
+      slogan: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
-      use_phone_for_sale: {
-        type: Sequelize.BOOLEAN,
+      primary_color: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
-      access_website: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-
-      value: {
-        type: Sequelize.DECIMAL(15, 2),
+      secondary_color: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
-      description: {
-        type: Sequelize.TEXT,
+      light_color: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
 
@@ -54,10 +48,11 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("plans");
+    await queryInterface.dropTable('websites');
   },
 };
