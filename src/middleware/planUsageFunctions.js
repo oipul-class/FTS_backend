@@ -82,4 +82,44 @@ module.exports = {
       res.status(500).send(error);
     }
   },
+
+  planWebsiteCreate: async (req, res, next) => {
+    try {
+      const token = req.headers.authorization;
+      const [Bearer, retriviedToken] = token.split(" ");
+
+      const payload = jwt.verify(retriviedToken, auth.secret);
+
+      const { company_id } = req.params;
+
+      if (!payload.cnpj)
+        return res
+          .status(400)
+          .send({ error: "Usuário logado não é uma companhia" });
+
+      const company = await Company.findOne({
+        where: {
+          id: payload.id,
+          cnpj: payload.cnpj,
+        },
+      });
+
+      if (company.id != company_id)
+        return res.status(400).send({
+          error: "Companhia requestida não é a mesma que esta logada",
+        });
+
+      const plan = await company.getPlan();
+
+      if (!plan.access_website)
+        return res.status(400).send({
+          error:
+            "Companhia não pode criar um site pois o plano atual não permite",
+        });
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
 };

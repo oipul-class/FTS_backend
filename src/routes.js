@@ -317,6 +317,7 @@ routes.get(
 routes.get("/company/:company_id/site", companySiteController.index);
 routes.post(
   "/site/company/:company_id",
+  planUsageSecurityFunctions.planWebsiteCreate,
   companySiteFunctionsMiddleware.companySiteCheck,
   multerInstance.fields([
     {
