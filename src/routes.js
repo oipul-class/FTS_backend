@@ -60,6 +60,7 @@ const purchaseSecurityFunctionsMiddleware = require("./middleware/purchaseSecuri
 const saleSecurityFunctionsMiddleware = require("./middleware/saleSecurityFunctions");
 const billToReceiveSecurityFunctionsMiddleware = require("./middleware/billToReceiveSecurityFunctions");
 const billToPaySecurityFunctionsMiddleware = require("./middleware/billToPaySecurityFunctions");
+const companySiteFunctionsMiddleware = require("./middleware/companySiteSecurityFunctions");
 
 const { useMulter } = require("./utils");
 
@@ -316,6 +317,7 @@ routes.get(
 routes.get("/company/:company_id/site", companySiteController.index);
 routes.post(
   "/site/company/:company_id",
+  companySiteFunctionsMiddleware.companySiteCheck,
   multerInstance.fields([
     {
       name: "logo",
