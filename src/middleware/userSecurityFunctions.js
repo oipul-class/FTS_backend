@@ -5,6 +5,7 @@ const User = require("../models/User");
 const Screen = require("../models/Screen");
 const Branch = require("../models/Branch");
 const Company = require("../models/Company");
+const user = require("../controllers/user");
 
 module.exports = {
   userStoreCheck: async (req, res, next) => {
@@ -93,48 +94,70 @@ module.exports = {
 
       const payload = jwt.verify(retriviedToken, auth.secret);
 
-      if (!payload.user_cpf && !payload.user_rg)
-        return res
-          .status(400)
-          .send({ error: "Usuario logado não é um funcionario" });
+      if (payload.user_cpf && payload.user_rg) {
+        const userByPayload = await User.findByPk(payload.id);
 
-      const userByPayload = await User.findByPk(payload.id);
+        const userByParams = await User.findByPk(id);
 
-      const userByParams = await User.findByPk(id);
+        if (!userByParams || !userByPayload)
+          return res
+            .status(404)
+            .send({ error: "Usuario logado ou requesitado não existe" });
 
-      if (!userByParams || !userByPayload)
-        return res
-          .status(404)
-          .send({ error: "Usuario logado ou requesitado não existe" });
-
-      if (userByPayload.id != userByParams.id) {
-        const userAdmin = await User.findOne({
-          where: {
-            id: userByPayload.id,
-          },
-          include: {
-            model: Permission,
+        if (userByPayload.id != userByParams.id) {
+          const userAdmin = await User.findOne({
+            where: {
+              id: userByPayload.id,
+            },
             include: {
-              model: Screen,
-              require: true,
-              where: {
-                route: "/usersRegister",
+              model: Permission,
+              include: {
+                model: Screen,
+                require: true,
+                where: {
+                  route: "/usersRegister",
+                },
               },
             },
+          });
+
+          if (!userAdmin.Permission)
+            return res.status(400).send({
+              error:
+                "Usuario logado não tem permissão para alterar dados de um usuário",
+            });
+
+          if (!userAdmin.Branch)
+            return res.status(400).send({
+              error: "Usuario logado não pertence a filial requesitada",
+            });
+        }
+      } else if (payload.cnpj) {
+        const userByParams = await User.findByPk(id, {
+          include: {
+            model: Branch,
           },
         });
 
-        if (!userAdmin.Permission)
-          return res.status(400).send({
-            error:
-              "Usuario logado não tem permissão para alterar dados de um usuário",
-          });
+        const company = await Company.findOne({
+          where: {
+            id: payload.id,
+            cnpj: payload.cnpj,
+          },
+        });
 
-        if (!userAdmin.Branch)
-          return res.status(400).send({
-            error: "Usuario logado não pertence a filial requesitada",
-          });
-      }
+
+        if (userByParams.Branch.company_id != company.id)
+          return res
+            .status(400)
+            .send({
+              error:
+                "Funcionario requesitado não pertence a uma filial da companhia logada",
+            });
+      } else
+        return res
+          .status(400)
+          .send({ error: "Dados para verificação faltando" });
 
       next();
     } catch (error) {
