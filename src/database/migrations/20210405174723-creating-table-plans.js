@@ -29,6 +29,12 @@ module.exports = {
         allowNull: false,
       },
 
+      access_website: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+
       value: {
         type: Sequelize.DECIMAL(15, 2),
         allowNull: false,
