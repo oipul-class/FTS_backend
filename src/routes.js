@@ -332,5 +332,22 @@ routes.post(
   websiteMiddleware.create,
   companySiteController.store
 );
+routes.put(
+  "/site/company/:company_id",
+  companySiteFunctionsMiddleware.companySiteCheck,
+  multerInstance.fields([
+    {
+      name: "logo",
+      maxCount: 1,
+    },
+    {
+      name: "banner",
+      maxCount: 1,
+    },
+  ]),
+  firebaseImageUploadService.uploadImagesWithSkip,
+  websiteMiddleware.update,
+  companySiteController.update
+);
 
 module.exports = routes;
