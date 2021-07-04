@@ -99,7 +99,7 @@ module.exports = {
       const company = await Company.findByPk(company_id);
 
       if (!company)
-        return res.status(400).send({
+        return res.status(500).send({
           error: "Comapnhia não existe",
         });
 
@@ -116,6 +116,54 @@ module.exports = {
       });
 
       res.status(201).send({
+        id: website.id,
+        logo_img: website.logo_img,
+        banner_img: website.banner_img,
+        slogan: website.slogan,
+        primary_color: website.primary_color,
+        secondary_color: website.secondary_color,
+        light_color: website.light_color,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error);
+    }
+  },
+
+  async update(req, res) {
+    try {
+      const { company_id } = req.params;
+      const {
+        logo_firebase_url,
+        banner_firebase_url,
+        slogan,
+        primary_color,
+        secondary_color,
+        light_color,
+      } = req.body;
+
+      const company = await Company.findByPk(company_id);
+
+      if (!company)
+        return res.status(500).send({
+          error: "Comapnhia não existe",
+        });
+
+      if (!company.WebsiteId)
+        return res.status(400).send({ error: "Companhia não possui o site" });
+
+      const website = await company.getWebsite();
+
+      if (logo_firebase_url) website.logo_img = logo_firebase_url;
+      if (banner_firebase_url) website.banner_img = banner_firebase_url;
+      if (slogan) website.slogan = slogan;
+      if (primary_color) website.primary_color = primary_color;
+      if (secondary_color) website.secondary_color = secondary_color;
+      if (light_color) website.light_color = light_color;
+
+      await website.save()
+      
+      res.status(200).send({
         id: website.id,
         logo_img: website.logo_img,
         banner_img: website.banner_img,
