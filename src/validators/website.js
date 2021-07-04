@@ -11,4 +11,15 @@ module.exports = {
       light_color: Joi.string().required(),
     }),
   }),
+  
+  update: celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      logo_firebase_url: Joi.string(),
+      banner_firebase_url: Joi.string(),
+      slogan: Joi.string(),
+      primary_color: Joi.string(),
+      secondary_color: Joi.string(),
+      light_color: Joi.string(),
+    }),
+  }),
 };
