@@ -222,6 +222,7 @@ routes.get("/paymentMethod/find/:id", paymentMethodController.find);
 
 routes.get("/purchase", purchaseController.index);
 routes.get("/branch/:branch_id/purchase", purchaseController.index);
+routes.get("/company/:company_id/purchase", purchaseController.index);
 routes.get("/purchase/find/:id", purchaseController.find);
 routes.post(
   "/purchase",
