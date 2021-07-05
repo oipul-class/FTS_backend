@@ -2,51 +2,68 @@ const request = require("supertest");
 const app = require("../../src/app");
 const connection = require("../../src/database");
 
-describe("Testando inserção e listagem com sucesso do modulo de filial de companhia", () => {
+describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
   afterAll(() => {
     connection.close();
   });
 
-  let companyID;
-  let bearerToken
+  const company_cnpj = "18119812000166";
+  const company_password = "123456789";
+  const company_phone = "551144444434";
+  const branch_phone = "551144444334";
+  let company_id;
+  let token = undefined;
 
-  it("é possivel inserir uma filial de uma companhia no sistema com sucesso", async () => {
-    const company = await request(app).post("/company").send({
-      cnpj: `33.235.804/0001-33`,
-      fantasy_name: "test company to branch",
-      social_reason: "test test",
-      place_number: 1,
-      companie_password: "12345678",
-      cep: "06622-080",
-      state: "SP",
-      nature_of_the_business: "test of your business",
-      commercial_email: "test@test.com",
+  it("é possivel cadastrar uma filial com sucesso", async () => {
+    const company_response = await request(app)
+      .post("/company")
+      .send({
+        cnpj: company_cnpj,
+        fantasy_name: "In-Game Entertainment",
+        social_reason:
+          "Provendo para todos Salões para jogatina e diversão para toda familia",
+        place_number: 100,
+        companie_password: company_password,
+        phone: company_phone,
+        nature_of_the_business: "Uma empressa que varios locais de diversão",
+        commercial_email: "InGameEnt@gmail.com",
+        plan_id: 3,
+        address: {
+          cep: "01001000",
+          street: "Rua Fernando Pessoa Da Silva",
+          district: "Pessoa",
+          city: "São Paulo",
+          uf: "SP",
+        },
+      });
+
+    company_id = response.body.id;
+
+    const token_response = await request(app).post("/session").send({
+      cnpj_ou_cpf: company_cnpj,
+      password: company_password,
     });
 
-    const token = await request(app).post("/session").send({
-      cnpj_ou_cpf: company.body.cnpj,
-      password: "12345678",
-    });
+    token = token_response.body.token;
 
-    bearerToken = `Bearer ${token.body.token}`
+    const branch_response = await request(app)
+      .post("/branch")
+      .send({
+        branch_name: "in-game do Rio de janeiro",
+        place_number: 100,
+        phone: "551144444454",
+        company_id: 1,
+        address: {
+          cep: "01001001",
+          street: "Rua Fernando Pessoa Da Silva",
+          district: "Pessoa",
+          city: "São Paulo",
+          uf: "SP",
+        },
+      });
 
-    const response = await request(app).post("/branch").set({ Authorization: bearerToken }).send({
-      branch_name: "filial de teste",
-      cep: "15062-526",
-      place_number: 300,
-      company_id: company.body.id,
-    });
-
-    expect(response.ok).toBeTruthy();
-    expect(response.body).toHaveProperty("id");
-    expect(response.body).toHaveProperty("company_id");
-
-    companyID = company.body.id;
-  });
-
-  it("é possivel listar todas as filiais cadastradas no sistema com sucesso", async () => {
-    const response = await request(app).get(`/company/${companyID}/branch`).set({ Authorization: bearerToken }).send();
-
-    expect(response.ok).toBeTruthy();
+    expect(branch_response.ok).toBeTruthy();
+    expect(branch_responsebody).toBeDefined();
+    expect(branch_response.body).toHaveProperty("id");
   });
 });
