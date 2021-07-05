@@ -158,12 +158,16 @@ routes.get("/company/:company_id/product/barCode/:bar_code", productController.i
 routes.get("/product/find/:id", productController.find);
 routes.post(
   "/product",
+  multerInstance.single("image"),
   productSecurityFunctionsMiddleware.productStoreCheck,
+  firebaseImageUploadService.uploadProductImage,
   productMiddleware.create,
   productController.store
 );
 routes.put(
   "/product/:id",
+  multerInstance.single("image"),
+  firebaseImageUploadService.uploadProductImage,
   productSecurityFunctionsMiddleware.productUpdateCheck,
   productMiddleware.update,
   productController.update
