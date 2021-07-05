@@ -8,7 +8,7 @@ const ProductType = require("../models/ProductType");
 module.exports = {
   async index(req, res) {
     try {
-      const { branch_id } = req.params;
+      const { branch_id, company_id } = req.params;
 
       let logbooks;
 
@@ -21,6 +21,45 @@ module.exports = {
           include: [
             {
               model: Product,
+              attributes: [
+                "id",
+                "product_name",
+                "description",
+                "bar_code",
+                "cost_per_item",
+              ],
+              include: [
+                {
+                  model: UnitOfMeasurement,
+                  attributes: ["id", "unit_name"],
+                },
+                {
+                  model: ProductType,
+                  attributes: ["id", "type"],
+                },
+              ],
+            },
+            {
+              model: Lot,
+              attributes: [
+                "id",
+                "lot_number",
+                "manufacture_date",
+                "expiration_date",
+              ],
+            },
+          ],
+        });
+      else if (company_id)
+        logbooks = await LogBookInventory.findAll({
+          attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+          include: [
+            {
+              model: Product,
+              required: true,
+              where: {
+                company_id,
+              },
               attributes: [
                 "id",
                 "product_name",
@@ -168,11 +207,9 @@ module.exports = {
       });
 
       if (existingLogbook)
-        return res
-          .status(400)
-          .send({
-            error: "Já existe o produto requesitado no inventario da filial",
-          });
+        return res.status(400).send({
+          error: "Já existe o produto requesitado no inventario da filial",
+        });
 
       const logbook = await LogBookInventory.create({
         date_of_acquisition,
