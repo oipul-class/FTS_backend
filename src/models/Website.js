@@ -10,6 +10,7 @@ class Website extends Model {
         primary_color: DataTypes.STRING,
         secondary_color: DataTypes.STRING,
         light_color: DataTypes.STRING,
+        dark_color: DataTypes.STRING,
       },
       {
         sequelize,

@@ -126,6 +126,7 @@ module.exports = {
         primary_color,
         secondary_color,
         light_color,
+        dark_color,
       } = req.body;
 
       const company = await Company.findByPk(company_id);
@@ -145,6 +146,7 @@ module.exports = {
         primary_color,
         secondary_color,
         light_color,
+        dark_color
       });
 
       res.status(201).send({
@@ -172,6 +174,7 @@ module.exports = {
         primary_color,
         secondary_color,
         light_color,
+        dark_color
       } = req.body;
 
       const company = await Company.findByPk(company_id);
@@ -192,6 +195,7 @@ module.exports = {
       if (primary_color) website.primary_color = primary_color;
       if (secondary_color) website.secondary_color = secondary_color;
       if (light_color) website.light_color = light_color;
+      if (dark_color) website.dark_color = dark_color;
 
       await website.save();
 
