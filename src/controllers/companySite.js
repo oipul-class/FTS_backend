@@ -77,7 +77,39 @@ module.exports = {
         },
       });
 
-      res.send(site);
+      const productsByType = await ProductType.findAll({
+        attributes: ["id", "type"],
+        include: {
+          model: Product,
+          attributes: ["id", "product_name", "description", "cost_per_item"],
+          required: true,
+          where: {
+            company_id,
+          },
+        },
+      });
+
+      res.send({
+        id: site.id,
+        logo_img: site.logo_img,
+        banner_img: site.banner_img,
+        slogan: site.slogan,
+        primary_color: site.primary_color,
+        secondary_color: site.secondary_color,
+        light_color: site.light_color,
+        Company: {
+          id: site.Company.id,
+          cnpj: site.Company.cnpj,
+          fantasy_name: site.Company.fantasy_name,
+          social_reason: site.Company.social_reason,
+          place_number: site.Company.place_number,
+          nature_of_the_business: site.Company.nature_of_the_business,
+          commercial_email: site.Company.commercial_email,
+          Branches: site.Company.Branches,
+          Products: site.Company.Products,
+          ProductsByType: productsByType,
+        },
+      });
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -161,8 +193,8 @@ module.exports = {
       if (secondary_color) website.secondary_color = secondary_color;
       if (light_color) website.light_color = light_color;
 
-      await website.save()
-      
+      await website.save();
+
       res.status(200).send({
         id: website.id,
         logo_img: website.logo_img,
