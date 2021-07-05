@@ -333,7 +333,7 @@ routes.post(
       maxCount: 1,
     },
   ]),
-  firebaseImageUploadService.uploadImages,
+  firebaseImageUploadService.uploadWebsiteImages,
   websiteMiddleware.create,
   companySiteController.store
 );
@@ -350,7 +350,7 @@ routes.put(
       maxCount: 1,
     },
   ]),
-  firebaseImageUploadService.uploadImagesWithSkip,
+  firebaseImageUploadService.uploadWebsiteImagesWithSkip,
   websiteMiddleware.update,
   companySiteController.update
 );

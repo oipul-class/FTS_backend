@@ -12,7 +12,7 @@ admin.initializeApp({
 let logoUrl;
 let bannerUrl;
 
-const uploadImages = async (req, res, next) => {
+const uploadWebsiteImages = async (req, res, next) => {
   if (!req.files.logo || !req.files.banner)
     return res.status(404).send({ error: "Imagens não enviadas" });
 
@@ -92,7 +92,7 @@ const uploadImages = async (req, res, next) => {
   next();
 };
 
-const uploadImagesWithSkip = async (req, res, next) => {
+const uploadWebsiteImagesWithSkip = async (req, res, next) => {
   try {
     if (req.files) {
       if (req.files.logo) {
@@ -180,7 +180,44 @@ const uploadImagesWithSkip = async (req, res, next) => {
   }
 };
 
+const uploadProductImage = async (req, res, next) => {
+
+  if (!req.file) return next();
+
+  const image = req.file;
+
+  const imageName = Date.now() + "." + image.originalname.split(".").pop();
+
+  const file = bucket.file(imageName); 
+
+
+  const stream = file.createWriteStream({
+    //criandpo um stream
+    metadata: {
+      contentType: image.mimetype,
+    },
+  });
+
+  stream.on("error", (error) => {
+    console.error(error);
+  });
+
+  stream.on("finish", () => {
+    file.makePublic(); 
+
+    req.file.imageName = imageName;
+
+    req.body.productUrl = `https://storage.googleapis.com/${BUCKET}/${imageName}`;
+
+    next(); 
+  });
+
+  stream.end(image.buffer); 
+}
+
+
 module.exports = {
-  uploadImages,
-  uploadImagesWithSkip,
+  uploadWebsiteImages,
+  uploadWebsiteImagesWithSkip,
+  uploadProductImage,
 };
