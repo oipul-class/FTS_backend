@@ -99,7 +99,6 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
       .send({
         branch_name: "Filial In-Game de jandira",
       });
-    console.log("body", response.body, "status", response.statusCode);
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
     expect(response.statusCode).toEqual(200);

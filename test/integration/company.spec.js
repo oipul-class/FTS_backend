@@ -39,6 +39,7 @@ describe("Testando todas rodas principais de companhia com sucesso", () => {
     expect(response.ok).toBeTruthy();
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("cnpj");
+    expect(typeof response.body).toEqual("object");
     company_id = response.body.id;
   });
 
@@ -47,6 +48,7 @@ describe("Testando todas rodas principais de companhia com sucesso", () => {
 
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
+    expect(Array.isArray(response.body)).toBeTruthy();
   });
 
   it("é possivel buscar a companhia registrada no sistema com sucesso", async () => {
@@ -54,11 +56,11 @@ describe("Testando todas rodas principais de companhia com sucesso", () => {
       .get(`/company/find/${company_id}`)
       .send({});
 
-
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("cnpj");
+    expect(typeof response.body).toEqual("object");
   });
 
   it("é possivel logar com a conta da empressa com sucesso", async () => {
@@ -84,6 +86,7 @@ describe("Testando todas rodas principais de companhia com sucesso", () => {
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
     expect(response.body).toHaveProperty("social_reason");
+    expect(typeof response.body).toEqual("object");
   });
 
   it("é desativar a empressa com sucesso", async () => {
