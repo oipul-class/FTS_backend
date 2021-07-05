@@ -62,10 +62,10 @@ module.exports = {
             ],
           });
         else if (bar_code)
-          products = await Product.findAll({
+          products = await Product.findOne({
             where: {
               company_id,
-              bar_code: { [Op.substring]: bar_code },
+              bar_code: bar_code,
             },
             attributes: [
               "id",

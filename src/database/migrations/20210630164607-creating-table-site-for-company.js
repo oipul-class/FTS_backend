@@ -39,6 +39,11 @@ module.exports = {
         allowNull: false,
       },
 
+      dark_color: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -48,11 +53,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('websites');
+    await queryInterface.dropTable("websites");
   },
 };

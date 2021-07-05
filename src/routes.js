@@ -176,6 +176,7 @@ routes.delete(
 
 routes.get("/logbook", logbookController.index);
 routes.get("/branch/:branch_id/logbook", logbookController.index);
+routes.get("/company/:company_id/logbook", logbookController.index);
 routes.get("/logbook/find/:id", logbookController.find);
 routes.post(
   "/logbook",
@@ -221,6 +222,7 @@ routes.get("/paymentMethod/find/:id", paymentMethodController.find);
 
 routes.get("/purchase", purchaseController.index);
 routes.get("/branch/:branch_id/purchase", purchaseController.index);
+routes.get("/company/:company_id/purchase", purchaseController.index);
 routes.get("/purchase/find/:id", purchaseController.find);
 routes.post(
   "/purchase",
@@ -254,6 +256,7 @@ routes.delete("/itemPurchase/:id", itemPurchaseController.delete);
 
 routes.get("/sale", saleController.index);
 routes.get("/branch/:branch_id/sale", saleController.index);
+routes.get("/company/:company_id/sale", saleController.index);
 routes.get("/sale/find/:id", saleController.find);
 routes.post(
   "/sale",
