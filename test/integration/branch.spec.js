@@ -7,15 +7,15 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
     connection.close();
   });
 
-  const company_cnpj = "18119812000166";
-  const company_password = "123456789";
-  const company_phone = "551144444434";
-  const branch_phone = "551144444334";
   let company_id;
   let branch_id;
   let token = undefined;
 
-  it("é possivel cadastrar uma filial com sucesso", async () => {
+  beforeAll(async () => {
+    const company_cnpj = "18119812000166";
+    const company_password = "123456789";
+    const company_phone = "551144444434";
+
     const company_response = await request(app)
       .post("/company")
       .send({
@@ -46,7 +46,13 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
     });
 
     token = token_response.body.token;
+  });
 
+  
+  const branch_phone = "551144444334";
+  
+
+  it("é possivel cadastrar uma filial com sucesso", async () => {
     const branch_response = await request(app)
       .post("/branch")
       .set("Authorization", `bearer ${token}`)
