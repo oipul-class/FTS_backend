@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../../src/app");
 const connection = require("../../src/database");
 
-describe("Testando todas rodas principais de companhia com sucesso", () => {
+describe("Testando todas rotas GET, POST, PUT e DELETE com sucesso", () => {
   afterAll(() => {
     connection.close();
   });
