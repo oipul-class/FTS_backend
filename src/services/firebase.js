@@ -24,7 +24,7 @@ const uploadWebsiteImages = async (req, res, next) => {
 
       const imageName = Date.now() + "." + image.originalname.split(".").pop();
 
-      const imageFile = bucketInstance.file(imageName);
+      const imageFile = bucketInstance.imageFile(imageName);
       const stream = imageFile.createWriteStream({
         metadata: {
           contentType: image.mimetype,
@@ -55,7 +55,7 @@ const uploadWebsiteImages = async (req, res, next) => {
 
       const imageName = Date.now() + "." + image.originalname.split(".").pop();
 
-      const imageFile = bucketInstance.file(imageName);
+      const imageFile = bucketInstance.imageFile(imageName);
 
       const stream = imageFile.createWriteStream({
         metadata: {
@@ -105,7 +105,7 @@ const uploadWebsiteImagesWithSkip = async (req, res, next) => {
             const imageName =
               Date.now() + "." + image.originalname.split(".").pop();
 
-            const imageFile = bucketInstance.file(imageName);
+            const imageFile = bucketInstance.imageFile(imageName);
             const stream = imageFile.createWriteStream({
               metadata: {
                 contentType: image.mimetype,
@@ -142,7 +142,7 @@ const uploadWebsiteImagesWithSkip = async (req, res, next) => {
             const imageName =
               Date.now() + "." + image.originalname.split(".").pop();
 
-            const imageFile = bucketInstance.file(imageName);
+            const imageFile = bucketInstance.imageFile(imageName);
 
             const stream = imageFile.createWriteStream({
               metadata: {
@@ -181,40 +181,42 @@ const uploadWebsiteImagesWithSkip = async (req, res, next) => {
 };
 
 const uploadProductImage = async (req, res, next) => {
+  try {
+    if (!req.file) return next();
+    const bucketInstance = admin.storage().bucket();
 
-  if (!req.file) return next();
+    const image = req.file;
 
-  const image = req.file;
+    const imageName = Date.now() + "." + image.originalname.split(".").pop();
 
-  const imageName = Date.now() + "." + image.originalname.split(".").pop();
+    const imageFile = bucketInstance.file(imageName);
 
-  const file = bucket.file(imageName); 
+    const stream = imageFile.createWriteStream({
+      //criandpo um stream
+      metadata: {
+        contentType: image.mimetype,
+      },
+    });
 
+    stream.on("error", (error) => {
+      console.error(error);
+    });
 
-  const stream = file.createWriteStream({
-    //criandpo um stream
-    metadata: {
-      contentType: image.mimetype,
-    },
-  });
+    stream.on("finish", () => {
+      imageFile.makePublic();
 
-  stream.on("error", (error) => {
+      req.file.imageName = imageName;
+
+      req.body.product_url = `https://storage.googleapis.com/${firebaseBucket}/${imageName}`;
+      next();
+    });
+
+    stream.end(image.buffer);
+  } catch (error) {
     console.error(error);
-  });
-
-  stream.on("finish", () => {
-    file.makePublic(); 
-
-    req.file.imageName = imageName;
-
-    req.body.productUrl = `https://storage.googleapis.com/${BUCKET}/${imageName}`;
-
-    next(); 
-  });
-
-  stream.end(image.buffer); 
-}
-
+    res.status(500).send(error);
+  }
+};
 
 module.exports = {
   uploadWebsiteImages,
