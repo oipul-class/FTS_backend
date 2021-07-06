@@ -85,7 +85,6 @@ module.exports = {
           ],
         });
 
-
         if (!user.Permissions[0] || !user.Permissions[0].Screens)
           return res.status(400).send({
             error:
@@ -160,6 +159,13 @@ module.exports = {
 
         return next();
       } else if (payload.cnpj) {
+        const purchase = await Purchase.findByPk(id, {
+          include: {
+            model: Branch,
+            attributes: ["id"],
+          },
+        });
+
         const user = await Company.findOne({
           where: {
             id: payload.id,
@@ -177,17 +183,13 @@ module.exports = {
               },
             },
             {
+              where: {
+                id: purchase.Branch.id,
+              },
               model: Branch,
               attributes: ["id"],
             },
           ],
-        });
-
-        const purchase = await Purchase.findByPk(id, {
-          include: {
-            model: Branch,
-            attributes: ["id"],
-          },
         });
 
         if (!user.Permissions)
@@ -196,7 +198,7 @@ module.exports = {
               "Companhia logada não tem permissão para uma alterar os dados da compra",
           });
 
-        if (user.Branch.id !== purchase.Branch.id)
+        if (user.Branch[0].id !== purchase.Branch.id)
           return res.status(400).send({
             error: "Filial da compra não é da companhia logada",
           });
