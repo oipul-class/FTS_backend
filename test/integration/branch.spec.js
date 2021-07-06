@@ -11,7 +11,9 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
   let branch_id;
   let token = undefined;
 
-  beforeAll(async () => {
+  beforeAll(async (done) => {
+    await truncate(connection.models);
+    done();
     const company_cnpj = "18119812000166";
     const company_password = "123456789";
     const company_phone = "551144444434";
@@ -21,8 +23,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
       .send({
         cnpj: company_cnpj,
         fantasy_name: "Bigo store",
-        social_reason:
-          "Uma das grandes lojas",
+        social_reason: "Uma das grandes lojas",
         place_number: 100,
         companie_password: company_password,
         phone: company_phone,
@@ -48,9 +49,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
     token = token_response.body.token;
   });
 
-  
   const branch_phone = "551144444334";
-  
 
   it("é possivel cadastrar uma filial com sucesso", async () => {
     const branch_response = await request(app)

@@ -13,6 +13,11 @@ describe("Testando todas rotas GET, POST, PUT e DELETE com sucesso", () => {
   let company_id;
   let token = undefined;
 
+  beforeAll(async (done) => {
+    await truncate(connection.models);
+    done();
+  });
+
   it("é possivel inserir uma nova companhia com sucesso", async () => {
     const response = await request(app)
       .post("/company")
