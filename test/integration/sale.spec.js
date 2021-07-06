@@ -119,7 +119,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
       });
 
     const user_token_response = await request(app).post("/session").send({
-      cnpj_ou_cpf: user_response..body.cpf,
+      cnpj_ou_cpf: user_response.body.cpf,
       password: "12345678",
     });
     token = user_token_response.body.token;
@@ -137,6 +137,8 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
           },
         ],
       });
+
+    console.log("response body:", response.body);
 
     expect(response.ok).toBeTruthy();
     expect(response.statusCode).toEqual(201);
