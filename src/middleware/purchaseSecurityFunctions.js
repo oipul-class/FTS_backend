@@ -198,7 +198,7 @@ module.exports = {
               "Companhia logada não tem permissão para uma alterar os dados da compra",
           });
 
-        if (user.Branch[0].id !== purchase.Branch.id)
+        if (user.Branches[0].id != purchase.Branch.id)
           return res.status(400).send({
             error: "Filial da compra não é da companhia logada",
           });
