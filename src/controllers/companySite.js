@@ -98,6 +98,7 @@ module.exports = {
         primary_color: site.primary_color,
         secondary_color: site.secondary_color,
         light_color: site.light_color,
+        dark_color: site.dark_color,
         Company: {
           id: site.Company.id,
           cnpj: site.Company.cnpj,

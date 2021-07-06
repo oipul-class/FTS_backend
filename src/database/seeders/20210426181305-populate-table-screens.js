@@ -57,6 +57,12 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        screen_name: "CMS",
+        route: "/cms",
+        created_at: new Date(),
+        updated_at: new Date(),
+      }
     ]);
   },
 
