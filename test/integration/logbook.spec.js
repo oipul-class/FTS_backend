@@ -5,10 +5,6 @@ const path = require("path");
 const truncate = require("./truncate");
 
 describe("Testando todas as rotas GET, POST, PUT e DELETE de inventario da filial", () => {
-  afterAll(() => {
-    connection.close();
-  });
-
   let company_id;
   let token;
 
