@@ -20,14 +20,14 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
       .post("/company")
       .send({
         cnpj: company_cnpj,
-        fantasy_name: "In-Game Entertainment",
+        fantasy_name: "Bigo store",
         social_reason:
-          "Provendo para todos Salões para jogatina e diversão para toda familia",
+          "Uma das grandes lojas",
         place_number: 100,
         companie_password: company_password,
         phone: company_phone,
-        nature_of_the_business: "Uma empressa que varios locais de diversão",
-        commercial_email: "InGameEnt@gmail.com",
+        nature_of_the_business: "Lojá geral",
+        commercial_email: "Bigo@gmail.com",
         plan_id: 3,
         address: {
           cep: "01001000",
