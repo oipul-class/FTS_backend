@@ -170,7 +170,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de compra", () => {
 
   it("é possivel buscar uma compra pelo id com sucesso", async () => {
     const response = await request(app)
-      .get(`/company/${company_id}/purchase`)
+      .get(`/purchase/find/${purchase_id}`)
       .set("Authorization", `bearer ${token}`)
       .send();
 
