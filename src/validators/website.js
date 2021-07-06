@@ -9,9 +9,10 @@ module.exports = {
       primary_color: Joi.string().required(),
       secondary_color: Joi.string().required(),
       light_color: Joi.string().required(),
+      dark_color: Joi.string().required(),
     }),
   }),
-  
+
   update: celebrate({
     [Segments.BODY]: Joi.object().keys({
       logo_firebase_url: Joi.string(),
@@ -20,6 +21,7 @@ module.exports = {
       primary_color: Joi.string(),
       secondary_color: Joi.string(),
       light_color: Joi.string(),
+      dark_color: Joi.string(),
     }),
   }),
 };
