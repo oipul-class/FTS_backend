@@ -40,6 +40,12 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        screen_id: 8,
+        permission_id: 1,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
       //GERENTE GERAL
       {
         screen_id: 1,

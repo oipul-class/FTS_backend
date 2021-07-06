@@ -36,6 +36,7 @@ module.exports = {
               "description",
               "bar_code",
               "cost_per_item",
+              "image_url",
               "unit_of_measurement_id",
               "product_type_id",
               "company_id",
@@ -73,6 +74,7 @@ module.exports = {
               "description",
               "bar_code",
               "cost_per_item",
+              "image_url",
               "unit_of_measurement_id",
               "product_type_id",
               "company_id",
@@ -112,6 +114,7 @@ module.exports = {
               "description",
               "bar_code",
               "cost_per_item",
+              "image_url",
               "unit_of_measurement_id",
               "product_type_id",
               "company_id",
@@ -233,6 +236,7 @@ module.exports = {
         description,
         bar_code,
         cost_per_item,
+        product_url,
         unit_of_measurement_id,
         product_type_id,
         company_id,
@@ -249,18 +253,21 @@ module.exports = {
             "Unidade de medidade ou tipo do produto requisitado não existe",
         });
 
-      const company = await Company.findByPk(company_id);
+      const company = await Company.findByPk(parseInt(company_id));
 
       if (!company)
         return res
           .status(404)
           .send({ error: "Comapnhia requesitada não existe" });
 
+      const image_url = product_url ? product_url : null;
+
       const product = await Product.create({
         product_name,
         description,
         bar_code,
         cost_per_item,
+        image_url,
         unit_of_measurement_id,
         product_type_id,
         company_id,
@@ -282,6 +289,7 @@ module.exports = {
         description,
         bar_code,
         cost_per_item,
+        product_url,
         unit_of_measurement_id,
         product_type_id,
       } = req.body;
@@ -297,7 +305,7 @@ module.exports = {
       if (description) product.description = description;
       if (bar_code) product.bar_code = bar_code;
       if (cost_per_item) product.cost_per_item = cost_per_item;
-
+      if (product_url) product.image_url = product_url;
       if (unit_of_measurement_id) {
         const unit_of_measurement = await UnitOfMeasurement.findByPk(
           unit_of_measurement_id
