@@ -42,7 +42,7 @@ module.exports = {
         },
       });
 
-      if (!branch.company_id != payload.id)
+      if (branch.company_id != payload.id)
         return res.status(400).send({
           error: "Filial não existe ou não pertence a companhia logada",
         });
