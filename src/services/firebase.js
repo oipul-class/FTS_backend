@@ -24,7 +24,7 @@ const uploadWebsiteImages = async (req, res, next) => {
 
       const imageName = Date.now() + "." + image.originalname.split(".").pop();
 
-      const imageFile = bucketInstance.imageFile(imageName);
+      const imageFile = bucketInstance.file(imageName);
       const stream = imageFile.createWriteStream({
         metadata: {
           contentType: image.mimetype,
@@ -55,7 +55,7 @@ const uploadWebsiteImages = async (req, res, next) => {
 
       const imageName = Date.now() + "." + image.originalname.split(".").pop();
 
-      const imageFile = bucketInstance.imageFile(imageName);
+      const imageFile = bucketInstance.file(imageName);
 
       const stream = imageFile.createWriteStream({
         metadata: {
@@ -105,7 +105,7 @@ const uploadWebsiteImagesWithSkip = async (req, res, next) => {
             const imageName =
               Date.now() + "." + image.originalname.split(".").pop();
 
-            const imageFile = bucketInstance.imageFile(imageName);
+            const imageFile = bucketInstance.file(imageName);
             const stream = imageFile.createWriteStream({
               metadata: {
                 contentType: image.mimetype,
@@ -142,7 +142,7 @@ const uploadWebsiteImagesWithSkip = async (req, res, next) => {
             const imageName =
               Date.now() + "." + image.originalname.split(".").pop();
 
-            const imageFile = bucketInstance.imageFile(imageName);
+            const imageFile = bucketInstance.file(imageName);
 
             const stream = imageFile.createWriteStream({
               metadata: {
