@@ -123,8 +123,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
       cnpj_ou_cpf: user_response.cpf,
       password: "12345678",
     });
-    console.log("user token : ", token_response.body);
-    token = token_response.body.token;
+    token = user_token_response.body.token;
 
     const response = await request(app)
       .post("/sale")
