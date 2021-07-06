@@ -77,7 +77,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de compra", () => {
     branch_id = branch_response.body.id;
   });
 
-  it("é possivel cadastrar item no inventario de uma filial", async () => {
+  it("é possivel cadastrar uma compra filial", async () => {
     const product_response = await request(app)
       .post("/product")
       .set("Authorization", `bearer ${token}`)
