@@ -8,6 +8,7 @@ class Product extends Model {
         description: DataTypes.TEXT,
         bar_code: DataTypes.STRING,
         cost_per_item: DataTypes.DECIMAL(15, 2),
+        image_url: DataTypes.STRING,
         unit_of_measurement_id: DataTypes.INTEGER,
         product_type_id: DataTypes.INTEGER,
         company_id: DataTypes.INTEGER,
