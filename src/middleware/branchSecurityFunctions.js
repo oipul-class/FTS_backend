@@ -13,7 +13,10 @@ module.exports = {
 
       const payload = jwt.verify(retriviedToken, auth.secret);
 
-      if (!payload.cnpj) return res.status(400).send({ error: "Usuário logado não é uma companhia"})
+      if (!payload.cnpj)
+        return res
+          .status(400)
+          .send({ error: "Usuário logado não é uma companhia" });
 
       const companyFromPayload = await Company.findOne({
         where: {
@@ -39,7 +42,7 @@ module.exports = {
         },
       });
 
-      if (!branch)
+      if (branch.company_id != payload.id)
         return res.status(400).send({
           error: "Filial não existe ou não pertence a companhia logada",
         });
