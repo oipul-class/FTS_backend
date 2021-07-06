@@ -30,6 +30,8 @@ class ItemSale extends Model {
                 parseFloat(sale.total_value) +
                 itemSale.cost_per_item * itemSale.quantity;
 
+              sale_total_value = sale.total_value;
+
               if (sale.discount || sale.discount > 0)
                 sale.total_value =
                   sale_total_value - (sale_total_value * sale.discount) / 100;
@@ -53,6 +55,8 @@ class ItemSale extends Model {
               sale.total_value =
                 parseFloat(sale.total_value) -
                 itemSale.cost_per_item * itemSale.quantity;
+
+              sale_total_value = sale.total_value;
 
               if (sale.discount || sale.discount > 0)
                 sale.total_value =
