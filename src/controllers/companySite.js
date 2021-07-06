@@ -21,6 +21,7 @@ module.exports = {
           "primary_color",
           "secondary_color",
           "light_color",
+          "dark_color"
         ],
         include: {
           model: Company,
@@ -157,6 +158,7 @@ module.exports = {
         primary_color: website.primary_color,
         secondary_color: website.secondary_color,
         light_color: website.light_color,
+        dark_color: website.dark_color,
       });
     } catch (error) {
       console.error(error);
@@ -207,6 +209,7 @@ module.exports = {
         primary_color: website.primary_color,
         secondary_color: website.secondary_color,
         light_color: website.light_color,
+        dark_color: website.dark_color,
       });
     } catch (error) {
       console.error(error);
