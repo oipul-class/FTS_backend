@@ -24,7 +24,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
   it("é possivel cadastrar uma venda na filial", async () => {
     const company_cnpj = "55555555555555";
     const company_password = "123456789";
-    const company_phone = "0111033777773";
+    const company_phone = "011103377773";
     const branch_phone = "511129921799";
 
     const company_response = await request(app)
@@ -48,7 +48,6 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         },
       });
 
-    console.log("company body:", company_response.body);
     company_id = company_response.body.id;
 
     const token_response = await request(app).post("/session").send({
@@ -65,7 +64,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         branch_name: "eletronic in do Rio de janeiro",
         place_number: 100,
         phone: branch_phone,
-        company_id: company_id,
+        company_id: company_response.body.id,
         address: {
           cep: "01001001",
           street: "Rua Fernando Pessoa Da Silva",
@@ -86,7 +85,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
       .attach("image", path.resolve(__dirname, "./misc/xiaomi.jpg"))
       .field("unit_of_measurement_id", "13")
       .field("product_type_id", "1")
-      .field("company_id", company_response.id)
+      .field("company_id", company_response.body.id)
       .timeout(20000);
 
     product_id = product_response.body.id;
@@ -114,13 +113,13 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         rg: "255224532",
         user_password: "12345678",
         user_name: "Lucas De Costa tudo",
-        branch_id: 3,
+        branch_id: branch_response.body.id,
         role_id: 1,
         permissions: "1,2,3,4,5,6",
       });
 
     const user_token_response = await request(app).post("/session").send({
-      cnpj_ou_cpf: user_response.cpf,
+      cnpj_ou_cpf: user_response..body.cpf,
       password: "12345678",
     });
     token = user_token_response.body.token;
@@ -133,7 +132,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         branch_id: 1,
         items: [
           {
-            product_id: product_id,
+            product_id: product_response.body.id,
             quantity: 100,
           },
         ],
@@ -145,5 +144,5 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
     expect(typeof response.body).toEqual("object");
     expect(response.body).toHaveProperty("id");
     sale_id = response.body.id;
-  });
+  }, 10000);
 });
