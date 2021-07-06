@@ -32,7 +32,7 @@ class ItemSale extends Model {
 
               if (sale.discount || sale.discount > 0)
                 sale.total_value =
-                  sale_total_value - (sale_total_value * discount) / 100;
+                  sale_total_value - (sale_total_value * sale.discount) / 100;
 
               await sale.save();
             } catch (error) {
@@ -56,7 +56,7 @@ class ItemSale extends Model {
 
               if (sale.discount || sale.discount > 0)
                 sale.total_value =
-                  sale_total_value - (sale_total_value * discount) / 100;
+                  sale_total_value - (sale_total_value * sale.discount) / 100;
 
               await logbook.save();
 

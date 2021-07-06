@@ -29,7 +29,6 @@ module.exports = {
               "user_limit_per_branch",
               "use_phone_for_sale",
               "access_website",
-
             ],
           },
           {
@@ -131,14 +130,16 @@ module.exports = {
       if (!plan)
         return res.status(404).send({ error: "Plano requisitado não existe" });
 
-
       const usedPhone = await Phone.findOne({
         where: {
           phone,
-        }
-      })
+        },
+      });
 
-      if (usedPhone) return res.status(400).send({ error: "Telefone recebido já cadastrado"})
+      if (usedPhone)
+        return res
+          .status(400)
+          .send({ error: "Telefone recebido já cadastrado" });
 
       let companyAddress;
 
@@ -172,10 +173,13 @@ module.exports = {
         phone,
       });
 
-      if (!branchPhone) return res.status(500).send({ error: "Falha ao cadastrar telefone para filial"})
+      if (!branchPhone)
+        return res
+          .status(500)
+          .send({ error: "Falha ao cadastrar telefone para filial" });
 
       Branch.create({
-        branch_name: company.fantasy_name,
+        branch_name: `Filial ${companyAddress.city}`,
         branch_email: null,
         place_number: company.place_number,
         company_id: company.id,
