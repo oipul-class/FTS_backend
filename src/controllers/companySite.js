@@ -68,6 +68,7 @@ module.exports = {
                 "product_name",
                 "description",
                 "cost_per_item",
+                "image_url",
               ],
               include: {
                 model: ProductType,
