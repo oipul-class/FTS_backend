@@ -48,6 +48,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         },
       });
 
+    console.log(company_response.body);
     company_id = company_response.body.id;
 
     const token_response = await request(app).post("/session").send({
@@ -122,11 +123,13 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
       cnpj_ou_cpf: user_response.body.cpf,
       password: "12345678",
     });
+
+    console.log("user token: ", user_token_response.body);
     token = user_token_response.body.token;
 
     const response = await request(app)
       .post("/sale")
-      .set("Authorization", `bearer ${token_response.body.token}`)
+      .set("Authorization", `bearer ${user_token_response.body.token}`)
       .send({
         payment_method_id: 1,
         branch_id: 1,
