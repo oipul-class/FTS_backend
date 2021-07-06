@@ -15,9 +15,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de produtos", () => {
   const product_name = "Carregador Xiaomi";
   let product_id;
 
-  beforeAll(async (done) => {
-    await truncate(connection.models);
-    done();
+  beforeAll(async () => {
     const company_cnpj = "18111812000000";
     const company_password = "123456789";
     const company_phone = "551144333444";

@@ -11,9 +11,8 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
   let branch_id;
   let token = undefined;
 
-  beforeAll(async (done) => {
-    await truncate(connection.models);
-    done();
+  beforeAll(async () => {
+
     const company_cnpj = "18119812000166";
     const company_password = "123456789";
     const company_phone = "551144444434";

@@ -13,9 +13,8 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de usuários", () => {
   let token;
   let user_id;
 
-  beforeAll(async (done) => {
-    await truncate(connection.models);
-    done();
+  beforeAll(async () => {
+
     const company_cnpj = "18119812002166";
     const company_password = "123456789";
     const company_phone = "551144443434";
