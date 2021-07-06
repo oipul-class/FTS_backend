@@ -18,6 +18,7 @@ module.exports = {
       const { branch_id } = req.body;
 
       if (payload.user_cpf && payload.user_rg) {
+        console.log("user is a usuário");
         const user = await User.findOne({
           where: {
             id: payload.id,

@@ -42,6 +42,9 @@ module.exports = {
           include: [
             {
               model: Branch,
+              where: {
+                company_id,
+              },
               attributes: ["id", "branch_name", "branch_email", "place_number"],
               include: [
                 {
