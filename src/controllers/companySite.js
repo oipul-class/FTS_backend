@@ -21,7 +21,7 @@ module.exports = {
           "primary_color",
           "secondary_color",
           "light_color",
-          "dark_color"
+          "dark_color",
         ],
         include: {
           model: Company,
@@ -82,7 +82,13 @@ module.exports = {
         attributes: ["id", "type"],
         include: {
           model: Product,
-          attributes: ["id", "product_name", "description", "cost_per_item"],
+          attributes: [
+            "id",
+            "product_name",
+            "description",
+            "cost_per_item",
+            "image_url",
+          ],
           required: true,
           where: {
             company_id,
@@ -148,7 +154,7 @@ module.exports = {
         primary_color,
         secondary_color,
         light_color,
-        dark_color
+        dark_color,
       });
 
       res.status(201).send({
@@ -177,7 +183,7 @@ module.exports = {
         primary_color,
         secondary_color,
         light_color,
-        dark_color
+        dark_color,
       } = req.body;
 
       const company = await Company.findByPk(company_id);
