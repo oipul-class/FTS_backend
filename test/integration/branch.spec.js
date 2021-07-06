@@ -12,7 +12,6 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
   let token = undefined;
 
   beforeAll(async () => {
-
     const company_cnpj = "18119812000166";
     const company_password = "123456789";
     const company_phone = "551144444434";
@@ -103,6 +102,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
       .send({
         branch_name: "Filial In-Game de jandira",
       });
+    console.log("put body: ", response.body);
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
     expect(response.statusCode).toEqual(200);
@@ -115,6 +115,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de filial", () => {
       .set("Authorization", `bearer ${token}`)
       .send();
 
+    console.log("delete route: ", response.body);
     expect(response.ok).toBeTruthy();
     expect(response.body).toBeDefined();
   });
