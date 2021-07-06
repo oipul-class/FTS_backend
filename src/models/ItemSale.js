@@ -17,6 +17,8 @@ class ItemSale extends Model {
             try {
               const logbook = await itemSale.getLogBookInventory();
 
+              let sale_total_value = 0;
+
               logbook.quantity_acquired =
                 logbook.quantity_acquired - itemSale.quantity;
 
@@ -40,6 +42,8 @@ class ItemSale extends Model {
           afterDestroy: async (itemSale, options) => {
             try {
               const logbook = await itemSale.getLogBookInventory();
+
+              let sale_total_value = 0;
 
               logbook.quantity_acquired =
                 logbook.quantity_acquired + itemSale.quantity;
