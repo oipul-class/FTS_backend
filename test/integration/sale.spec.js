@@ -16,16 +16,16 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
   let product_id;
   let branch_id;
   let logbook_id;
-  let purchase_id;
+  let sale_id;
 
   const product_bar_code = "442";
   const product_name = "Carregador Xiaomi";
 
-  beforeAll(async () => {
-    const company_cnpj = "18111595555555";
+  it("é possivel cadastrar uma venda na filial", async () => {
+    const company_cnpj = "55555555555555";
     const company_password = "123456789";
-    const company_phone = "000033777333";
-    const branch_phone = "551129922799";
+    const company_phone = "0111033777773";
+    const branch_phone = "511129921799";
 
     const company_response = await request(app)
       .post("/company")
@@ -48,6 +48,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         },
       });
 
+    console.log("company body:", company_response.body);
     company_id = company_response.body.id;
 
     const token_response = await request(app).post("/session").send({
@@ -75,9 +76,6 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
       });
 
     branch_id = branch_response.body.id;
-  });
-
-  it("é possivel cadastrar uma venda na filial", async () => {
     const product_response = await request(app)
       .post("/product")
       .set("Authorization", `bearer ${token}`)
@@ -88,7 +86,7 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
       .attach("image", path.resolve(__dirname, "./misc/xiaomi.jpg"))
       .field("unit_of_measurement_id", "13")
       .field("product_type_id", "1")
-      .field("company_id", company_id)
+      .field("company_id", company_response.id)
       .timeout(20000);
 
     product_id = product_response.body.id;
@@ -108,8 +106,6 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         },
       });
 
-    logbook_id = logbook_response.body.id;
-
     const user_response = await request(app)
       .post("/user")
       .set("Authorization", `bearer ${token}`)
@@ -123,16 +119,23 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
         permissions: "1,2,3,4,5,6",
       });
 
+    const user_token_response = await request(app).post("/session").send({
+      cnpj_ou_cpf: user_response.cpf,
+      password: "12345678",
+    });
+    console.log("user token : ", token_response.body);
+    token = token_response.body.token;
+
     const response = await request(app)
-      .post("/purchase")
-      .set("Authorization", `bearer ${token}`)
+      .post("/sale")
+      .set("Authorization", `bearer ${token_response.body.token}`)
       .send({
         payment_method_id: 1,
-        branch_id: branch_id,
+        branch_id: 1,
         items: [
           {
-            product_id: product_response.body.id,
-            quantity: 10,
+            product_id: product_id,
+            quantity: 100,
           },
         ],
       });
@@ -142,80 +145,6 @@ describe("Testando todas as rotas GET, POST, PUT e DELETE de vendas", () => {
     expect(response.body).toBeDefined();
     expect(typeof response.body).toEqual("object");
     expect(response.body).toHaveProperty("id");
-    purchase_id = response.body.id;
-  });
-
-  it("é possivel fazer uma listagem de todas as vendas do sistema com sucesso", async () => {
-    const response = await request(app)
-      .get("/purchase")
-      .set("Authorization", `bearer ${token}`)
-      .send();
-
-    expect(response.ok).toBeTruthy();
-    expect(response.statusCode).toEqual(200);
-    expect(response.body).toBeDefined();
-    expect(Array.isArray(response.body)).toBeTruthy();
-  });
-
-  it("é possivel fazer listagem de vendas de uma filial com sucesso", async () => {
-    const response = await request(app)
-      .get(`/branch/${branch_id}/purchase`)
-      .set("Authorization", `bearer ${token}`)
-      .send();
-
-    expect(response.ok).toBeTruthy();
-    expect(response.statusCode).toEqual(200);
-    expect(response.body).toBeDefined();
-    expect(Array.isArray(response.body)).toBeTruthy();
-  });
-
-  it("é possivel fazer listagem de vendas das filials de uma companhia com sucesso", async () => {
-    const response = await request(app)
-      .get(`/company/${company_id}/purchase`)
-      .set("Authorization", `bearer ${token}`)
-      .send();
-
-    expect(response.ok).toBeTruthy();
-    expect(response.statusCode).toEqual(200);
-    expect(response.body).toBeDefined();
-    expect(Array.isArray(response.body)).toBeTruthy();
-  });
-
-  it("é possivel buscar uma venda pelo id com sucesso", async () => {
-    const response = await request(app)
-      .get(`/purchase/find/${purchase_id}`)
-      .set("Authorization", `bearer ${token}`)
-      .send();
-
-    expect(response.ok).toBeTruthy();
-    expect(response.statusCode).toEqual(200);
-    expect(response.body).toBeDefined();
-    expect(typeof response.body).toEqual("object");
-    expect(response.body).toHaveProperty("id");
-  });
-
-  it("é possivel alterar dados de uma venda com sucesso", async () => {
-    const response = await request(app)
-      .put(`/purchase/${purchase_id}`)
-      .set("Authorization", `bearer ${token}`)
-      .send({
-        payment_method_id: 4,
-      });
-
-    expect(response.ok).toBeTruthy();
-    expect(response.statusCode).toEqual(200);
-    expect(response.body).toBeDefined();
-    expect(typeof response.body).toEqual("object");
-    expect(response.body).toHaveProperty("id");
-  });
-
-  it("é possivel deletar uma venda com sucesso", async () => {
-    const response = await request(app)
-      .delete(`/purchase/${purchase_id}`)
-      .set("Authorization", `bearer ${token}`)
-      .send();
-
-    expect(response.ok).toBeTruthy();
-    expect(response.statusCode).toEqual(200);
+    sale_id = response.body.id;
   });
 });
