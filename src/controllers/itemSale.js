@@ -16,28 +16,23 @@ module.exports = {
           where: {
             sale_id,
           },
-          attributes: [
-            "id",
-            "cost_per_item",
-            "quantity",
-            "total_value",
-            "discount",
-          ],
+          attributes: ["id", "cost_per_item", "quantity"],
           include: [
             {
               model: LogBookInventory,
               attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+              include: {
+                model: Product,
+                attributes: [
+                  "id",
+                  "product_name",
+                  "description",
+                  "bar_code",
+                  "cost_per_item",
+                ],
+              },
             },
-            {
-              model: Product,
-              attributes: [
-                "id",
-                "product_name",
-                "description",
-                "bar_code",
-                "cost_per_item",
-              ],
-            },
+
             {
               model: Sale,
               attributes: ["id"],
@@ -50,28 +45,23 @@ module.exports = {
         });
       else
         itemSale = await ItemSale.findAll({
-          attributes: [
-            "id",
-            "cost_per_item",
-            "quantity",
-            "total_value",
-            "discount",
-          ],
+          attributes: ["id", "cost_per_item", "quantity"],
           include: [
             {
               model: LogBookInventory,
               attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+              include: {
+                model: Product,
+                attributes: [
+                  "id",
+                  "product_name",
+                  "description",
+                  "bar_code",
+                  "cost_per_item",
+                ],
+              },
             },
-            {
-              model: Product,
-              attributes: [
-                "id",
-                "product_name",
-                "description",
-                "bar_code",
-                "cost_per_item",
-              ],
-            },
+
             {
               model: Sale,
               attributes: ["id"],
@@ -83,7 +73,7 @@ module.exports = {
           ],
         });
 
-      res.send(itemSales);
+      res.send(itemSale);
     } catch (error) {
       console.error(error);
       res.status(500).send(error);
@@ -99,24 +89,23 @@ module.exports = {
           "id",
           "cost_per_item",
           "quantity",
-          "total_value",
-          "discount",
         ],
         include: [
           {
             model: LogBookInventory,
             attributes: ["id", "date_of_acquisition", "quantity_acquired"],
+            include: {
+              model: Product,
+              attributes: [
+                "id",
+                "product_name",
+                "description",
+                "bar_code",
+                "cost_per_item",
+              ],
+            },
           },
-          {
-            model: Product,
-            attributes: [
-              "id",
-              "product_name",
-              "description",
-              "bar_code",
-              "cost_per_item",
-            ],
-          },
+
           {
             model: Sale,
             attributes: ["id"],
@@ -141,11 +130,17 @@ module.exports = {
 
       const product = await Product.findByPk(product_id);
 
-      if (!product) return res.status(404).send({ error: "Produto requesitado não existe" });
+      if (!product)
+        return res
+          .status(404)
+          .send({ error: "Produto requesitado não existe" });
 
       const logbook = await product.getLogBookInventory();
 
-      if (!logbook) return res.status(404).send({ error: "Logbook requesitado não existe" });
+      if (!logbook)
+        return res
+          .status(404)
+          .send({ error: "Logbook requesitado não existe" });
 
       let total_value;
 
