@@ -15,6 +15,7 @@ class Product extends Model {
       },
       {
         sequelize,
+        paranoid: true,
       }
     );
 
