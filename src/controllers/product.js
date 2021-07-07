@@ -351,6 +351,18 @@ module.exports = {
 
       await product.destroy();
 
+      const logbooks = await LogBookInventory.findAll({
+        where: {
+          product_id: id,
+        },
+      });
+
+      await Promise.all(
+        logbooks.map(async (logbook) => {
+          await logbook.destroy();
+        })
+      );
+
       res.send();
     } catch (error) {
       console.error(error);

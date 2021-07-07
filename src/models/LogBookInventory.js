@@ -12,6 +12,7 @@ class LogBookInventory extends Model {
       },
       {
         sequelize,
+        paranoid: true,
         tableName: "logbook_inventories",
       }
     );
