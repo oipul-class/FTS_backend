@@ -1,5 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
-
+const Sale = require("./Sale");
 class ItemSale extends Model {
   static init(sequelize) {
     super.init(
@@ -41,7 +41,7 @@ class ItemSale extends Model {
               console.error(error);
             }
           },
-          afterDestroy: async (itemSale, options) => {
+          beforeDestroy: async (itemSale, options) => {
             try {
               const logbook = await itemSale.getLogBookInventory();
 
@@ -50,8 +50,8 @@ class ItemSale extends Model {
               logbook.quantity_acquired =
                 logbook.quantity_acquired + itemSale.quantity;
 
-              const sale = await itemSale.getSale();
-
+              await logbook.save();
+              const sale = await Sale.findByPk(itemSale.sale_id);
               sale.total_value =
                 parseFloat(sale.total_value) -
                 itemSale.cost_per_item * itemSale.quantity;
@@ -61,8 +61,6 @@ class ItemSale extends Model {
               if (sale.discount || sale.discount > 0)
                 sale.total_value =
                   sale_total_value - (sale_total_value * sale.discount) / 100;
-
-              await logbook.save();
 
               await sale.save();
             } catch (error) {
